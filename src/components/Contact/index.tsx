@@ -1,25 +1,32 @@
-"use client";
+"use client"
 
-import { ArrowUpRight, Copy, Mail } from "lucide-react";
-import { ClickSpark } from "@/components/ClickSpark";
-import { CopyEmailButton } from "@/components/CopyEmailButton";
-import i18next from "i18next";
-import { useTranslation } from "react-i18next";
-import id from "./i18n/id";
-import en from "./i18n/en";
-import { Reveal } from "@/components/Reveal";
-import { SectionHeading } from "@/components/SectionHeading";
-import { Card } from "@/components/ui/card";
-import { siteConfig } from "@/data/profile";
+import { ArrowUpRight, Copy, Mail } from "lucide-react"
+import { ClickSpark } from "@/components/ClickSpark"
+import { CopyEmailButton } from "@/components/CopyEmailButton"
+import i18next from "i18next"
+import { useTranslation } from "react-i18next"
+import id from "./i18n/id"
+import en from "./i18n/en"
+import { Reveal } from "@/components/Reveal"
+import { SectionHeading } from "@/components/SectionHeading"
+import { Card } from "@/components/ui/card"
+import { siteConfig } from "@/data/profile"
 
 export const Contact = () => {
-  i18next.addResourceBundle("id", "Contact", id);
-  i18next.addResourceBundle("en", "Contact", en);
-  const { t } = useTranslation("Contact");
-  const steps = t("steps", { returnObjects: true }) as { title: string; detail: string }[];
+  i18next.addResourceBundle("id", "Contact", id)
+  i18next.addResourceBundle("en", "Contact", en)
+  const { t } = useTranslation("Contact")
+  const steps = t("steps", { returnObjects: true }) as {
+    title: string
+    detail: string
+  }[]
 
   return (
-    <section id="contact" aria-label="Contact" className="scroll-mt-24 border-t border-border py-20 sm:py-28">
+    <section
+      id="contact"
+      aria-label="Contact"
+      className="scroll-mt-24 border-t border-border py-20 sm:py-28"
+    >
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
           <Reveal>
@@ -29,7 +36,7 @@ export const Contact = () => {
               title={
                 <>
                   {t("titleA")}{" "}
-                  <span className="font-display font-normal italic text-signal">
+                  <span className="font-display font-normal text-signal italic">
                     {t("titleAccent")}
                   </span>
                 </>
@@ -37,7 +44,12 @@ export const Contact = () => {
             >
               {t("description")}
             </SectionHeading>
-            <ClickSpark sparkColor={["#22D3EE", "#A78BFA"]} sparkCount={10} sparkRadius={48}>
+            <ClickSpark
+              sparkColor={["#22D3EE", "#A78BFA"]}
+              sparkCount={10}
+              sparkRadius={48}
+              className="h-auto!"
+            >
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
                   href={`mailto:${siteConfig.email}`}
@@ -80,12 +92,16 @@ export const Contact = () => {
               <ol className="mt-5 space-y-5">
                 {steps.map((step, i) => (
                   <li key={step.title} className="flex gap-4">
-                    <span className="font-mono text-xs font-semibold text-signal tabular">
+                    <span className="tabular font-mono text-xs font-semibold text-signal">
                       0{i + 1}
                     </span>
                     <div>
-                      <p className="text-[15px] font-semibold text-foreground">{step.title}</p>
-                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{step.detail}</p>
+                      <p className="text-[15px] font-semibold text-foreground">
+                        {step.title}
+                      </p>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                        {step.detail}
+                      </p>
                     </div>
                   </li>
                 ))}
@@ -104,5 +120,5 @@ export const Contact = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}

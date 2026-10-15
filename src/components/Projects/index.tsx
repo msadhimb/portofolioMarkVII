@@ -8,7 +8,9 @@ import id from "./i18n/id"
 import en from "./i18n/en"
 import { ProjectLinks, ProjectVisual, TechList } from "@/components/ProjectCard"
 import { useQuery } from "@tanstack/react-query"
+import { Shimmer } from "shimmer-from-structure"
 import { useProjects } from "./store"
+import { projectsTemplate } from "./template"
 
 export const Projects = () => {
   i18next.addResourceBundle("id", "Projects", id)
@@ -17,7 +19,7 @@ export const Projects = () => {
 
   const { getProjects } = useProjects()
 
-  const { data: projects } = useQuery({
+  const { data: projects, isLoading } = useQuery({
     queryKey: ["projects", i18n.language],
     queryFn: () => getProjects(i18n.language),
   })
@@ -27,11 +29,11 @@ export const Projects = () => {
     liveDemo: t("liveDemo"),
     internalDemo: t("internalDemo"),
   }
-  const featured: any = projects?.find((p: any) => p.featured) ?? projects?.[0]
-  const rest: any =
-    projects?.filter((p: any) => p.slug !== featured?.slug) || []
+  const list = projects ?? projectsTemplate
+  const featured: any = list.find((p: any) => p.featured) ?? list[0]
+  const rest: any = list.filter((p: any) => p.slug !== featured?.slug) || []
 
-  if (!featured) return null
+  if (!isLoading && !featured) return null
 
   return (
     <section
@@ -63,7 +65,8 @@ export const Projects = () => {
         </Reveal>
 
         {/* Featured — dominant */}
-        <Reveal delay={0.05}>
+        <Shimmer loading={isLoading}>
+          <Reveal delay={0.05}>
           <article className="card-futuristic mt-12 overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(2,132,199,0.5)] transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.45)]">
             <div className="grid lg:grid-cols-2">
               <div className="bg-muted/60">
@@ -163,7 +166,8 @@ export const Projects = () => {
               </article>
             </Reveal>
           ))}
-        </div>
+          </div>
+        </Shimmer>
       </div>
     </section>
   )

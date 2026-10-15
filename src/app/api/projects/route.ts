@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import { ProjectCardRow } from "./type"
-import { toProjectCard } from "./helper/toProject"
+import { toProjectCard } from "@/helper/server/formatProjects/toProject"
 
 export const GET = async (req: Request) => {
   try {
@@ -32,9 +31,7 @@ export const GET = async (req: Request) => {
       )
     }
 
-    const projects = ((data ?? []) as unknown as ProjectCardRow[]).map(
-      toProjectCard
-    )
+    const projects = data.map(toProjectCard)
 
     return NextResponse.json({ data: projects, locale, variant: "card" })
   } catch (err) {

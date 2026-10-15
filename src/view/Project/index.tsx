@@ -4,13 +4,14 @@ import { ArrowLeft, ArrowUpRight, Lock } from "lucide-react"
 import Link from "next/link"
 import i18next from "i18next"
 import { useTranslation } from "react-i18next"
-import { getProject, getProjects } from "@/data/localized"
 import id from "./i18n/id"
 import en from "./i18n/en"
 import { ProjectVisual, TechList } from "@/components/ProjectCard"
 import { Card } from "@/components/ui/card"
 import { useProjectsDetail } from "./store"
 import { useQuery } from "@tanstack/react-query"
+import { Shimmer } from "shimmer-from-structure"
+import { projectTemplate } from "./template"
 
 type ProjectViewProps = {
   slug: string
@@ -23,14 +24,16 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
 
   const { getProjectBySlug } = useProjectsDetail()
 
-  const { data: project } = useQuery({
-    queryKey: ["project", slug],
+  const { data: projectData, isLoading } = useQuery({
+    queryKey: ["project", slug, i18n.language],
     queryFn: () => getProjectBySlug(slug, i18n.language),
   })
 
-  if (!project) {
+  if (!isLoading && !projectData) {
     return null
   }
+
+  const project: any = projectData ?? projectTemplate
 
   return (
     <main id="main" className="pt-28 pb-20 sm:pt-36">
@@ -43,7 +46,8 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
           {t("back")}
         </Link>
 
-        <p className="mt-8 font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
+        <Shimmer loading={isLoading}>
+          <p className="mt-8 font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
           {t("prefix")} · {project.context}
         </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
@@ -182,6 +186,7 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
             </Link>
           ))}
         </nav>
+        </Shimmer>
       </article>
     </main>
   )

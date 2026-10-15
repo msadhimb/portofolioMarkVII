@@ -3,22 +3,23 @@ export const siteConfig = {
   shortName: "Salman",
   monogram: "ms",
   location: "Salatiga, Jawa Tengah",
-  email: "halo@salmanbaqy.dev",
+  email: "adhimbaqy72@gmail.com",
   github: "https://github.com",
   linkedin: "https://linkedin.com",
-};
+}
 
 export type Experience = {
-  period: string;
-  role: string;
-  org: string;
-  context: string;
-  points: string[];
-  stack: string[];
-};
+  slug: string
+  period: string
+  role: string
+  org: string
+  context: string
+  points: string[]
+  stack: string[]
+}
 
 export type SkillGroup = {
-  title: string;
-  note: string;
-  items: string[];
-};
+  title: string
+  note: string
+  items: string[]
+}

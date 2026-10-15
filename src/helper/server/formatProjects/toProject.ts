@@ -1,5 +1,5 @@
 import { Project } from "@/data/projects"
-import type { ProjectCard, ProjectCardRow, ProjectRow } from "../type"
+import type { ProjectCard, ProjectCardRow, ProjectRow } from "./type"
 
 export const toProjectCard = (row: ProjectCardRow): ProjectCard => ({
   slug: row.slug,

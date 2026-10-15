@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import i18next from "i18next";
-import { useTranslation } from "react-i18next";
-import idNav from "../Navbar/i18n/id";
-import enNav from "../Navbar/i18n/en";
-import id from "./i18n/id";
-import en from "./i18n/en";
-import { Separator } from "@/components/ui/separator";
-import { siteConfig } from "@/data/profile";
+import Link from "next/link"
+import i18next from "i18next"
+import { useTranslation } from "react-i18next"
+import idNav from "../Navbar/i18n/id"
+import enNav from "../Navbar/i18n/en"
+import id from "./i18n/id"
+import en from "./i18n/en"
+import { Separator } from "@/components/ui/separator"
+import { siteConfig } from "@/data/profile"
 
 export const Footer = () => {
-  i18next.addResourceBundle("id", "Navbar", idNav);
-  i18next.addResourceBundle("en", "Navbar", enNav);
-  i18next.addResourceBundle("id", "Footer", id);
-  i18next.addResourceBundle("en", "Footer", en);
-  const { t } = useTranslation("Footer");
-  const { t: tNav } = useTranslation("Navbar");
+  i18next.addResourceBundle("id", "Navbar", idNav)
+  i18next.addResourceBundle("en", "Navbar", enNav)
+  i18next.addResourceBundle("id", "Footer", id)
+  i18next.addResourceBundle("en", "Footer", en)
+  const { t } = useTranslation("Footer")
+  const { t: tNav } = useTranslation("Navbar")
 
   const links: [string, string][] = [
     ["#about", tNav("about")],
@@ -25,7 +25,7 @@ export const Footer = () => {
     ["#skills", tNav("skills")],
     ["#ai", tNav("ai")],
     ["#contact", tNav("contact")],
-  ];
+  ]
 
   return (
     <footer className="border-t border-border" aria-label="Footer">
@@ -44,9 +44,16 @@ export const Footer = () => {
               {t("tagline")}
             </p>
           </div>
-          <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+          <nav
+            aria-label="Footer"
+            className="flex flex-wrap gap-2 gap-x-6 text-sm text-muted-foreground"
+          >
             {links.map(([href, label]) => (
-              <Link key={href} href={href} className="transition-colors hover:text-foreground">
+              <Link
+                key={href}
+                href={href}
+                className="transition-colors hover:text-foreground"
+              >
                 {label}
               </Link>
             ))}
@@ -54,10 +61,15 @@ export const Footer = () => {
         </div>
         <Separator className="mt-8" />
         <div className="flex flex-col gap-2 pt-6 font-mono text-xs text-muted-foreground sm:flex-row sm:justify-between">
-          <p>© {new Date().getFullYear()} {siteConfig.siteName}. All rights reserved.</p>
-          <p className="tabular">Salatiga · {new Date().toISOString().slice(0, 10)} · v1.0</p>
+          <p>
+            © {new Date().getFullYear()} {siteConfig.siteName}. All rights
+            reserved.
+          </p>
+          <p className="tabular">
+            Salatiga · {new Date().toISOString().slice(0, 10)} · v1.0
+          </p>
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}

@@ -2,6 +2,7 @@ import type { Experience } from "./profile";
 
 export const experiences: Experience[] = [
     {
+      slug: "pln-pusmanpro",
       period: "2023 — Sekarang",
       role: "Frontend Engineer",
       org: "PLN Pusmanpro",
@@ -15,6 +16,7 @@ export const experiences: Experience[] = [
       stack: ["Next.js", "TypeScript", "React Query", "Zustand", "Tailwind", "Axios"],
     },
     {
+      slug: "duitku",
       period: "2022 — Sekarang",
       role: "Independent Builder",
       org: "Duitku",
@@ -27,6 +29,7 @@ export const experiences: Experience[] = [
       stack: ["Next.js", "Supabase", "PostgreSQL", "React Query", "shadcn/ui"],
     },
     {
+      slug: "freelance",
       period: "2021 — 2023",
       role: "Web Developer",
       org: "Freelance & Client Work",

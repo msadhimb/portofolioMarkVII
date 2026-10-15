@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import { toProject } from "../helper/toProject"
-import { ProjectRow } from "../type"
+import { toProject } from "@/helper/server/formatProjects/toProject"
 
 export const GET = async (
   req: NextRequest,
@@ -50,7 +49,7 @@ export const GET = async (
     }
 
     const project = {
-      ...toProject(projectRes.data as ProjectRow),
+      ...toProject(projectRes.data),
       related: relatedRes.data || [],
     }
 

@@ -243,7 +243,7 @@ export const ChatbotSection = () => {
                       onChange={(e) => chat.setInput(e.target.value)}
                       placeholder={t("placeholder")}
                       aria-label={t("placeholder")}
-                      className="h-10 w-full bg-transparent font-mono text-sm text-[#dbe6ff] outline-none placeholder:text-[#8ea0c9]/50"
+                      className="h-10 w-full bg-transparent font-mono text-sm text-[#dbe6ff] outline-none placeholder:text-[#8ea0c9]/50 focus:ring-0 focus-visible:outline-0!"
                     />
                     {chat.loading ? (
                       <Button
