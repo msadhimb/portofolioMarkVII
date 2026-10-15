@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { projectSlugs } from "@/i18n/dictionaries";
+import { projectSlugs } from "@/data/localized";
 import { ProjectView } from "@/view/Project";
 
 type CaseStudyPageProps = {

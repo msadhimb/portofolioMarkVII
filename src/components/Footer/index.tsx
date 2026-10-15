@@ -1,22 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useLanguage } from "@/components/LanguageProvider";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
+import idNav from "../Navbar/i18n/id";
+import enNav from "../Navbar/i18n/en";
+import id from "./i18n/id";
+import en from "./i18n/en";
 import { Separator } from "@/components/ui/separator";
 import { siteConfig } from "@/data/profile";
 
 export const Footer = () => {
-  const { dict } = useLanguage();
-  const t = dict.footer;
-  const nav = dict.nav;
+  i18next.addResourceBundle("id", "Navbar", idNav);
+  i18next.addResourceBundle("en", "Navbar", enNav);
+  i18next.addResourceBundle("id", "Footer", id);
+  i18next.addResourceBundle("en", "Footer", en);
+  const { t } = useTranslation("Footer");
+  const { t: tNav } = useTranslation("Navbar");
 
   const links: [string, string][] = [
-    ["#about", nav.about],
-    ["#projects", nav.projects],
-    ["#experience", nav.experience],
-    ["#skills", nav.skills],
-    ["#ai", nav.ai],
-    ["#contact", nav.contact],
+    ["#about", tNav("about")],
+    ["#projects", tNav("projects")],
+    ["#experience", tNav("experience")],
+    ["#skills", tNav("skills")],
+    ["#ai", tNav("ai")],
+    ["#contact", tNav("contact")],
   ];
 
   return (
@@ -33,7 +41,7 @@ export const Footer = () => {
               </span>
             </p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {t.tagline}
+              {t("tagline")}
             </p>
           </div>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">

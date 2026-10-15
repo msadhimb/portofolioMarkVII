@@ -3,7 +3,10 @@
 import { ShieldCheck, Layers, Gauge, HeartHandshake } from "lucide-react";
 import { useTheme } from "next-themes";
 import type { CSSProperties } from "react";
-import { useLanguage } from "@/components/LanguageProvider";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
+import id from "./i18n/id";
+import en from "./i18n/en";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SpotlightCard } from "@/components/SpotlightCard";
@@ -19,9 +22,14 @@ const spotlightStyle = {
 } as CSSProperties;
 
 export const About = () => {
-  const { dict } = useLanguage();
+  i18next.addResourceBundle("id", "About", id);
+  i18next.addResourceBundle("en", "About", en);
+  const { t } = useTranslation("About");
+  const paragraphs = t("paragraphs", { returnObjects: true }) as string[];
+  const values = t("values", { returnObjects: true }) as { title: string; body: string }[];
   const { resolvedTheme } = useTheme();
-  const [beforeHighlight, afterHighlight] = dict.about.paragraphs[1].split(dict.about.highlight);
+  const highlight = t("highlight");
+  const [beforeHighlight, afterHighlight] = paragraphs[1].split(highlight);
 
   return (
     <section id="about" aria-label="About" className="scroll-mt-24 py-20 sm:py-28">
@@ -29,17 +37,17 @@ export const About = () => {
         <Reveal>
           <SectionHeading
             index="01"
-            eyebrow={dict.about.eyebrow}
+            eyebrow={t("eyebrow")}
             title={
               <>
-                {dict.about.titleA}{" "}
+                {t("titleA")}{" "}
                 <span className="font-display font-normal italic text-signal">
-                  {dict.about.titleAccent}
+                  {t("titleAccent")}
                 </span>
               </>
             }
           >
-            {dict.about.description}
+            {t("description")}
           </SectionHeading>
         </Reveal>
 
@@ -48,26 +56,26 @@ export const About = () => {
             <div className="space-y-5 text-[15.5px] leading-relaxed text-muted-foreground">
               <p>
                 <strong className="font-medium text-foreground">
-                  {dict.about.greeting}
+                  {t("greeting")}
                 </strong>{" "}
-                {dict.about.paragraphs[0]}
+                {paragraphs[0]}
               </p>
               <p>
                 {beforeHighlight}
                 <strong className="font-medium text-foreground">
-                  {dict.about.highlight}
+                  {highlight}
                 </strong>
                 {afterHighlight}
               </p>
-              <p>{dict.about.paragraphs[2]}</p>
+              <p>{paragraphs[2]}</p>
               <p className="border-l-2 border-signal pl-4 text-foreground">
-                {dict.about.principle}
+                {t("principle")}
               </p>
             </div>
           </Reveal>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-            {dict.about.values.map((v, i) => {
+            {values.map((v, i) => {
               const Icon = icons[i % icons.length];
               return (
                 <Reveal key={v.title} delay={0.06 * i} className="h-full">

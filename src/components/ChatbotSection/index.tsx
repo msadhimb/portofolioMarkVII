@@ -11,7 +11,10 @@ import {
   Terminal,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useLanguage } from "@/components/LanguageProvider";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
+import id from "./i18n/id";
+import en from "./i18n/en";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Badge } from "@/components/ui/badge";
@@ -26,9 +29,12 @@ import { cn } from "@/lib/utils";
  * Data mengalir: UI -> /api/chat -> Ollama (model & key dari env).
  */
 export const ChatbotSection = () => {
-  const { dict, lang } = useLanguage();
-  const t = dict.chatbot;
-  const chat = useChat({ locale: lang, initialGreeting: t.greeting });
+  i18next.addResourceBundle("id", "Chatbot", id);
+  i18next.addResourceBundle("en", "Chatbot", en);
+  const { t, i18n } = useTranslation("Chatbot");
+  const locale = i18n.language === "en" ? "en" : "id";
+  const chat = useChat({ locale, initialGreeting: t("greeting") });
+  const prompts = t("prompts", { returnObjects: true }) as string[];
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
 
@@ -67,21 +73,21 @@ export const ChatbotSection = () => {
           <Reveal>
             <SectionHeading
               index="AI"
-              eyebrow={t.eyebrow}
+              eyebrow={t("eyebrow")}
               title={
                 <>
-                  {t.titleA}{" "}
+                  {t("titleA")}{" "}
                   <span className="font-display font-normal italic text-signal">
-                    {t.titleAccent}
+                    {t("titleAccent")}
                   </span>
                 </>
               }
             >
-              {t.description}
+              {t("description")}
             </SectionHeading>
 
             <div className="mt-7 flex flex-wrap gap-2">
-              {t.prompts.map((p) => (
+              {prompts.map((p) => (
                 <button
                   key={p}
                   type="button"
@@ -100,18 +106,18 @@ export const ChatbotSection = () => {
             <Card className="mt-6 gap-0 overflow-hidden rounded-2xl p-0">
               <div className="flex items-center gap-2 border-b border-border bg-muted/60 px-4 py-2.5 font-mono text-[11px] text-muted-foreground">
                 <Terminal className="size-3.5 text-signal" />
-                {t.terminalTitle}
+                {t("terminalTitle")}
                 <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-emerald-500/12 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">
                   <span className="relative flex size-1.5">
                     <span className="absolute h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
                     <span className="relative size-1.5 rounded-full bg-emerald-500" />
                   </span>
-                  {t.online}
+                  {t("online")}
                 </span>
               </div>
               <dl className="grid grid-cols-2 gap-px bg-border font-mono text-[11px]">
                 {[
-                  [t.modelLabel, chat.model],
+                  [t("modelLabel"), chat.model],
                   ["api", "/api/chat → ollama"],
                   ["stream", "token-by-token"],
                   ["key", "OLLAMA_API_KEY · env"],
@@ -125,7 +131,7 @@ export const ChatbotSection = () => {
             </Card>
 
             <p className="mt-4 font-mono text-[11px] leading-relaxed text-muted-foreground">
-              {t.disclaimer}
+              {t("disclaimer")}
             </p>
           </Reveal>
 
@@ -209,7 +215,7 @@ export const ChatbotSection = () => {
                         ))}
                       </span>
                       <span className="font-mono text-[11px] text-[#8ea0c9]">
-                        {t.thinking}…
+                        {t("thinking")}…
                       </span>
                     </div>
                   </div>
@@ -231,8 +237,8 @@ export const ChatbotSection = () => {
                   <input
                     value={chat.input}
                     onChange={(e) => chat.setInput(e.target.value)}
-                    placeholder={t.placeholder}
-                    aria-label={t.placeholder}
+                    placeholder={t("placeholder")}
+                    aria-label={t("placeholder")}
                     className="h-10 w-full bg-transparent font-mono text-sm text-[#dbe6ff] outline-none placeholder:text-[#8ea0c9]/50"
                   />
                   {chat.loading ? (
@@ -241,7 +247,7 @@ export const ChatbotSection = () => {
                       size="icon"
                       variant="destructive"
                       onClick={chat.stop}
-                      aria-label={t.stop}
+                      aria-label={t("stop")}
                       className="size-9 shrink-0 rounded-xl"
                     >
                       <Square className="size-4" />
@@ -250,7 +256,7 @@ export const ChatbotSection = () => {
                     <Button
                       type="submit"
                       size="icon"
-                      aria-label={t.send}
+                      aria-label={t("send")}
                       disabled={!chat.input.trim()}
                       className="size-9 shrink-0 rounded-xl bg-[#22d3ee] text-[#032630] hover:bg-[#06b6d4] disabled:opacity-40"
                     >
@@ -260,7 +266,7 @@ export const ChatbotSection = () => {
                 </div>
                 <div className="mt-2.5 flex items-center justify-between px-1 font-mono text-[10px] text-[#8ea0c9]/70">
                   <span>
-                    esc = stop · enter = {t.send.toLowerCase()}
+                    esc = stop · enter = {t("send").toLowerCase()}
                   </span>
                   <button
                     type="button"
@@ -268,7 +274,7 @@ export const ChatbotSection = () => {
                     className="inline-flex items-center gap-1 transition-colors hover:text-[#22d3ee]"
                   >
                     <Eraser className="size-3" />
-                    {t.clear}
+                    {t("clear")}
                   </button>
                 </div>
               </form>

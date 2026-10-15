@@ -2,12 +2,23 @@
 
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
-import { useLanguage } from "@/components/LanguageProvider";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
+import { getProjects } from "@/data/localized";
+import id from "./i18n/id";
+import en from "./i18n/en";
 import { ProjectLinks, ProjectVisual, TechList } from "@/components/ProjectCard";
 
 export const Projects = () => {
-  const { dict } = useLanguage();
-  const { projects, projectsSection: t } = dict;
+  i18next.addResourceBundle("id", "Projects", id);
+  i18next.addResourceBundle("en", "Projects", en);
+  const { t, i18n } = useTranslation("Projects");
+  const projects = getProjects(i18n.language);
+  const linksDict = {
+    viewCaseStudy: t("viewCaseStudy"),
+    liveDemo: t("liveDemo"),
+    internalDemo: t("internalDemo"),
+  };
   const featured = projects.find((p) => p.featured) ?? projects[0];
   const rest = projects.filter((p) => p.slug !== featured.slug);
 
@@ -18,20 +29,20 @@ export const Projects = () => {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeading
               index="02"
-              eyebrow={t.eyebrow}
+              eyebrow={t("eyebrow")}
               title={
                 <>
-                  {t.titleA}{" "}
+                  {t("titleA")}{" "}
                   <span className="font-display font-normal italic text-signal">
-                    {t.titleAccent}
+                    {t("titleAccent")}
                   </span>
                 </>
               }
             >
-              {t.description}
+              {t("description")}
             </SectionHeading>
             <p className="max-w-xs font-mono text-xs leading-relaxed text-muted-foreground">
-              {t.note}
+              {t("note")}
             </p>
           </div>
         </Reveal>
@@ -46,7 +57,7 @@ export const Projects = () => {
               <div className="flex flex-col justify-center p-7 sm:p-10">
                 <p className="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] uppercase">
                   <span className="rounded-full bg-signal px-2.5 py-1 text-signal-foreground">
-                    {t.featured}
+                    {t("featured")}
                   </span>
                   <span className="text-muted-foreground">{featured.context}</span>
                 </p>
@@ -75,7 +86,7 @@ export const Projects = () => {
                   <TechList items={featured.technologies} limit={7} />
                 </div>
                 <div className="mt-7">
-                  <ProjectLinks project={featured} dict={t} />
+                  <ProjectLinks project={featured} dict={linksDict} />
                 </div>
               </div>
             </div>
@@ -103,7 +114,7 @@ export const Projects = () => {
                   </p>
                   <div className="mt-4 rounded-xl bg-muted/70 p-4">
                     <p className="font-mono text-[11px] tracking-wider text-muted-foreground uppercase">
-                      {t.problem}
+                      {t("problem")}
                     </p>
                     <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-foreground/90">
                       {p.problem}
@@ -121,7 +132,7 @@ export const Projects = () => {
                     <TechList items={p.technologies} limit={5} />
                   </div>
                   <div className="mt-6 border-t border-border pt-5">
-                    <ProjectLinks project={p} dict={t} />
+                    <ProjectLinks project={p} dict={linksDict} />
                   </div>
                 </div>
               </article>

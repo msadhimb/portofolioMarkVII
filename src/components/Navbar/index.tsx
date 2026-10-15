@@ -3,27 +3,32 @@
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 import { GlassSurface } from "@/components/GlassSurface";
-import { useLanguage } from "@/components/LanguageProvider";
 import { LocaleToggle } from "@/components/LocaleToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { siteConfig } from "@/data/profile";
 import { cn } from "@/lib/utils";
+import id from "./i18n/id";
+import en from "./i18n/en";
 
 export const Navbar = () => {
-  const { dict } = useLanguage();
+  i18next.addResourceBundle("id", "Navbar", id);
+  i18next.addResourceBundle("en", "Navbar", en);
+  const { t } = useTranslation("Navbar");
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const links = [
-    { href: "#about", label: dict.nav.about },
-    { href: "#projects", label: dict.nav.projects },
-    { href: "#experience", label: dict.nav.experience },
-    { href: "#skills", label: dict.nav.skills },
-    { href: "#ai", label: dict.nav.ai, highlight: true },
-    { href: "#contact", label: dict.nav.contact },
+    { href: "#about", label: t("about") },
+    { href: "#projects", label: t("projects") },
+    { href: "#experience", label: t("experience") },
+    { href: "#skills", label: t("skills") },
+    { href: "#ai", label: t("ai"), highlight: true },
+    { href: "#contact", label: t("contact") },
   ];
 
   useEffect(() => {
@@ -46,7 +51,7 @@ export const Navbar = () => {
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-primary-foreground"
       >
-        {dict.nav.skipToContent}
+        {t("skipToContent")}
       </a>
       <div className="mx-auto max-w-6xl">
         <div className="relative flex items-center justify-between gap-4 rounded-2xl px-4 py-3">
@@ -72,7 +77,7 @@ export const Navbar = () => {
           <Link
             href="#top"
             className="relative flex items-center gap-2.5 font-mono text-sm"
-            aria-label={dict.nav.backToTop}
+            aria-label={t("backToTop")}
           >
             <span className="flex size-8 items-center justify-center rounded-md bg-foreground font-semibold text-background">
               {siteConfig.monogram}
@@ -104,14 +109,14 @@ export const Navbar = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <ThemeToggle
-                  toLightLabel={dict.nav.toggleToLight}
-                  toDarkLabel={dict.nav.toggleToDark}
+                  toLightLabel={t("toggleToLight")}
+                  toDarkLabel={t("toggleToDark")}
                 />
               </TooltipTrigger>
-              <TooltipContent side="bottom">{dict.nav.themeHint}</TooltipContent>
+              <TooltipContent side="bottom">{t("themeHint")}</TooltipContent>
             </Tooltip>
             <Button asChild className="hidden rounded-full md:inline-flex">
-              <Link href="#contact">{dict.nav.hireMe}</Link>
+              <Link href="#contact">{t("hireMe")}</Link>
             </Button>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -121,14 +126,14 @@ export const Navbar = () => {
                   className="rounded-full md:hidden"
                   aria-expanded={open}
                   aria-controls="mobile-menu"
-                  aria-label={open ? dict.nav.closeMenu : dict.nav.openMenu}
+                  aria-label={open ? t("closeMenu") : t("openMenu")}
                   onClick={() => setOpen((v) => !v)}
                 >
                   {open ? <X className="size-5" /> : <Menu className="size-5" />}
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                {open ? dict.nav.closeMenu : dict.nav.openMenu}
+                {open ? t("closeMenu") : t("openMenu")}
               </TooltipContent>
             </Tooltip>
           </div>
@@ -161,7 +166,7 @@ export const Navbar = () => {
                 ))}
                 <Button asChild className="mt-2 h-11 rounded-xl">
                   <Link href="#contact" onClick={() => setOpen(false)}>
-                    {dict.nav.hireMe}
+                    {t("hireMe")}
                   </Link>
                 </Button>
               </nav>

@@ -1,14 +1,20 @@
 "use client";
 
 import { Building2 } from "lucide-react";
-import { useLanguage } from "@/components/LanguageProvider";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
+import { getExperiences } from "@/data/localized";
+import id from "./i18n/id";
+import en from "./i18n/en";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Badge } from "@/components/ui/badge";
 
 export const Experience = () => {
-  const { dict } = useLanguage();
-  const { experiences, experienceSection: t } = dict;
+  i18next.addResourceBundle("id", "Experience", id);
+  i18next.addResourceBundle("en", "Experience", en);
+  const { t, i18n } = useTranslation("Experience");
+  const experiences = getExperiences(i18n.language);
 
   return (
     <section
@@ -20,17 +26,17 @@ export const Experience = () => {
         <Reveal>
           <SectionHeading
             index="03"
-            eyebrow={t.eyebrow}
+            eyebrow={t("eyebrow")}
             title={
               <>
-                {t.titleA}{" "}
+                {t("titleA")}{" "}
                 <span className="font-display font-normal italic text-signal">
-                  {t.titleAccent}
+                  {t("titleAccent")}
                 </span>
               </>
             }
           >
-            {t.description}
+            {t("description")}
           </SectionHeading>
         </Reveal>
 

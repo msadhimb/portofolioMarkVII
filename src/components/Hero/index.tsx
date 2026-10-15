@@ -6,7 +6,11 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { BlurText } from "@/components/BlurText";
 import { CountUp } from "@/components/CountUp";
-import { useLanguage } from "@/components/LanguageProvider";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
+import { getProjects } from "@/data/localized";
+import id from "./i18n/id";
+import en from "./i18n/en";
 import { Magnet } from "@/components/Magnet";
 import { ShinyText } from "@/components/ShinyText";
 import { Button } from "@/components/ui/button";
@@ -15,7 +19,9 @@ import { siteConfig } from "@/data/profile";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export const Hero = () => {
-  const { dict } = useLanguage();
+  i18next.addResourceBundle("id", "Hero", id);
+  i18next.addResourceBundle("en", "Hero", en);
+  const { t, i18n } = useTranslation("Hero");
   const reduce = useReducedMotion();
   const { resolvedTheme } = useTheme();
 
@@ -31,12 +37,13 @@ export const Hero = () => {
   // Shine harus tetap terlihat: putih hanya untuk dark, violet muda untuk light
   // (putih di atas background terang membuat teks tampak transparan).
   const shineColor = resolvedTheme === "dark" ? "#ffffff" : "#c4b5fd";
-  const techCount = new Set(dict.projects.flatMap((p) => p.technologies)).size;
+  const techCount = new Set(getProjects(i18n.language).flatMap((p) => p.technologies)).size;
 
+  const statsLabels = t("stats", { returnObjects: true }) as string[];
   const stats = [
-    { to: 4, label: dict.hero.stats[0] },
-    { to: 3, label: dict.hero.stats[1] },
-    { to: techCount, label: dict.hero.stats[2] },
+    { to: 4, label: statsLabels[0] },
+    { to: 3, label: statsLabels[1] },
+    { to: techCount, label: statsLabels[2] },
   ];
 
   return (
@@ -62,7 +69,7 @@ export const Hero = () => {
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
                     <span className="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
                   </span>
-                  {dict.hero.availability}
+                  {t("availability")}
                 </span>
                 <span className="inline-flex items-center gap-1 font-mono">
                   <MapPin className="size-3" />
@@ -75,7 +82,7 @@ export const Hero = () => {
               {...item(0.08)}
               className="mt-8 font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase"
             >
-              {dict.hero.role}
+              {t("role")}
             </motion.p>
 
             {/* Stiker keahlian miring — sentuhan playful khas */}
@@ -99,7 +106,7 @@ export const Hero = () => {
                 href="#ai"
                 className="sticker inline-block rotate-1 rounded-lg bg-foreground px-2.5 py-1 font-mono text-[11px] font-semibold text-background transition-transform hover:scale-105"
               >
-                ✦ tanya Salman AI ↓
+                {t("stickerAi")}
               </a>
             </motion.div>
 
@@ -120,7 +127,7 @@ export const Hero = () => {
             </motion.h1>
 
             <BlurText
-              text={`${dict.hero.statement} ${dict.hero.statementExtra}`}
+              text={`${t("statement")} ${t("statementExtra")}`}
               delay={45}
               animateBy="words"
               className="text-balance mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground sm:text-xl"
@@ -130,20 +137,20 @@ export const Hero = () => {
               <Magnet padding={48} magnetStrength={3.5} maxOffset={10}>
                 <Button asChild size="lg" className="h-11 rounded-full px-6">
                   <Link href="#projects">
-                    {dict.hero.ctaProjects}
+                    {t("ctaProjects")}
                     <ArrowDown className="size-4" />
                   </Link>
                 </Button>
               </Magnet>
               <Magnet padding={48} magnetStrength={3.5} maxOffset={10}>
                 <Button asChild variant="outline" size="lg" className="h-11 rounded-full px-6">
-                  <Link href="#contact">{dict.hero.ctaContact}</Link>
+                  <Link href="#contact">{t("ctaContact")}</Link>
                 </Button>
               </Magnet>
               <Button asChild variant="ghost" size="lg" className="h-11 rounded-full px-5">
                 <Link href="/cv">
                   <Download className="size-4" />
-                  {dict.hero.ctaCv}
+                  {t("ctaCv")}
                 </Link>
               </Button>
             </motion.div>
@@ -224,7 +231,7 @@ export const Hero = () => {
                 tabIndex={-1}
                 className="inline-flex items-center gap-1 text-signal"
               >
-                view work <ArrowUpRight className="size-3" />
+                {t("viewWork")} <ArrowUpRight className="size-3" />
               </Link>
             </div>
           </motion.aside>

@@ -2,7 +2,11 @@
 
 import type { CSSProperties } from "react";
 import { useTheme } from "next-themes";
-import { useLanguage } from "@/components/LanguageProvider";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
+import { getPrinciples, getSkillGroups } from "@/data/localized";
+import id from "./i18n/id";
+import en from "./i18n/en";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SpotlightCard } from "@/components/SpotlightCard";
@@ -16,26 +20,30 @@ const spotlightStyle = {
 } as CSSProperties;
 
 export const Skills = () => {
-  const { dict } = useLanguage();
+  i18next.addResourceBundle("id", "Skills", id);
+  i18next.addResourceBundle("en", "Skills", en);
+  const { t, i18n } = useTranslation("Skills");
   const { resolvedTheme } = useTheme();
-  const { skillGroups, principles, skillsSection: t } = dict;
+  const skillGroups = getSkillGroups(i18n.language);
+  const principles = getPrinciples(i18n.language);
+  const rangeItems = t("rangeItems", { returnObjects: true }) as string[];
   return (
     <section id="skills" aria-label="Skills and approach" className="scroll-mt-24 border-t border-border py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <Reveal>
           <SectionHeading
             index="04"
-            eyebrow={t.eyebrow}
+            eyebrow={t("eyebrow")}
             title={
               <>
-                {t.titleA}{" "}
+                {t("titleA")}{" "}
                 <span className="font-display font-normal italic text-signal">
-                  {t.titleAccent}
+                  {t("titleAccent")}
                 </span>
               </>
             }
           >
-            {t.description}
+            {t("description")}
           </SectionHeading>
         </Reveal>
 
@@ -75,14 +83,14 @@ export const Skills = () => {
             <article className="card-futuristic flex h-full flex-col justify-between rounded-2xl bg-foreground p-6 text-background shadow-[0_24px_55px_-30px_rgba(2,132,199,0.6)]">
               <div>
                 <h3 className="font-mono text-sm font-semibold tracking-wide uppercase">
-                  {t.rangeTitle}
+                  {t("rangeTitle")}
                 </h3>
                 <p className="font-display mt-1 text-[15px] italic opacity-70">
-                  {t.rangeNote}
+                  {t("rangeNote")}
                 </p>
               </div>
               <ol className="mt-5 space-y-2 font-mono text-[13px]">
-                {t.rangeItems.map((s) => (
+                {rangeItems.map((s) => (
                   <li key={s} className="flex items-center justify-between border-b border-background/15 pb-2">
                     {s}
                     <span aria-hidden="true">→</span>

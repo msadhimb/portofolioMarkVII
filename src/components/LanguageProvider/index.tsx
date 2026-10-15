@@ -1,57 +1,41 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, type ReactNode } from "react";
+import { I18nextProvider } from "react-i18next";
+import i18n from "@/i18n";
 import { defaultLocale, type Locale } from "@/i18n/config";
-import { dictionaries, type Dictionary } from "@/i18n/dictionaries";
-
-type LanguageContextValue = {
-  lang: Locale;
-  dict: Dictionary;
-  setLang: (lang: Locale) => void;
-};
-
-const LanguageContext = createContext<LanguageContextValue>({
-  lang: defaultLocale,
-  dict: dictionaries[defaultLocale],
-  setLang: () => {},
-});
 
 type LanguageProviderProps = {
   children: ReactNode;
 };
 
+/**
+ * Provider i18n ala PLN (nextjs-simpp-eiqc ClientProvider):
+ * satu I18nextProvider global. Bahasa dari localStorage, default "id",
+ * disinkron ke document.documentElement.lang.
+ * Ganti bahasa dari mana saja via i18n.changeLanguage (lihat LocaleToggle).
+ */
 export const LanguageProvider = ({ children }: LanguageProviderProps) => {
-  const [lang, setLangState] = useState<Locale>(defaultLocale);
-
   useEffect(() => {
     const saved = window.localStorage.getItem("locale");
-    const next: Locale = saved === "en" || saved === "id" ? saved : defaultLocale;
+    const next: Locale =
+      saved === "en" || saved === "id" ? saved : defaultLocale;
     document.documentElement.lang = next;
-    // Hydrate saved preference after mount to avoid SSR mismatch.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLangState(next);
+    if (i18n.language !== next) {
+      void i18n.changeLanguage(next);
+    }
   }, []);
 
-  const setLang = useCallback((next: Locale) => {
-    setLangState(next);
-    window.localStorage.setItem("locale", next);
-    document.documentElement.lang = next;
+  useEffect(() => {
+    const onChanged = (lng: string) => {
+      document.documentElement.lang = lng;
+      window.localStorage.setItem("locale", lng);
+    };
+    i18n.on("languageChanged", onChanged);
+    return () => {
+      i18n.off("languageChanged", onChanged);
+    };
   }, []);
 
-  const value = useMemo(
-    () => ({ lang, dict: dictionaries[lang], setLang }),
-    [lang, setLang]
-  );
-
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
-
-export const useLanguage = () => useContext(LanguageContext);

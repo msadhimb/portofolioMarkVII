@@ -2,7 +2,11 @@ import { ArrowUpRight, Lock } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import type { Project } from "@/data/projects";
-import type { ProjectsSectionDict } from "@/i18n/dictionaries";
+export type ProjectLinksDict = {
+  viewCaseStudy: string;
+  liveDemo: string;
+  internalDemo: string;
+};
 import { cn } from "@/lib/utils";
 
 type ProjectVisualProps = {
@@ -16,7 +20,7 @@ type TechListProps = {
 
 type ProjectLinksProps = {
   project: Project;
-  dict: ProjectsSectionDict;
+  dict: ProjectLinksDict;
 };
 
 /** Lightweight, code-driven visual preview — no image assets needed. */
