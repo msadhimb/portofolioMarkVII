@@ -224,7 +224,6 @@
   }
   /* Varian ramping untuk card: siku kecil semi-transparan di tiap sudut */
   .card-futuristic {
-    --corner: color-mix(in srgb, var(--signal) 60%, transparent);
     background-image:
       linear-gradient(var(--corner), var(--corner)),
       linear-gradient(var(--corner), var(--corner)),

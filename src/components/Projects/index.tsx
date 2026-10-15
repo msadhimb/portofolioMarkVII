@@ -1,29 +1,44 @@
-"use client";
+"use client"
 
-import { Reveal } from "@/components/Reveal";
-import { SectionHeading } from "@/components/SectionHeading";
-import i18next from "i18next";
-import { useTranslation } from "react-i18next";
-import { getProjects } from "@/data/localized";
-import id from "./i18n/id";
-import en from "./i18n/en";
-import { ProjectLinks, ProjectVisual, TechList } from "@/components/ProjectCard";
+import { Reveal } from "@/components/Reveal"
+import { SectionHeading } from "@/components/SectionHeading"
+import i18next from "i18next"
+import { useTranslation } from "react-i18next"
+import id from "./i18n/id"
+import en from "./i18n/en"
+import { ProjectLinks, ProjectVisual, TechList } from "@/components/ProjectCard"
+import { useQuery } from "@tanstack/react-query"
+import { useProjects } from "./store"
 
 export const Projects = () => {
-  i18next.addResourceBundle("id", "Projects", id);
-  i18next.addResourceBundle("en", "Projects", en);
-  const { t, i18n } = useTranslation("Projects");
-  const projects = getProjects(i18n.language);
+  i18next.addResourceBundle("id", "Projects", id)
+  i18next.addResourceBundle("en", "Projects", en)
+  const { t, i18n } = useTranslation("Projects")
+
+  const { getProjects } = useProjects()
+
+  const { data: projects } = useQuery({
+    queryKey: ["projects", i18n.language],
+    queryFn: () => getProjects(i18n.language),
+  })
+
   const linksDict = {
     viewCaseStudy: t("viewCaseStudy"),
     liveDemo: t("liveDemo"),
     internalDemo: t("internalDemo"),
-  };
-  const featured = projects.find((p) => p.featured) ?? projects[0];
-  const rest = projects.filter((p) => p.slug !== featured.slug);
+  }
+  const featured: any = projects?.find((p: any) => p.featured) ?? projects?.[0]
+  const rest: any =
+    projects?.filter((p: any) => p.slug !== featured?.slug) || []
+
+  if (!featured) return null
 
   return (
-    <section id="projects" aria-label="Selected projects" className="scroll-mt-24 border-t border-border py-20 sm:py-28">
+    <section
+      id="projects"
+      aria-label="Selected projects"
+      className="scroll-mt-24 border-t border-border py-20 sm:py-28"
+    >
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <Reveal>
           <div className="flex flex-wrap items-end justify-between gap-6">
@@ -33,7 +48,7 @@ export const Projects = () => {
               title={
                 <>
                   {t("titleA")}{" "}
-                  <span className="font-display font-normal italic text-signal">
+                  <span className="font-display font-normal text-signal italic">
                     {t("titleAccent")}
                   </span>
                 </>
@@ -59,19 +74,21 @@ export const Projects = () => {
                   <span className="rounded-full bg-signal px-2.5 py-1 text-signal-foreground">
                     {t("featured")}
                   </span>
-                  <span className="text-muted-foreground">{featured.context}</span>
+                  <span className="text-muted-foreground">
+                    {featured.context}
+                  </span>
                 </p>
                 <h3 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
                   {featured.title}
                 </h3>
-                <p className="font-display mt-1 text-lg italic text-muted-foreground">
+                <p className="mt-1 font-display text-lg text-muted-foreground italic">
                   {featured.tagline}
                 </p>
                 <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
                   {featured.description}
                 </p>
                 <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-border py-5 sm:grid-cols-4">
-                  {(featured.metrics ?? []).map((m) => (
+                  {(featured.metrics ?? []).map((m: any) => (
                     <div key={m.label}>
                       <dt className="font-mono text-[11px] text-muted-foreground uppercase">
                         {m.label}
@@ -95,7 +112,7 @@ export const Projects = () => {
 
         {/* Rest — editorial rows, not repetitive cards */}
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          {rest.map((p, i) => (
+          {rest.map((p: any, i: number) => (
             <Reveal key={p.slug} delay={0.05 * i}>
               <article className="card-futuristic flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(2,132,199,0.5)] transition-all duration-300 hover:-translate-y-1 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.45)]">
                 <div className="border-b border-border bg-muted/60">
@@ -108,7 +125,9 @@ export const Projects = () => {
                   <h3 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
                     {p.title}
                   </h3>
-                  <p className="font-display mt-1 italic text-muted-foreground">{p.tagline}</p>
+                  <p className="mt-1 font-display text-muted-foreground italic">
+                    {p.tagline}
+                  </p>
                   <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
                     {p.description}
                   </p>
@@ -121,9 +140,15 @@ export const Projects = () => {
                     </p>
                   </div>
                   <ul className="mt-4 space-y-1.5">
-                    {p.highlights.slice(0, 3).map((h) => (
-                      <li key={h} className="flex gap-2 text-sm text-muted-foreground">
-                        <span aria-hidden="true" className="mt-[7px] size-1.5 shrink-0 rounded-full bg-signal" />
+                    {p.highlights.slice(0, 3).map((h: any) => (
+                      <li
+                        key={h}
+                        className="flex gap-2 text-sm text-muted-foreground"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="mt-[7px] size-1.5 shrink-0 rounded-full bg-signal"
+                        />
                         {h}
                       </li>
                     ))}
@@ -141,5 +166,5 @@ export const Projects = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}

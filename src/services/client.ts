@@ -8,7 +8,7 @@ const CancelToken = axios.CancelToken
 let cancel: any = undefined
 
 const axiosInterceptorInstance = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API}/api`,
+  baseURL: `/api`,
   timeout: 1000000,
 })
 

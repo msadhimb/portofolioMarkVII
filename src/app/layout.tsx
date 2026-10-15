@@ -1,20 +1,21 @@
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
-import type { Metadata } from "next";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
+import type { Metadata } from "next"
 
-import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { LanguageProvider } from "@/components/LanguageProvider";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+import "./globals.css"
+import { ThemeProvider } from "@/components/ThemeProvider"
+import { LanguageProvider } from "@/components/LanguageProvider"
+import { QueryProvider } from "@/components/QueryProvider"
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
 const display = Instrument_Serif({
   subsets: ["latin"],
   variable: "--font-display",
   weight: "400",
   style: ["normal", "italic"],
-});
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://salmanbaqy.dev"),
@@ -51,11 +52,11 @@ export const metadata: Metadata = {
       "Next.js · TypeScript · Supabase · Enterprise & produk independen.",
   },
   robots: { index: true, follow: true },
-};
+}
 
 type RootLayoutProps = Readonly<{
-  children: React.ReactNode;
-}>;
+  children: React.ReactNode
+}>
 
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
@@ -70,27 +71,16 @@ const RootLayout = ({ children }: RootLayoutProps) => {
       )}
     >
       <body className="font-sans">
-        <ThemeProvider>
-          <TooltipProvider>
-            <LanguageProvider>{children}</LanguageProvider>
-          </TooltipProvider>
-        </ThemeProvider>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Muhamad Salman Adhim Baqy",
-              jobTitle: "Web Developer / Frontend Engineer",
-              address: { "@type": "PostalAddress", addressLocality: "Salatiga", addressCountry: "ID" },
-              knowsAbout: ["TypeScript", "Next.js", "React", "Supabase", "PostgreSQL"],
-            }),
-          }}
-        />
+        <QueryProvider>
+          <ThemeProvider>
+            <TooltipProvider>
+              <LanguageProvider>{children}</LanguageProvider>
+            </TooltipProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
-  );
-};
+  )
+}
 
-export default RootLayout;
+export default RootLayout
