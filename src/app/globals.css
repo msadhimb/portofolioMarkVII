@@ -134,7 +134,11 @@
     background-size: 44px 44px;
   }
   .bg-grid-fade {
-    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 35%, transparent 78%);
+    mask-image: radial-gradient(
+      ellipse 90% 70% at 50% 0%,
+      black 35%,
+      transparent 78%
+    );
   }
   .tabular {
     font-variant-numeric: tabular-nums;
@@ -199,15 +203,23 @@
       linear-gradient(var(--hud), var(--hud)),
       linear-gradient(var(--hud), var(--hud));
     background-size:
-      26px 2px, 2px 26px,
-      26px 2px, 2px 26px,
-      26px 2px, 2px 26px,
-      26px 2px, 2px 26px;
+      26px 2px,
+      2px 26px,
+      26px 2px,
+      2px 26px,
+      26px 2px,
+      2px 26px,
+      26px 2px,
+      2px 26px;
     background-position:
-      left top, left top,
-      right top, right top,
-      left bottom, left bottom,
-      right bottom, right bottom;
+      left top,
+      left top,
+      right top,
+      right top,
+      left bottom,
+      left bottom,
+      right bottom,
+      right bottom;
     background-repeat: no-repeat;
   }
   /* Varian ramping untuk card: siku kecil semi-transparan di tiap sudut */
@@ -223,22 +235,29 @@
       linear-gradient(var(--corner), var(--corner)),
       linear-gradient(var(--corner), var(--corner));
     background-size:
-      18px 2px, 2px 18px,
-      18px 2px, 2px 18px,
-      18px 2px, 2px 18px,
-      18px 2px, 2px 18px;
+      18px 2px,
+      2px 18px,
+      18px 2px,
+      2px 18px,
+      18px 2px,
+      2px 18px,
+      18px 2px,
+      2px 18px;
     background-position:
-      left top, left top,
-      right top, right top,
-      left bottom, left bottom,
-      right bottom, right bottom;
+      left top,
+      left top,
+      right top,
+      right top,
+      left bottom,
+      left bottom,
+      right bottom,
+      right bottom;
     background-repeat: no-repeat;
   }
   /* Teks neon: glow halus mengikuti --signal */
   .text-glow {
     text-shadow:
-      0 0 22px
-      color-mix(in srgb, var(--signal) 60%, transparent),
+      0 0 22px color-mix(in srgb, var(--signal) 60%, transparent),
       0 0 2px var(--signal);
   }
 }
