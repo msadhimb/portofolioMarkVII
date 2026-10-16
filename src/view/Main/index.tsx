@@ -1,4 +1,5 @@
 import { About } from "@/components/About"
+import { Awards } from "@/components/Awards"
 import { ChatbotSection } from "@/components/ChatbotSection"
 import { Contact } from "@/components/Contact"
 import { Experience } from "@/components/Experience"
@@ -28,6 +29,7 @@ export const MainView = () => {
       <About />
       <Projects />
       <Experience />
+      <Awards />
       <Skills />
       <ChatbotSection />
       <Contact />

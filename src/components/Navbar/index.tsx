@@ -26,6 +26,7 @@ export const Navbar = () => {
     { href: "#about", label: t("about") },
     { href: "#projects", label: t("projects") },
     { href: "#experience", label: t("experience") },
+    { href: "#awards", label: t("awards") },
     { href: "#skills", label: t("skills") },
     { href: "#ai", label: t("ai"), highlight: true },
     { href: "#contact", label: t("contact") },

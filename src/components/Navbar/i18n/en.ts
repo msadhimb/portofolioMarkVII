@@ -2,6 +2,7 @@ const locale = {
     about: "About",
     projects: "Projects",
     experience: "Experience",
+    awards: "Awards",
     skills: "Skills",
     contact: "Contact",
     ai: "Ask AI",

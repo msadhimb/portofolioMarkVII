@@ -23,3 +23,19 @@ export type SkillGroup = {
   note: string
   items: string[]
 }
+
+export type AwardCategory = "certificate" | "award" | "honor"
+
+export type AwardItem = {
+  slug: string
+  title: string
+  issuer: string
+  category: AwardCategory
+  issueDate: string
+  expiryDate?: string
+  credentialId?: string
+  credentialUrl?: string
+  description: string
+  skills: string[]
+}
+

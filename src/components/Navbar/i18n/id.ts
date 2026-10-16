@@ -2,6 +2,7 @@ const locale = {
     about: "Tentang",
     projects: "Proyek",
     experience: "Pengalaman",
+    awards: "Sertifikat",
     skills: "Keahlian",
     contact: "Kontak",
     ai: "Tanya AI",
