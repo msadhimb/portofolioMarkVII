@@ -9,6 +9,9 @@ import { skillGroups as skillGroupsId } from "./skillGroups.id"
 import { skillGroups as skillGroupsEn } from "./skillGroups.en"
 import { principles as principlesId } from "./principles.id"
 import { principles as principlesEn } from "./principles.en"
+import { awards as awardsId } from "./awards.id"
+import { awards as awardsEn } from "./awards.en"
+import type { AwardItem } from "./profile"
 
 export type Principle = {
   title: string
@@ -28,6 +31,9 @@ export const getSkillGroups = (locale: string): SkillGroup[] =>
 
 export const getPrinciples = (locale: string): Principle[] =>
   pick(locale, principlesId as Principle[], principlesEn as Principle[])
+
+export const getAwards = (locale: string): AwardItem[] =>
+  pick(locale, awardsId, awardsEn)
 
 export const isLocale = (value: string): value is Locale =>
   value === "id" || value === "en"

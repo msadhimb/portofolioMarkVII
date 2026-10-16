@@ -27,10 +27,10 @@ const locale = {
   validationTooLong: "Message is too long (max 2000 characters).",
   fallbackError: "Something went wrong.",
   emptyReply: "Hmm, empty reply — try asking again?",
-  contactSuffix: "or email me at halo@salmanbaqy.dev",
+  contactSuffix: "or email me at adhimbaqy72@gmail.com",
   emptyState: "No conversation yet — send your first message below.",
   copyAnswer: "Copy answer",
   inputHint: "esc = stop · enter = send",
-};
+}
 
-export default locale;
+export default locale

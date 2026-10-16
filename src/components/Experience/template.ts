@@ -15,7 +15,14 @@ export const experiencesTemplate = [
       "Memuat poin pengalaman yang sedang dimuat dari server.",
       "Memuat poin pengalaman yang sedang dimuat dari server.",
     ],
-    stack: ["Next.js", "TypeScript", "React Query", "Zustand", "Tailwind", "Axios"],
+    stack: [
+      "Next.js",
+      "TypeScript",
+      "React Query",
+      "Zustand",
+      "Tailwind",
+      "Axios",
+    ],
   },
   {
     slug: "duitku",

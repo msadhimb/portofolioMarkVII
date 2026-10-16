@@ -27,10 +27,10 @@ const locale = {
   validationTooLong: "Pesan terlalu panjang (maks 2000 karakter).",
   fallbackError: "Terjadi kesalahan.",
   emptyReply: "Hmm, jawabannya kosong — coba tanya lagi ya?",
-  contactSuffix: "atau email saya di halo@salmanbaqy.dev",
+  contactSuffix: "atau email saya di adhimbaqy72@gmail.com",
   emptyState: "Belum ada percakapan — kirim pesan pertama di bawah.",
   copyAnswer: "Salin jawaban",
   inputHint: "esc = stop · enter = kirim",
-};
+}
 
-export default locale;
+export default locale

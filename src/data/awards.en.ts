@@ -8,7 +8,8 @@ export const awards: AwardItem[] = [
     category: "certificate",
     issueDate: "2024",
     credentialId: "DICODING-RWD-2024-8841",
-    credentialUrl: "https://www.dicoding.com/certificates/DICODING-RWD-2024-8841",
+    credentialUrl:
+      "https://www.dicoding.com/certificates/DICODING-RWD-2024-8841",
     description:
       "Advanced certification covering Clean Architecture, complex state management, automated testing (TDD/Cypress), PWA, and web performance.",
     skills: ["React", "Clean Architecture", "PWA", "TDD", "Cypress"],
@@ -46,7 +47,12 @@ export const awards: AwardItem[] = [
     issueDate: "2023",
     description:
       "Academic excellence honor awarded for top graduating GPA and published research on modern web computing architecture.",
-    skills: ["Computer Science", "Algorithms", "Software Engineering", "Research"],
+    skills: [
+      "Computer Science",
+      "Algorithms",
+      "Software Engineering",
+      "Research",
+    ],
   },
   {
     slug: "pln-innovation-award",
@@ -56,7 +62,12 @@ export const awards: AwardItem[] = [
     issueDate: "2023",
     description:
       "Recognition for refactoring multi-tier approval workflows and optimizing enterprise dashboard rendering performance by 40%.",
-    skills: ["Enterprise Architecture", "React Query", "Audit Logging", "Optimization"],
+    skills: [
+      "Enterprise Architecture",
+      "React Query",
+      "Audit Logging",
+      "Optimization",
+    ],
   },
   {
     slug: "meta-frontend-developer",
@@ -65,7 +76,8 @@ export const awards: AwardItem[] = [
     category: "certificate",
     issueDate: "2022",
     credentialId: "META-FRONTEND-77312",
-    credentialUrl: "https://coursera.org/verify/professional-cert/META-FRONTEND-77312",
+    credentialUrl:
+      "https://coursera.org/verify/professional-cert/META-FRONTEND-77312",
     description:
       "Comprehensive curriculum spanning advanced JavaScript core concepts, React ecosystems, UX heuristics, version control, and accessibility.",
     skills: ["JavaScript", "React", "UI/UX", "Git", "Accessibility"],

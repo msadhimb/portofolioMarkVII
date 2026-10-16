@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server"
 import OpenAI from "openai"
+import {
+  CHAT_TOOLS,
+  buildSystemPrompt,
+  executeChatTool,
+} from "./knowledge"
 
 type ChatMessage = {
   role: "system" | "user" | "assistant"
@@ -19,11 +24,6 @@ const getConfig = () => ({
   apiKey: process.env.OLLAMA_API_KEY || "",
   model: process.env.OLLAMA_MODEL || DEFAULT_MODEL,
 })
-
-const buildSystemPrompt = (locale: string) =>
-  locale === "en"
-    ? `...prompt EN kamu yang sama...`
-    : `...prompt ID kamu yang sama...`
 
 export const GET = async () => {
   const { model, apiKey } = getConfig()
@@ -73,26 +73,135 @@ export const POST = async (req: Request) => {
 
   const client = new OpenAI({ baseURL, apiKey, timeout: 60_000, maxRetries: 1 })
 
-  let completion: Awaited<ReturnType<typeof createStream>>
-  const createStream = () =>
-    client.chat.completions.create(
-      {
-        model,
-        stream: true,
-        temperature: 0.7,
-        messages: [
-          { role: "system", content: buildSystemPrompt(locale) },
-          ...userMessages,
-        ],
-      },
-      { signal: req.signal }
-    )
+  const messages: OpenAI.ChatCompletionMessageParam[] = [
+    { role: "system", content: buildSystemPrompt(locale) },
+    ...userMessages,
+  ]
+
+  let stream: ReadableStream<Uint8Array>
+  const encoder = new TextEncoder()
 
   try {
-    completion = await createStream()
+    // 1. Initial call with tools enabled (evaluates if model wants to fetch knowledge)
+    let initialRes: OpenAI.Chat.Completions.ChatCompletion
+    try {
+      initialRes = await client.chat.completions.create(
+        {
+          model,
+          temperature: 0.2,
+          messages,
+          tools: CHAT_TOOLS,
+          tool_choice: "auto",
+        },
+        { signal: req.signal }
+      )
+    } catch (toolsErr) {
+      console.warn("Tool calling initial request failed, falling back to direct stream:", toolsErr)
+      // Fallback if model doesn't support tools or tools parameter error
+      const directStream = await client.chat.completions.create(
+        {
+          model,
+          stream: true,
+          temperature: 0.6,
+          messages,
+        },
+        { signal: req.signal }
+      )
+
+      stream = new ReadableStream<Uint8Array>({
+        async start(controller) {
+          try {
+            for await (const chunk of directStream) {
+              const text = chunk.choices[0]?.delta?.content
+              if (text) controller.enqueue(encoder.encode(text))
+            }
+            controller.close()
+          } catch (err) {
+            controller.error(err)
+          }
+        },
+        cancel() {
+          directStream.controller.abort()
+        },
+      })
+
+      return new Response(stream, {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "no-cache, no-transform",
+          "X-Ollama-Model": model,
+        },
+      })
+    }
+
+    const initialChoice = initialRes.choices[0]
+    const toolCalls = initialChoice?.message?.tool_calls
+
+    if (toolCalls && toolCalls.length > 0) {
+      // 2. Execute tools requested by the model with real portfolio data
+      messages.push(initialChoice.message)
+
+      for (const call of toolCalls) {
+        if (call.type === "function") {
+          let parsedArgs: Record<string, unknown> = {}
+          try {
+            parsedArgs = JSON.parse(call.function.arguments || "{}")
+          } catch {
+            parsedArgs = {}
+          }
+
+          const toolResult = await executeChatTool(call.function.name, parsedArgs, locale)
+
+          messages.push({
+            role: "tool",
+            tool_call_id: call.id,
+            content: JSON.stringify(toolResult),
+          })
+        }
+      }
+
+      // 3. Final call streaming the grounded answer based on tool outputs
+      const finalStream = await client.chat.completions.create(
+        {
+          model,
+          stream: true,
+          temperature: 0.5,
+          messages,
+        },
+        { signal: req.signal }
+      )
+
+      stream = new ReadableStream<Uint8Array>({
+        async start(controller) {
+          try {
+            for await (const chunk of finalStream) {
+              const text = chunk.choices[0]?.delta?.content
+              if (text) controller.enqueue(encoder.encode(text))
+            }
+            controller.close()
+          } catch (err) {
+            controller.error(err)
+          }
+        },
+        cancel() {
+          finalStream.controller.abort()
+        },
+      })
+    } else {
+      // No tools called; model answered directly
+      const directContent = initialChoice?.message?.content || ""
+      stream = new ReadableStream<Uint8Array>({
+        start(controller) {
+          if (directContent) {
+            controller.enqueue(encoder.encode(directContent))
+          }
+          controller.close()
+        },
+      })
+    }
   } catch (err) {
     if (err instanceof OpenAI.APIError && err.status) {
-      const messages: Record<number, { en: string; id: string }> = {
+      const errorMessages: Record<number, { en: string; id: string }> = {
         401: {
           en: "Invalid or missing Ollama API key.",
           id: "API key Ollama tidak valid atau hilang.",
@@ -106,7 +215,7 @@ export const POST = async (req: Request) => {
           id: "Batas penggunaan Ollama Cloud tercapai. Coba lagi nanti.",
         },
       }
-      const m = messages[err.status]
+      const m = errorMessages[err.status]
       return NextResponse.json(
         { error: m ? m[locale] : `Ollama Cloud error (${err.status}).` },
         { status: err.status === 404 ? 502 : err.status }
@@ -122,25 +231,6 @@ export const POST = async (req: Request) => {
       { status: 503 }
     )
   }
-
-  const encoder = new TextEncoder()
-
-  const stream = new ReadableStream<Uint8Array>({
-    async start(controller) {
-      try {
-        for await (const chunk of completion) {
-          const text = chunk.choices[0]?.delta?.content
-          if (text) controller.enqueue(encoder.encode(text))
-        }
-        controller.close()
-      } catch (err) {
-        controller.error(err)
-      }
-    },
-    cancel() {
-      completion.controller.abort()
-    },
-  })
 
   return new Response(stream, {
     headers: {

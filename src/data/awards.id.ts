@@ -8,7 +8,8 @@ export const awards: AwardItem[] = [
     category: "certificate",
     issueDate: "2024",
     credentialId: "DICODING-RWD-2024-8841",
-    credentialUrl: "https://www.dicoding.com/certificates/DICODING-RWD-2024-8841",
+    credentialUrl:
+      "https://www.dicoding.com/certificates/DICODING-RWD-2024-8841",
     description:
       "Sertifikasi tingkat lanjut mencakup Clean Architecture, state management kompleks, automation testing (TDD/Cypress), PWA, dan performa web.",
     skills: ["React", "Clean Architecture", "PWA", "TDD", "Cypress"],
@@ -46,7 +47,12 @@ export const awards: AwardItem[] = [
     issueDate: "2023",
     description:
       "Penghargaan kehormatan akademik atas capaian IPK tertinggi dan kontribusi penelitian komputasi web modern selama masa studi.",
-    skills: ["Computer Science", "Algorithms", "Software Engineering", "Research"],
+    skills: [
+      "Computer Science",
+      "Algorithms",
+      "Software Engineering",
+      "Research",
+    ],
   },
   {
     slug: "pln-innovation-award",
@@ -56,7 +62,12 @@ export const awards: AwardItem[] = [
     issueDate: "2023",
     description:
       "Pengakuan atas inisiatif refaktorisasi arsitektur approval bertingkat dan peningkatan kecepatan rendering dashboard enterprise hingga 40%.",
-    skills: ["Enterprise Architecture", "React Query", "Audit Logging", "Optimization"],
+    skills: [
+      "Enterprise Architecture",
+      "React Query",
+      "Audit Logging",
+      "Optimization",
+    ],
   },
   {
     slug: "meta-frontend-developer",
@@ -65,7 +76,8 @@ export const awards: AwardItem[] = [
     category: "certificate",
     issueDate: "2022",
     credentialId: "META-FRONTEND-77312",
-    credentialUrl: "https://coursera.org/verify/professional-cert/META-FRONTEND-77312",
+    credentialUrl:
+      "https://coursera.org/verify/professional-cert/META-FRONTEND-77312",
     description:
       "Kurikulum profesional komprehensif mencakup fundamental JavaScript tingkat lanjut, React, UX research, version control, dan UI responsiveness.",
     skills: ["JavaScript", "React", "UI/UX", "Git", "Accessibility"],
