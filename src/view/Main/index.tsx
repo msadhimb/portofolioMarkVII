@@ -4,6 +4,7 @@ import { Contact } from "@/components/Contact"
 import { Experience } from "@/components/Experience"
 import { Hero } from "@/components/Hero"
 import { Marquee } from "@/components/Marquee"
+import { ModalDemo } from "@/components/ModalDemo"
 import { Projects } from "@/components/Projects"
 import { Skills } from "@/components/Skills"
 
@@ -30,6 +31,8 @@ export const MainView = () => {
       <Skills />
       <ChatbotSection />
       <Contact />
+      {/* TODO(demo): hapus baris + file ModalDemo setelah mencoba modal */}
+      <ModalDemo />
     </main>
   )
 }

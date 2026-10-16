@@ -16,6 +16,7 @@ import { ShinyText } from "@/components/ShinyText"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/data/profile"
 import { useSiteSettings } from "@/hooks/useSiteSettings"
+import Grid from "../Background/Grid"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -34,7 +35,9 @@ export const Hero = () => {
 
   const { settings } = useSiteSettings()
   const availabilityLabel =
-    i18n.language === "en" ? settings.available_label_en : settings.available_label_id
+    i18n.language === "en"
+      ? settings.available_label_en
+      : settings.available_label_id
   const availabilityOpen = settings.is_available
 
   const firstName = siteConfig.siteName.split(" ")[0]
@@ -61,18 +64,7 @@ export const Hero = () => {
       className="relative overflow-hidden pt-32 pb-16 sm:pt-40 sm:pb-24"
     >
       {/* Grid + aurora backdrop — lebih hidup tapi tetap fungsional */}
-      <div
-        aria-hidden="true"
-        className="bg-grid bg-grid-fade absolute inset-0"
-      />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="animate-aurora absolute -top-20 left-[8%] size-[26rem] rounded-full bg-signal/15 blur-[110px]" />
-        <div className="animate-aurora-slow absolute top-24 right-[4%] size-[22rem] rounded-full bg-cyan-400/20 blur-[110px]" />
-      </div>
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-background to-transparent"
-      />
+      <Grid />
 
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.35fr_0.85fr] lg:items-end">
