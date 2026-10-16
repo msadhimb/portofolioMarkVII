@@ -10,11 +10,12 @@ import {
   Square,
   Terminal,
 } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type FormEvent } from "react"
 import i18next from "i18next"
 import { useTranslation } from "react-i18next"
 import id from "./i18n/id"
 import en from "./i18n/en"
+import { MAX_CHAT_INPUT, parseChatInput } from "./validation"
 import { Reveal } from "@/components/Reveal"
 import { SectionHeading } from "@/components/SectionHeading"
 import { Badge } from "@/components/ui/badge"
@@ -54,6 +55,17 @@ export const ChatbotSection = () => {
     }
   }
 
+  const handleSubmitChat = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const text = parseChatInput(chat.input)
+    if (text) chat.send(text)
+  }
+
+  const handleSendPrompt = (prompt: string) => {
+    const text = parseChatInput(prompt)
+    if (text) chat.send(text)
+  }
+
   return (
     <section
       id="ai"
@@ -91,7 +103,7 @@ export const ChatbotSection = () => {
                 <button
                   key={p}
                   type="button"
-                  onClick={() => chat.send(p)}
+                  onClick={() => handleSendPrompt(p)}
                   disabled={chat.loading}
                   className="group inline-flex items-center gap-2 rounded-xl border border-border bg-card px-3.5 py-2.5 text-left text-[13px] font-medium text-foreground shadow-[0_2px_0_0_var(--border)] transition-all hover:-translate-y-0.5 hover:border-signal/60 hover:shadow-[0_4px_0_0_var(--signal)] active:translate-y-0 active:shadow-none disabled:cursor-wait disabled:opacity-60"
                 >
@@ -228,10 +240,7 @@ export const ChatbotSection = () => {
 
                 {/* Input */}
                 <form
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    chat.send()
-                  }}
+                  onSubmit={handleSubmitChat}
                   className="border-t border-white/10 bg-white/[0.02] p-4"
                 >
                   <div className="flex items-center gap-2 rounded-2xl border border-white/15 bg-black/40 px-4 py-1.5 focus-within:border-[#22d3ee]/60">
@@ -243,6 +252,7 @@ export const ChatbotSection = () => {
                       onChange={(e) => chat.setInput(e.target.value)}
                       placeholder={t("placeholder")}
                       aria-label={t("placeholder")}
+                      maxLength={MAX_CHAT_INPUT}
                       className="h-10 w-full bg-transparent font-mono text-sm text-[#dbe6ff] outline-none placeholder:text-[#8ea0c9]/50 focus:ring-0 focus-visible:outline-0!"
                     />
                     {chat.loading ? (

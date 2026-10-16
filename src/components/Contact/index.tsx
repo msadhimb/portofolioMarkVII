@@ -12,6 +12,7 @@ import { SectionHeading } from "@/components/SectionHeading"
 import { Card } from "@/components/ui/card"
 import { siteConfig } from "@/data/profile"
 import { useSiteSettings } from "@/hooks/useSiteSettings"
+import { ContactForm } from "./components/ContactForm"
 
 export const Contact = () => {
   i18next.addResourceBundle("id", "Contact", id)
@@ -127,6 +128,10 @@ export const Contact = () => {
             </Card>
           </Reveal>
         </div>
+
+        <Reveal delay={0.12} className="mt-8">
+          <ContactForm />
+        </Reveal>
       </div>
     </section>
   )
