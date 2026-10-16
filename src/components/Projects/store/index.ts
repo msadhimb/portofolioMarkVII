@@ -2,11 +2,7 @@
 
 import { create } from "zustand"
 import clientApi from "@/services/client"
-import {
-  toPageQuery,
-  unwrapList,
-  type PaginationMeta,
-} from "@/lib/pagination"
+import { toPageQuery, unwrapList, type PaginationMeta } from "@/lib/pagination"
 import type { ProjectCard } from "@/helper/server/formatProjects/type"
 import { ProjectStore } from "./type"
 
@@ -24,20 +20,17 @@ export const useProjects = create<ProjectStore>()((set, get) => ({
   },
   getProjectsPage: async (lang: string, page = 1, perPage = 6) => {
     const res = await clientApi({
-      url: `/projects?locale=${lang}&${toPageQuery({ page, perPage })}`,
+      url: `/projects`,
       method: "GET",
-    })
-    const items = unwrapList<ProjectCard>(res.data)
-    const pagination = (res as { pagination?: PaginationMeta }).pagination
-    return {
-      items,
-      pagination: pagination ?? {
+      params: {
+        locale: lang,
         page,
         per_page: perPage,
-        total: items.length,
-        total_pages: 1,
       },
-    }
+    })
+
+    console.log(res)
+    return res
   },
   getAdminProjects: async (params) => {
     const res = await clientApi({

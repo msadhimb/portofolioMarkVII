@@ -1,27 +1,28 @@
-import { ArrowUpRight, Lock } from "lucide-react";
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import type { Project } from "@/data/projects";
+import { ArrowUpRight, Lock } from "lucide-react"
+import Link from "next/link"
+import { Badge } from "@/components/ui/badge"
+import type { Project } from "@/data/projects"
 export type ProjectLinksDict = {
-  viewCaseStudy: string;
-  liveDemo: string;
-  internalDemo: string;
-};
-import { cn } from "@/lib/utils";
+  viewCaseStudy: string
+  liveDemo: string
+  internalDemo: string
+}
+import { cn } from "@/lib/utils"
+import { useTranslation } from "react-i18next"
 
 type ProjectVisualProps = {
-  project: Project;
-};
+  project: Project
+}
 
 type TechListProps = {
-  items: string[];
-  limit?: number;
-};
+  items: string[]
+  limit?: number
+}
 
 type ProjectLinksProps = {
-  project: Project;
-  dict: ProjectLinksDict;
-};
+  project: Project
+  t: any
+}
 
 /** Lightweight, code-driven visual preview — no image assets needed. */
 export const ProjectVisual = ({ project }: ProjectVisualProps) => {
@@ -35,7 +36,9 @@ export const ProjectVisual = ({ project }: ProjectVisualProps) => {
               <span className="size-2 rounded-full bg-border" />
               <span className="size-2 rounded-full bg-signal/70" />
             </div>
-            <span className="font-mono text-[11px] text-muted-foreground">duitku.app/overview</span>
+            <span className="font-mono text-[11px] text-muted-foreground">
+              duitku.app/overview
+            </span>
             <span className="rounded-full bg-emerald-500/12 px-2 py-0.5 font-mono text-[10px] text-emerald-700 dark:text-emerald-300">
               live
             </span>
@@ -46,33 +49,53 @@ export const ProjectVisual = ({ project }: ProjectVisualProps) => {
               ["Arus kas", "+Rp 3,1 jt", "bulan ini"],
               ["Wishlist", "72%", "MacBook fund"],
             ].map(([l, v, d]) => (
-              <div key={l} className="rounded-lg border border-border bg-card p-3">
+              <div
+                key={l}
+                className="rounded-lg border border-border bg-card p-3"
+              >
                 <p className="text-[11px] text-muted-foreground">{l}</p>
-                <p className="tabular mt-1 font-mono text-sm font-semibold text-foreground">{v}</p>
-                <p className="mt-0.5 font-mono text-[10px] text-emerald-700 dark:text-emerald-300">{d}</p>
+                <p className="tabular mt-1 font-mono text-sm font-semibold text-foreground">
+                  {v}
+                </p>
+                <p className="mt-0.5 font-mono text-[10px] text-emerald-700 dark:text-emerald-300">
+                  {d}
+                </p>
               </div>
             ))}
             <div className="rounded-lg border border-border bg-card p-3 sm:col-span-2">
-              <p className="text-[11px] text-muted-foreground">Arus kas · 6 bulan</p>
+              <p className="text-[11px] text-muted-foreground">
+                Arus kas · 6 bulan
+              </p>
               <div className="mt-2 flex h-16 items-end gap-1.5">
-                {[35, 55, 42, 70, 58, 88, 64, 92, 76, 100, 84, 96].map((h, i) => (
-                  <div
-                    key={i}
-                    style={{ height: `${h}%` }}
-                    className={cn(
-                      "flex-1 rounded-sm",
-                      i >= 9 ? "bg-signal" : "bg-foreground/15"
-                    )}
-                  />
-                ))}
+                {[35, 55, 42, 70, 58, 88, 64, 92, 76, 100, 84, 96].map(
+                  (h, i) => (
+                    <div
+                      key={i}
+                      style={{ height: `${h}%` }}
+                      className={cn(
+                        "flex-1 rounded-sm",
+                        i >= 9 ? "bg-signal" : "bg-foreground/15"
+                      )}
+                    />
+                  )
+                )}
               </div>
             </div>
             <div className="rounded-lg border border-border bg-card p-3">
               <p className="text-[11px] text-muted-foreground">Wallets</p>
               <ul className="mt-2 space-y-1.5 font-mono text-[11px]">
-                <li className="flex justify-between"><span>BCA</span><span className="tabular">12,4</span></li>
-                <li className="flex justify-between"><span>E-Wallet</span><span className="tabular">3,8</span></li>
-                <li className="flex justify-between text-muted-foreground"><span>Cash</span><span className="tabular">1,2</span></li>
+                <li className="flex justify-between">
+                  <span>BCA</span>
+                  <span className="tabular">12,4</span>
+                </li>
+                <li className="flex justify-between">
+                  <span>E-Wallet</span>
+                  <span className="tabular">3,8</span>
+                </li>
+                <li className="flex justify-between text-muted-foreground">
+                  <span>Cash</span>
+                  <span className="tabular">1,2</span>
+                </li>
               </ul>
               <p className="mt-2 rounded-md bg-muted px-2 py-1 font-mono text-[10px] text-muted-foreground">
                 RLS ✓ user_id = auth.uid()
@@ -81,7 +104,7 @@ export const ProjectVisual = ({ project }: ProjectVisualProps) => {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   if (project.slug === "pln-pusmanpro") {
@@ -89,7 +112,9 @@ export const ProjectVisual = ({ project }: ProjectVisualProps) => {
       <div aria-hidden="true" className="p-6 sm:p-8">
         <div className="overflow-hidden rounded-xl border border-border bg-background">
           <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
-            <span className="font-mono text-[11px] text-muted-foreground">pusmanpro · dashboard</span>
+            <span className="font-mono text-[11px] text-muted-foreground">
+              pusmanpro · dashboard
+            </span>
             <span className="rounded-full bg-muted px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
               role: reviewer
             </span>
@@ -105,10 +130,14 @@ export const ProjectVisual = ({ project }: ProjectVisualProps) => {
                   key={t as string}
                   className={cn(
                     "rounded-lg border p-2.5",
-                    active ? "border-signal/50 bg-card" : "border-border bg-card"
+                    active
+                      ? "border-signal/50 bg-card"
+                      : "border-border bg-card"
                   )}
                 >
-                  <p className="font-mono text-[11px] font-medium text-foreground">{t}</p>
+                  <p className="font-mono text-[11px] font-medium text-foreground">
+                    {t}
+                  </p>
                   <p className="mt-1 inline-block rounded-full bg-muted px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
                     {s}
                   </p>
@@ -118,11 +147,23 @@ export const ProjectVisual = ({ project }: ProjectVisualProps) => {
             <div className="rounded-lg border border-border bg-card p-3">
               <div className="flex items-center gap-2">
                 {["draft", "review", "approved"].map((s, i) => (
-                  <span key={s} className="flex items-center gap-2 font-mono text-[10px]">
-                    <span className={cn("rounded-full px-2 py-0.5", i <= 1 ? "bg-signal text-signal-foreground" : "bg-muted text-muted-foreground")}>
+                  <span
+                    key={s}
+                    className="flex items-center gap-2 font-mono text-[10px]"
+                  >
+                    <span
+                      className={cn(
+                        "rounded-full px-2 py-0.5",
+                        i <= 1
+                          ? "bg-signal text-signal-foreground"
+                          : "bg-muted text-muted-foreground"
+                      )}
+                    >
                       {s}
                     </span>
-                    {i < 2 ? <span className="text-muted-foreground">→</span> : null}
+                    {i < 2 ? (
+                      <span className="text-muted-foreground">→</span>
+                    ) : null}
                   </span>
                 ))}
               </div>
@@ -132,61 +173,88 @@ export const ProjectVisual = ({ project }: ProjectVisualProps) => {
                 <div className="h-2 w-3/5 rounded bg-muted" />
               </div>
               <div className="mt-3 flex gap-2">
-                <span className="rounded-md bg-foreground px-2.5 py-1 font-mono text-[10px] text-background">Approve</span>
-                <span className="rounded-md border border-border px-2.5 py-1 font-mono text-[10px] text-muted-foreground">Request changes</span>
+                <span className="rounded-md bg-foreground px-2.5 py-1 font-mono text-[10px] text-background">
+                  Approve
+                </span>
+                <span className="rounded-md border border-border px-2.5 py-1 font-mono text-[10px] text-muted-foreground">
+                  Request changes
+                </span>
               </div>
             </div>
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
     <div aria-hidden="true" className="p-6 sm:p-8">
       <div className="overflow-hidden rounded-xl border border-border bg-[#101010] text-[#f5f1e8]">
         <div className="px-6 pt-10 pb-6 text-center">
-          <p className="font-mono text-[10px] tracking-[0.3em] uppercase opacity-60">The Wedding Of</p>
-          <p className="font-display mt-2 text-3xl italic">D &amp; N</p>
-          <p className="mt-1 font-mono text-[11px] opacity-70">Sabtu · 14 . 06 . 2025</p>
+          <p className="font-mono text-[10px] tracking-[0.3em] uppercase opacity-60">
+            The Wedding Of
+          </p>
+          <p className="mt-2 font-display text-3xl italic">D &amp; N</p>
+          <p className="mt-1 font-mono text-[11px] opacity-70">
+            Sabtu · 14 . 06 . 2025
+          </p>
           <div className="mx-auto mt-5 flex max-w-[220px] justify-center gap-2 font-mono text-[11px]">
             {["02", "14", "33", "09"].map((v) => (
-              <span key={v} className="flex-1 rounded-md border border-white/15 bg-white/5 px-2 py-1.5 tabular">
+              <span
+                key={v}
+                className="tabular flex-1 rounded-md border border-white/15 bg-white/5 px-2 py-1.5"
+              >
                 {v}
               </span>
             ))}
           </div>
           <div className="mx-auto mt-5 h-16 w-px bg-gradient-to-b from-white/40 to-transparent" />
-          <p className="font-mono text-[10px] tracking-widest uppercase opacity-50">scroll untuk cerita</p>
+          <p className="font-mono text-[10px] tracking-widest uppercase opacity-50">
+            scroll untuk cerita
+          </p>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const TechList = ({ items, limit }: TechListProps) => {
-  const shown = limit ? items.slice(0, limit) : items;
+  if (!items) return null
+  const shown = limit ? items.slice(0, limit) : items
+
   return (
     <ul aria-label="Technologies" className="flex flex-wrap gap-1.5">
       {shown.map((t) => (
         <li key={t}>
-          <Badge variant="secondary" className="h-auto rounded-full px-2.5 py-1 font-mono text-[11px] font-normal">
+          <Badge
+            variant="secondary"
+            className="h-auto rounded-full px-2.5 py-1 font-mono text-[11px] font-normal"
+          >
             {t}
           </Badge>
         </li>
       ))}
       {limit && items.length > limit ? (
         <li>
-          <Badge variant="outline" className="h-auto rounded-full px-2.5 py-1 font-mono text-[11px] font-normal">
+          <Badge
+            variant="outline"
+            className="h-auto rounded-full px-2.5 py-1 font-mono text-[11px] font-normal"
+          >
             +{items.length - limit}
           </Badge>
         </li>
       ) : null}
     </ul>
-  );
-};
+  )
+}
 
-export const ProjectLinks = ({ project, dict }: ProjectLinksProps) => {
+export const ProjectLinks = ({ project, t }: ProjectLinksProps) => {
+  const dict = {
+    viewCaseStudy: t("viewCaseStudy"),
+    liveDemo: t("liveDemo"),
+    internalDemo: t("internalDemo"),
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Link
@@ -213,5 +281,5 @@ export const ProjectLinks = ({ project, dict }: ProjectLinksProps) => {
         </span>
       )}
     </div>
-  );
-};
+  )
+}

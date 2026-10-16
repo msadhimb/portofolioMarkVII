@@ -31,8 +31,6 @@ export const MainView = () => {
       <Skills />
       <ChatbotSection />
       <Contact />
-      {/* TODO(demo): hapus baris + file ModalDemo setelah mencoba modal */}
-      <ModalDemo />
     </main>
   )
 }

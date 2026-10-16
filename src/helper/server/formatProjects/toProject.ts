@@ -9,10 +9,10 @@ export const toProjectCard = (row: ProjectCardRow): ProjectCard => ({
   context: row.context ?? "",
   period: row.period ?? "",
   problem: row.problem ?? "",
+  featured: row.featured ?? false,
   technologies: (row.technologies ?? []).slice(0, 7),
   highlights: (row.highlights ?? []).slice(0, 3),
-  ...(row.demo_url ? { demoUrl: row.demo_url } : {}),
-  ...(row.featured ? { featured: true } : {}),
+  demoUrl: row.demo_url || "",
   ...(row.featured && row.metrics?.length ? { metrics: row.metrics } : {}),
 })
 
@@ -28,9 +28,9 @@ export const toProject = (row: ProjectRow): Project => ({
   technologies: row.technologies ?? [],
   highlights: row.highlights ?? [],
   image: row.image ?? "",
-  ...(row.demo_url ? { demoUrl: row.demo_url } : {}),
+  featured: row.featured ?? false,
+  demoUrl: row.demo_url || "",
   ...(row.repository_url ? { repositoryUrl: row.repository_url } : {}),
-  ...(row.featured ? { featured: true } : {}),
   ...(row.metrics?.length ? { metrics: row.metrics } : {}),
   ...(row.decisions?.length ? { decisions: row.decisions } : {}),
 })

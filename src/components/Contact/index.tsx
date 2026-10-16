@@ -20,7 +20,9 @@ export const Contact = () => {
   const { t, i18n } = useTranslation("Contact")
   const { settings } = useSiteSettings()
   const availabilityLabel =
-    i18n.language === "en" ? settings.available_label_en : settings.available_label_id
+    i18n.language === "en"
+      ? settings.available_label_en
+      : settings.available_label_id
   const steps = t("steps", { returnObjects: true }) as {
     title: string
     detail: string
@@ -128,10 +130,6 @@ export const Contact = () => {
             </Card>
           </Reveal>
         </div>
-
-        <Reveal delay={0.12} className="mt-8">
-          <ContactForm />
-        </Reveal>
       </div>
     </section>
   )

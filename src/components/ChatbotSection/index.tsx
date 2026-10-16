@@ -189,7 +189,7 @@ export const ChatbotSection = () => {
                           </p>
                         </div>
                       </div>
-                    ) : (
+                    ) : m.content === "" ? null : (
                       <div key={m.id} className="flex gap-2.5">
                         <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg bg-cyan-400/15 text-cyan-300">
                           <Bot className="size-4" />
