@@ -70,7 +70,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
         display.variable
       )}
     >
-      <body className="font-mono">
+      <body className="font-sans">
         <QueryProvider>
           <ThemeProvider>
             <TooltipProvider>
