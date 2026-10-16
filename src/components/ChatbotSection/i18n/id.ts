@@ -20,8 +20,17 @@ const locale = {
   online: "online · Ollama",
   modelLabel: "model",
   terminalTitle: "salman-ai — ollama console",
+  apiPath: "/api/v1/chat → ollama",
   disclaimer:
     "Ditenagai Ollama · model & key dari env · bisa salah, verifikasi via email.",
-}
+  validationEmpty: "Pesan tidak boleh kosong.",
+  validationTooLong: "Pesan terlalu panjang (maks 2000 karakter).",
+  fallbackError: "Terjadi kesalahan.",
+  emptyReply: "Hmm, jawabannya kosong — coba tanya lagi ya?",
+  contactSuffix: "atau email saya di halo@salmanbaqy.dev",
+  emptyState: "Belum ada percakapan — kirim pesan pertama di bawah.",
+  copyAnswer: "Salin jawaban",
+  inputHint: "esc = stop · enter = kirim",
+};
 
-export default locale
+export default locale;

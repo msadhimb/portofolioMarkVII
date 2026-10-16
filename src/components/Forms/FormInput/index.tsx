@@ -44,7 +44,7 @@ export const FormInput = ({
           required={required}
           aria-invalid={Boolean(error)}
           aria-describedby={describedBy}
-          className="pr-10"
+          className={cn(type === "password" && "pr-10")}
           type={type === "password" && showPassword ? "text" : type}
           {...props}
         />

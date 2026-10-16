@@ -1,21 +1,37 @@
-import * as yup from "yup"
+import * as yup from "yup";
+import type { ChatInputErrorKey } from "../store/type";
 
-export const MAX_CHAT_INPUT = 2000
+export const MAX_CHAT_INPUT = 2000;
 
-const chatInputSchema = yup.string().trim().min(1).max(MAX_CHAT_INPUT)
+export const chatInputSchema = yup
+  .string()
+  .trim()
+  .min(1, "empty")
+  .max(MAX_CHAT_INPUT, "too_long");
+
+export type ChatInputValidation =
+  | { text: string; errorKey: null }
+  | { text: null; errorKey: ChatInputErrorKey };
 
 /**
- * Validasi input chat sebelum dikirim ke `useChat.send`.
- * Mengembalikan teks bersih atau `null` jika kosong.
- * Kelebihan panjang dipotong aman ke batas maksimum.
+ * Validasi input chat sebelum dikirim ke store.
+ * Mengembalikan teks bersih atau `errorKey` yang diterjemahkan di component
+ * (jangan menaruh string bahasa di sini agar store tetap netral).
  */
-export const parseChatInput = (raw: string): string | null => {
-  const trimmed = raw.trim()
-  if (!trimmed) return null
+export const validateChatInput = (raw: string): ChatInputValidation => {
+  const trimmed = raw.trim();
+  if (!trimmed) return { text: null, errorKey: "empty" };
   try {
-    const valid = chatInputSchema.validateSync(trimmed)
-    return valid || null
-  } catch {
-    return trimmed.slice(0, MAX_CHAT_INPUT).trim() || null
+    const valid = chatInputSchema.validateSync(trimmed);
+    if (!valid) return { text: null, errorKey: "empty" };
+    return { text: valid, errorKey: null };
+  } catch (error) {
+    if (error instanceof yup.ValidationError) {
+      if (error.message === "too_long" || error.type === "max") {
+        return { text: null, errorKey: "too_long" };
+      }
+    }
+    if (trimmed.length > MAX_CHAT_INPUT) return { text: null, errorKey: "too_long" };
+    return { text: null, errorKey: "empty" };
   }
-}
+};

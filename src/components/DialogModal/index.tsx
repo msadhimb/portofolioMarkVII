@@ -109,14 +109,14 @@ export const DialogModal = ({
           <div
             aria-hidden="true"
             className={cn(
-              "animate-aurora pointer-events-none absolute -top-14 -left-10 size-44 rounded-full blur-3xl",
+              "animate-aurora pointer-events-none absolute -top-14 -left-10 size-44 rounded-full blur-2xl opacity-75",
               styles.blobA
             )}
           />
           <div
             aria-hidden="true"
             className={cn(
-              "animate-aurora-slow pointer-events-none absolute -top-10 right-0 size-40 rounded-full blur-3xl",
+              "animate-aurora-slow pointer-events-none absolute -top-10 right-0 size-40 rounded-full blur-2xl opacity-75",
               styles.blobB
             )}
           />
@@ -154,7 +154,7 @@ export const DialogModal = ({
         </div>
 
         {footer ? (
-          <div className="sticky bottom-0 z-10 rounded-b-2xl border-t border-border bg-card/85 px-6 py-4 backdrop-blur-xl">
+          <div className="sticky bottom-0 z-10 rounded-b-2xl border-t border-border bg-card px-6 py-4">
             {footer}
           </div>
         ) : null}

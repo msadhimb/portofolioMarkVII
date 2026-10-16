@@ -179,7 +179,7 @@ export const DetailHero = ({
       <div
         aria-hidden="true"
         className={cn(
-          "animate-aurora pointer-events-none absolute -top-16 -right-8 size-48 rounded-full blur-3xl",
+          "animate-aurora pointer-events-none absolute -top-16 -right-8 size-48 rounded-full blur-2xl opacity-75",
           blob
         )}
       />

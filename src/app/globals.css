@@ -153,9 +153,11 @@
   }
   .animate-aurora {
     animation: aurora-drift 11s ease-in-out infinite alternate;
+    will-change: transform;
   }
   .animate-aurora-slow {
     animation: aurora-drift 17s ease-in-out infinite alternate-reverse;
+    will-change: transform;
   }
   .animate-typing-dot {
     animation: typing-dot 1.1s ease-in-out infinite;
@@ -272,10 +274,10 @@
 
 @keyframes aurora-drift {
   from {
-    transform: translate3d(-6%, -4%, 0) scale(1);
+    transform: translate3d(-6%, -4%, 0);
   }
   to {
-    transform: translate3d(7%, 6%, 0) scale(1.12);
+    transform: translate3d(7%, 6%, 0);
   }
 }
 
