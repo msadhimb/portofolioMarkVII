@@ -15,6 +15,7 @@ import { Magnet } from "@/components/Magnet"
 import { ShinyText } from "@/components/ShinyText"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/data/profile"
+import { useSiteSettings } from "@/hooks/useSiteSettings"
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -30,6 +31,11 @@ export const Hero = () => {
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.65, delay, ease },
   })
+
+  const { settings } = useSiteSettings()
+  const availabilityLabel =
+    i18n.language === "en" ? settings.available_label_en : settings.available_label_id
+  const availabilityOpen = settings.is_available
 
   const firstName = siteConfig.siteName.split(" ")[0]
   const restName = siteConfig.siteName.split(" ").slice(1).join(" ")
@@ -73,12 +79,24 @@ export const Hero = () => {
           <div>
             <motion.div {...item(0)}>
               <p className="inline-flex flex-wrap items-center gap-2 rounded-full border border-border bg-card py-1.5 pr-4 pl-1.5 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/12 px-2.5 py-1 font-medium text-emerald-700 dark:text-emerald-300">
+                <span
+                  className={
+                    availabilityOpen
+                      ? "inline-flex items-center gap-1.5 rounded-full bg-emerald-500/12 px-2.5 py-1 font-medium text-emerald-700 dark:text-emerald-300"
+                      : "inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 font-medium text-muted-foreground"
+                  }
+                >
                   <span className="relative flex size-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-                    <span className="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
+                    {availabilityOpen ? (
+                      <>
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
+                        <span className="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
+                      </>
+                    ) : (
+                      <span className="relative inline-flex size-1.5 rounded-full bg-muted-foreground" />
+                    )}
                   </span>
-                  {t("availability")}
+                  {availabilityLabel}
                 </span>
                 <span className="inline-flex items-center gap-1 font-mono">
                   <MapPin className="size-3" />

@@ -11,11 +11,15 @@ import { Reveal } from "@/components/Reveal"
 import { SectionHeading } from "@/components/SectionHeading"
 import { Card } from "@/components/ui/card"
 import { siteConfig } from "@/data/profile"
+import { useSiteSettings } from "@/hooks/useSiteSettings"
 
 export const Contact = () => {
   i18next.addResourceBundle("id", "Contact", id)
   i18next.addResourceBundle("en", "Contact", en)
-  const { t } = useTranslation("Contact")
+  const { t, i18n } = useTranslation("Contact")
+  const { settings } = useSiteSettings()
+  const availabilityLabel =
+    i18n.language === "en" ? settings.available_label_en : settings.available_label_id
   const steps = t("steps", { returnObjects: true }) as {
     title: string
     detail: string
@@ -109,7 +113,12 @@ export const Contact = () => {
               <div className="mt-6 rounded-2xl bg-muted/70 p-4">
                 <p className="flex items-center gap-2 text-sm font-medium text-foreground">
                   <Copy className="size-4 text-signal" />
-                  {t("availabilityNow")}: {t("availability").toLowerCase()}
+                  {t("availabilityNow")}:{" "}
+                  {settings.is_available
+                    ? availabilityLabel.toLowerCase()
+                    : i18n.language === "en"
+                      ? "currently unavailable"
+                      : "sedang tidak tersedia"}
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {t("capacity")}
