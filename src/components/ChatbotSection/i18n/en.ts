@@ -8,7 +8,7 @@ const locale = {
   greeting:
     "Hey! I'm EVE 👋 — the digital twin that memorized this portfolio. Ask about skills, the Duitku / PLN Pusmanpro projects, or freelance availability. Just type, I answer fast.",
   prompts: [
-    "Tell me about Duitku",
+    "Tell me about SIMPP",
     "What skills stand out most?",
     "Experience at PLN Pusmanpro?",
     "Available for freelance?",

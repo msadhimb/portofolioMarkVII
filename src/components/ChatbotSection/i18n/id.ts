@@ -8,7 +8,7 @@ const locale = {
   greeting:
     "Halo! Saya EVE 👋 — kembaran digital yang hafal portofolio ini. Mau tanya soal skill, proyek Duitku / PLN Pusmanpro, atau ketersediaan freelance? Ketik aja, saya jawab cepat.",
   prompts: [
-    "Ceritakan proyek Duitku",
+    "Ceritakan proyek SIMPP",
     "Skill apa yang paling dikuasai?",
     "Pengalaman di PLN Pusmanpro?",
     "Apakah tersedia untuk freelance?",
