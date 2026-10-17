@@ -77,21 +77,27 @@ export const Experience = () => {
         <Shimmer loading={isPending}>
           <ol className="mt-12 space-y-0">
             {data.map((e: any, i: number) => (
-              <Reveal key={e.slug} delay={0.04 * i}>
-                <li className="grid gap-4 border-t border-border py-8 last:border-b sm:grid-cols-[180px_1fr] sm:gap-8">
-                  <div>
+              <li
+                key={e.slug}
+                className="border-t border-border last:border-b"
+              >
+                <Reveal
+                  delay={0.04 * i}
+                  className="grid min-w-0 gap-3 py-8 sm:grid-cols-[180px_1fr] sm:gap-8"
+                >
+                  <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 sm:block">
                     <p className="tabular font-mono text-xs text-muted-foreground">
                       {e.period}
                     </p>
                     <Badge
                       variant="outline"
-                      className="mt-2 h-auto w-full min-w-0 justify-start gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal text-muted-foreground"
+                      className="h-auto min-w-0 max-w-full justify-start gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal text-muted-foreground sm:mt-2 sm:w-full"
                     >
                       <Building2 className="size-3.5 shrink-0" />
                       <span className="min-w-0 truncate">{e.context}</span>
                     </Badge>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="text-xl font-semibold tracking-tight text-foreground">
                       {e.role}{" "}
                       <span className="font-normal text-muted-foreground">
@@ -102,22 +108,22 @@ export const Experience = () => {
                       {e.points.map((pt: string) => (
                         <li
                           key={pt}
-                          className="flex gap-3 text-[15px] leading-relaxed text-muted-foreground"
+                          className="flex min-w-0 gap-3 text-[15px] leading-relaxed break-words text-muted-foreground"
                         >
                           <span
                             aria-hidden="true"
                             className="mt-[9px] size-1.5 shrink-0 rounded-full bg-signal"
                           />
-                          {pt}
+                          <span className="min-w-0">{pt}</span>
                         </li>
                       ))}
                     </ul>
-                    <p className="mt-4 font-mono text-xs text-muted-foreground">
+                    <p className="mt-4 font-mono text-xs break-words text-muted-foreground">
                       {e.stack.join(" · ")}
                     </p>
                   </div>
-                </li>
-              </Reveal>
+                </Reveal>
+              </li>
             ))}
           </ol>
 

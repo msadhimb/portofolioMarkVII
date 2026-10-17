@@ -152,20 +152,22 @@ export const Navbar = () => {
               backgroundOpacity={0.4}
             >
               <nav aria-label="Mobile" className="flex w-full flex-col gap-1 p-2">
-                {links.map((l, i) => (
+                {links.map((l) => (
                   <Link
                     key={l.href}
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-medium text-foreground transition-colors hover:bg-foreground/[0.06]"
+                    className={cn(
+                      "flex items-center rounded-full px-4 py-3 text-base transition-colors",
+                      "highlight" in l && l.highlight
+                        ? "bg-foreground font-medium text-background hover:opacity-90"
+                        : "text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground"
+                    )}
                   >
                     {"highlight" in l && l.highlight ? `✦ ${l.label}` : l.label}
-                    <span className="font-mono text-xs text-muted-foreground">
-                      0{i + 1}
-                    </span>
                   </Link>
                 ))}
-                <Button asChild className="mt-2 h-11 rounded-xl">
+                <Button asChild className="mt-1 h-11 rounded-full">
                   <Link href="#contact" onClick={() => setOpen(false)}>
                     {t("hireMe")}
                   </Link>
