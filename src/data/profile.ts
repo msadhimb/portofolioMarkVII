@@ -4,8 +4,8 @@ export const siteConfig = {
   monogram: "ms",
   location: "Salatiga, Jawa Tengah",
   email: "adhimbaqy72@gmail.com",
-  github: "https://github.com",
-  linkedin: "https://linkedin.com",
+  github: "https://github.com/msadhimb?tab=repositories",
+  linkedin: "https://www.linkedin.com/in/muhamad-salman-adhim-baqy-618a51353/",
 }
 
 export type Experience = {
@@ -38,4 +38,3 @@ export type AwardItem = {
   description: string
   skills: string[]
 }
-

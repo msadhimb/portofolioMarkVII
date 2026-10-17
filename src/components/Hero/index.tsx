@@ -151,7 +151,7 @@ export const Hero = () => {
               text={`${t("statement")} ${t("statementExtra")}`}
               delay={45}
               animateBy="words"
-              className="mt-6 max-w-xl text-lg leading-relaxed text-balance text-muted-foreground sm:text-xl"
+              className="text-md mt-6 max-w-xl text-justify leading-relaxed text-balance text-muted-foreground md:text-lg"
             />
 
             <motion.div
