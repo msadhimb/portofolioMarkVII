@@ -13,6 +13,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import {
+  AwardIcon,
   BriefcaseBusinessIcon,
   FolderKanbanIcon,
   GalleryVerticalEndIcon,
@@ -49,6 +50,11 @@ const data = {
       title: "Experiences",
       url: "/admin/dashboard/experiences",
       icon: <BriefcaseBusinessIcon />,
+    },
+    {
+      title: "Awards",
+      url: "/admin/dashboard/awards",
+      icon: <AwardIcon />,
     },
     {
       title: "Skills",

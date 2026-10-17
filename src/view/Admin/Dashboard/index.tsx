@@ -7,6 +7,7 @@ import { motion } from "framer-motion"
 import {
   ArrowRight,
   ArrowUpRight,
+  AwardIcon,
   BadgeCheck,
   BriefcaseBusinessIcon,
   CalendarDays,
@@ -56,6 +57,7 @@ import {
 } from "@/components/ui/sidebar"
 import { useProjects } from "@/components/Projects/store"
 import { useExperiences } from "@/components/Experience/store"
+import { useAwards } from "@/components/Awards/store"
 import { useSkills } from "@/components/Skills/store"
 import { unwrapList } from "@/lib/pagination"
 
@@ -109,6 +111,7 @@ const DONUT_COLORS = ["#22d3ee", "#a78bfa", "#34d399", "#fbbf24"]
 function OverviewContent() {
   const { getAdminProjects } = useProjects()
   const { getAdminExperiences } = useExperiences()
+  const { getAdminAwards } = useAwards()
   const { getAdminSkillGroups } = useSkills()
 
   const projectsQuery = useQuery({
@@ -119,6 +122,10 @@ function OverviewContent() {
     queryKey: ["admin", "experiences", "overview"],
     queryFn: () => getAdminExperiences(),
   })
+  const awardsQuery = useQuery({
+    queryKey: ["admin", "awards", "overview"],
+    queryFn: () => getAdminAwards(),
+  })
   const skillsQuery = useQuery({
     queryKey: ["admin", "skills", "overview"],
     queryFn: () => getAdminSkillGroups(),
@@ -127,6 +134,7 @@ function OverviewContent() {
   const loading =
     projectsQuery.isLoading ||
     experiencesQuery.isLoading ||
+    awardsQuery.isLoading ||
     skillsQuery.isLoading
 
   const projects = useMemo(
@@ -136,6 +144,10 @@ function OverviewContent() {
   const experiences = useMemo(
     () => unwrapList<unknown>(experiencesQuery.data),
     [experiencesQuery.data]
+  )
+  const awards = useMemo(
+    () => unwrapList<unknown>(awardsQuery.data),
+    [awardsQuery.data]
   )
   const skillGroups = useMemo(
     () => unwrapList<AdminSkillGroupLike>(skillsQuery.data),
@@ -160,10 +172,17 @@ function OverviewContent() {
     () => [
       { name: "Projects", value: projects.length },
       { name: "Experiences", value: experiences.length },
+      { name: "Awards", value: awards.length },
       { name: "Skill groups", value: skillGroups.length },
       { name: "Skill items", value: stats.totalSkills },
     ],
-    [projects.length, experiences.length, skillGroups.length, stats.totalSkills]
+    [
+      projects.length,
+      experiences.length,
+      awards.length,
+      skillGroups.length,
+      stats.totalSkills,
+    ]
   )
 
   const spark = (seed: number[]) => seed.map((v, i) => ({ i, v }))
@@ -188,6 +207,16 @@ function OverviewContent() {
       tile: "bg-violet-500/15 text-violet-600 dark:text-violet-300",
       sparkData: spark([2, 3, 5, 4, 6, 5, 7]),
       sparkColor: "#a78bfa",
+    },
+    {
+      label: "Awards",
+      value: awards.length,
+      hint: "Sertifikat, penghargaan & honor",
+      href: "/admin/dashboard/awards",
+      icon: <AwardIcon className="size-4" />,
+      tile: "bg-rose-500/15 text-rose-600 dark:text-rose-300",
+      sparkData: spark([1, 3, 2, 4, 3, 5, 4]),
+      sparkColor: "#fb7185",
     },
     {
       label: "Skill groups",
@@ -275,8 +304,9 @@ function OverviewContent() {
               <span className="text-glow text-signal"> Kontenmu siap gas.</span>
             </h1>
             <p className="mt-2 max-w-lg text-sm leading-relaxed text-muted-foreground">
-              Kelola projects, experiences, dan skills dalam dua bahasa dari
-              satu tempat. Semua perubahan langsung tampil di website publik.
+              Kelola projects, experiences, awards, dan skills dalam dua bahasa
+              dari satu tempat. Semua perubahan langsung tampil di website
+              publik.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-2.5">
               <Button asChild>
@@ -327,7 +357,7 @@ function OverviewContent() {
       </motion.section>
 
       {/* ── Stat cards ───────────────────────────────────── */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {statCards.map((s, i) => (
           <motion.div
             key={s.label}
@@ -442,6 +472,7 @@ function OverviewContent() {
                       <span className="tabular text-2xl font-semibold">
                         {projects.length +
                           experiences.length +
+                          awards.length +
                           skillGroups.length +
                           stats.totalSkills}
                       </span>
@@ -625,7 +656,7 @@ function OverviewContent() {
               <CardTitle className="text-[15px]">Aksi cepat</CardTitle>
               <CardDescription>Lompat ke tugas paling sering.</CardDescription>
             </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-2.5">
+            <CardContent className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
               {[
                 {
                   label: "Project",
@@ -636,6 +667,11 @@ function OverviewContent() {
                   label: "Experience",
                   href: "/admin/dashboard/experiences",
                   icon: <BriefcaseBusinessIcon className="size-4" />,
+                },
+                {
+                  label: "Awards",
+                  href: "/admin/dashboard/awards",
+                  icon: <AwardIcon className="size-4" />,
                 },
                 {
                   label: "Skills",

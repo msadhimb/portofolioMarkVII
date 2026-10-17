@@ -13,6 +13,8 @@ const locale = {
   issuedBy: "Issued by",
   issuedAt: "Year",
   empty: "No items found for this category.",
+  loadMore: "Load more awards",
+  loadingMore: "Loading awards…",
 }
 
 export default locale

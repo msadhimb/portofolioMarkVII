@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Award, ExternalLink, Medal, Sparkles, Trophy } from "lucide-react"
 import i18next from "i18next"
 import { useTranslation } from "react-i18next"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
 import { Reveal } from "@/components/Reveal"
 import { SectionHeading } from "@/components/SectionHeading"
@@ -25,19 +25,34 @@ export const Awards = () => {
   const { t, i18n } = useTranslation("Awards")
 
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all")
-  const { getAwards } = useAwards()
+  const { getAwardsPage } = useAwards()
 
-  const { data: awardsData, isLoading } = useQuery({
-    queryKey: ["awards", i18n.language],
-    queryFn: () => getAwards(i18n.language),
+  const [pageSize] = useState(3)
+
+  const {
+    data: awardsData,
+    isPending,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["awards", "feed", i18n.language, activeCategory],
+    queryFn: ({ pageParam }) =>
+      getAwardsPage(i18n.language, pageParam, pageSize, activeCategory),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const pagination = lastPage.pagination
+      return pagination && pagination.page < pagination.total_pages
+        ? pagination.page + 1
+        : undefined
+    },
+    staleTime: 60_000,
   })
 
-  const list = awardsData ?? awardsTemplate
-
-  const filteredList =
-    activeCategory === "all"
-      ? list
-      : list.filter((item) => item.category === activeCategory)
+  const list =
+    awardsData?.pages.flatMap((page: any) => page.data ?? []) ?? []
+  const data = isPending ? awardsTemplate : list
+  const isEmpty = !isPending && list.length === 0
 
   const getCategoryConfig = (category: AwardCategory) => {
     switch (category) {
@@ -131,14 +146,14 @@ export const Awards = () => {
         </Reveal>
 
         {/* Grid List */}
-        <Shimmer loading={isLoading}>
-          {filteredList.length === 0 ? (
+        <Shimmer loading={isPending}>
+          {isEmpty ? (
             <div className="mt-12 rounded-2xl border border-dashed border-border py-12 text-center text-sm text-muted-foreground">
               {t("empty")}
             </div>
           ) : (
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredList.map((item: AwardItem, i: number) => {
+              {data.map((item: AwardItem, i: number) => {
                 const config = getCategoryConfig(item.category)
                 const IconComponent = config.icon
 
@@ -222,6 +237,19 @@ export const Awards = () => {
                   </Reveal>
                 )
               })}
+            </div>
+          )}
+
+          {hasNextPage && (
+            <div className="mt-10 flex justify-center">
+              <button
+                type="button"
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className="rounded-full border border-border/70 bg-card px-6 py-2.5 font-mono text-xs tracking-[0.16em] text-foreground uppercase transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_30px_-10px_rgba(34,211,238,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isFetchingNextPage ? t("loadingMore") : t("loadMore")}
+              </button>
             </div>
           )}
         </Shimmer>

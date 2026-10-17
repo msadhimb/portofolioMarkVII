@@ -85,9 +85,12 @@ select
       where s.award_id = a.id
     ),
     array[]::text[]
-  ) as skills
+  ) as skills,
+  a.created_at
 from public.awards a
 join public.award_translations t on t.award_id = a.id;
+
+grant select on public.award_list to anon, authenticated;
 
 -- 5. ROW LEVEL SECURITY (RLS)
 alter table public.awards enable row level security;

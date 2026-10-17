@@ -13,6 +13,8 @@ const locale = {
   issuedBy: "Diterbitkan oleh",
   issuedAt: "Tahun",
   empty: "Belum ada item untuk kategori ini.",
+  loadMore: "Muat award lainnya",
+  loadingMore: "Memuat award…",
 }
 
 export default locale

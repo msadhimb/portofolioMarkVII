@@ -305,7 +305,7 @@ export const executeChatTool = async (
           .from("award_list")
           .select("*")
           .eq("locale", locale)
-          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: false })
 
         if (cat && cat !== "all") {
           queryBuilder = queryBuilder.eq("category", cat)
