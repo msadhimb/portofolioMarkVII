@@ -311,3 +311,25 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .animate-aurora,
+  .animate-aurora-slow,
+  .animate-typing-dot,
+  .animate-spin-slow {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+  * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}

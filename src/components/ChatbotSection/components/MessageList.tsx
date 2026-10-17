@@ -39,7 +39,7 @@ export const MessageList = ({
       ref={listRef}
       role="log"
       aria-live="polite"
-      className="h-[380px] space-y-4 overflow-y-auto px-5 py-5 sm:h-[420px]"
+      className="h-[380px] space-y-4 overflow-y-auto px-5 py-5 touch-pan-y overscroll-contain [scrollbar-width:thin] sm:h-[420px]"
     >
       {messages.length === 0 && !loading ? (
         <p className="font-mono text-xs leading-relaxed text-[#8ea0c9]">{emptyStateLabel}</p>

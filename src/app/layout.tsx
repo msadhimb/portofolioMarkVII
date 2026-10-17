@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ThemeProvider"
 import { LanguageProvider } from "@/components/LanguageProvider"
 import { QueryProvider } from "@/components/QueryProvider"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { MobileMotionProvider } from "@/components/MobileMotionProvider"
 import { cn } from "@/lib/utils"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
@@ -74,7 +75,9 @@ const RootLayout = ({ children }: RootLayoutProps) => {
         <QueryProvider>
           <ThemeProvider>
             <TooltipProvider>
-              <LanguageProvider>{children}</LanguageProvider>
+              <MobileMotionProvider>
+                <LanguageProvider>{children}</LanguageProvider>
+              </MobileMotionProvider>
             </TooltipProvider>
           </ThemeProvider>
         </QueryProvider>
