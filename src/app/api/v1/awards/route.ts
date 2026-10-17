@@ -69,7 +69,7 @@ export const GET = async (req: Request) => {
       .from("award_list")
       .select(AWARD_COLUMNS, { count: "exact" })
       .eq("locale", locale)
-      .order("created_at", { ascending: false })
+      .order("sort_order", { ascending: false })
 
     if (category) {
       query = query.eq("category", category)

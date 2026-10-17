@@ -25,7 +25,10 @@ export const GET = async (req: Request) => {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Unauthorized.", message: "Sesi tidak valid. Silakan login kembali." },
+        {
+          error: "Unauthorized.",
+          message: "Sesi tidak valid. Silakan login kembali.",
+        },
         { status: 401 }
       )
     }
@@ -41,7 +44,7 @@ export const GET = async (req: Request) => {
     let query = supabase
       .from("awards")
       .select(AWARD_WITH_RELATIONS, { count: "exact" })
-      .order("created_at", { ascending: false })
+      .order("sort_order", { ascending: false })
 
     if (search) {
       const { ids, error: searchError } = await fetchTranslationIds(
@@ -110,7 +113,10 @@ export const POST = async (req: Request) => {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Unauthorized.", message: "Sesi tidak valid. Silakan login kembali." },
+        {
+          error: "Unauthorized.",
+          message: "Sesi tidak valid. Silakan login kembali.",
+        },
         { status: 401 }
       )
     }
@@ -150,7 +156,10 @@ export const POST = async (req: Request) => {
           { status: 409 }
         )
       }
-      console.error("[POST /api/admin/awards] Supabase error:", awardError.message)
+      console.error(
+        "[POST /api/admin/awards] Supabase error:",
+        awardError.message
+      )
       return NextResponse.json(
         {
           error: "Gagal menyimpan award.",
