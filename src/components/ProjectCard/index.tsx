@@ -8,7 +8,7 @@ export type ProjectLinksDict = {
   internalDemo: string
 }
 import { cn } from "@/lib/utils"
-import { useTranslation } from "react-i18next"
+
 
 type ProjectVisualProps = {
   project: Project

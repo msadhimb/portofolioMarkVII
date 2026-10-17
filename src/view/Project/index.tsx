@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next"
 import id from "./i18n/id"
 import en from "./i18n/en"
 import { ProjectVisual, TechList } from "@/components/ProjectCard"
-import { Card } from "@/components/ui/card"
+
 import { useProjectsDetail } from "./store"
 import { useQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"

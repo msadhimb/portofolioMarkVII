@@ -2,8 +2,7 @@
 
 import { create } from "zustand"
 import clientApi from "@/services/client"
-import { toPageQuery, unwrapList, type PaginationMeta } from "@/lib/pagination"
-import type { ProjectCard } from "@/helper/server/formatProjects/type"
+import { toPageQuery, unwrapList } from "@/lib/pagination"
 import { ProjectStore } from "./type"
 
 export const useProjects = create<ProjectStore>()((set, get) => ({

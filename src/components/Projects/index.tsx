@@ -6,11 +6,10 @@ import i18next from "i18next"
 import { useTranslation } from "react-i18next"
 import id from "./i18n/id"
 import en from "./i18n/en"
-import { ProjectLinks, ProjectVisual, TechList } from "@/components/ProjectCard"
+import { ProjectLinks, TechList } from "@/components/ProjectCard"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
 import { useProjects } from "./store"
-import { projectsTemplate } from "./template"
 import { useState } from "react"
 
 export const Projects = () => {
