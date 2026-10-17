@@ -23,7 +23,7 @@ export const GET = async (req: Request) => {
         .select("slug,locale,period,role,org,context,points,stack,sort_order")
         .eq("locale", locale)
         .eq("slug", slug)
-        .order("sort_order", { ascending: true })
+        .order("start_date", { ascending: false, nullsFirst: false })
 
       if (error) {
         console.error("[GET /api/experiences] Supabase error:", error.message)
@@ -62,7 +62,7 @@ export const GET = async (req: Request) => {
         count: "exact",
       })
       .eq("locale", locale)
-      .order("sort_order", { ascending: true })
+      .order("start_date", { ascending: false, nullsFirst: false })
       .range(from, to)
 
     if (error) {

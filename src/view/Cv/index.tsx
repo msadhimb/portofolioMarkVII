@@ -61,7 +61,7 @@ export const CvView = () => {
           </h2>
           <div className="mt-4 space-y-6">
             {experiences.map((e) => (
-              <div key={e.org}>
+              <div key={e.slug}>
                 <p className="flex flex-wrap items-baseline justify-between gap-2">
                   <strong className="text-[15px]">
                     {e.role} · {e.org}

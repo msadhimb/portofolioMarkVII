@@ -41,7 +41,7 @@ export const GET = async (req: Request) => {
     let query = supabase
       .from("experiences")
       .select(EXPERIENCE_WITH_RELATIONS, { count: "exact" })
-      .order("sort_order", { ascending: true })
+      .order("start_date", { ascending: false, nullsFirst: false })
 
     if (search) {
       const { ids, error: searchError } = await fetchTranslationIds(
@@ -131,9 +131,9 @@ export const POST = async (req: Request) => {
       .from("experiences")
       .insert({
         slug,
-        sort_order: body.sort_order ?? 0,
         start_date: body.start_date || null,
         end_date: body.end_date || null,
+        org: body.org?.trim() ?? "",
       })
       .select("id, slug")
       .single()

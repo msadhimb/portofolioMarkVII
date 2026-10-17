@@ -14,6 +14,21 @@ import {
   LocaleTabs,
 } from "@/view/Admin/components/DetailParts"
 import type { AdminExperience } from "../../table/columns"
+import { format, isValid } from "date-fns"
+import { id as idLocale } from "date-fns/locale"
+
+const monthYear = (value: string | null | undefined) => {
+  if (!value) return null
+  const date = new Date(value)
+  return isValid(date) ? format(date, "MMMM yyyy", { locale: idLocale }) : null
+}
+
+const periodLabel = (experience: AdminExperience | null) => {
+  if (!experience) return "—"
+  const start = monthYear(experience.start_date)
+  const end = experience.end_date ? monthYear(experience.end_date) : "Sekarang"
+  return start ? `${start} — ${end}` : "—"
+}
 
 type ExperienceDetailDialogProps = {
   open: boolean
@@ -32,7 +47,7 @@ export const ExperienceDetailDialog = ({
   const active = locale === "id" ? id : en
   const heroTitle =
     id?.role || en?.role || experience?.slug || "Experience"
-  const heroOrg = id?.org || en?.org || ""
+  const heroOrg = experience?.org || ""
 
   return (
     <DialogModal
@@ -81,7 +96,7 @@ export const ExperienceDetailDialog = ({
                 ) : null}
                 <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
                   <CalendarDays className="size-3" />
-                  {id?.period || en?.period || "Periode belum diisi"}
+                  {periodLabel(experience)}
                   <span className="text-border">|</span>
                   <code className="text-signal">/{experience.slug}</code>
                 </span>
@@ -89,9 +104,6 @@ export const ExperienceDetailDialog = ({
             }
             badges={
               <>
-                <Badge variant="secondary" className="tabular">
-                  #{experience.sort_order ?? 0}
-                </Badge>
                 <Badge
                   variant="secondary"
                   className="gap-1"
@@ -124,9 +136,6 @@ export const ExperienceDetailDialog = ({
                   </code>
                 }
               />
-              <DetailText label="Urutan" value={experience.sort_order ?? 0} />
-            </div>
-            <div className="grid gap-2.5 sm:grid-cols-2">
               <DetailText
                 label="Tanggal mulai"
                 value={experience.start_date || "—"}
@@ -152,10 +161,10 @@ export const ExperienceDetailDialog = ({
           >
             <div className="grid gap-2.5 sm:grid-cols-2">
               <DetailText label="Peran" value={active?.role} />
-              <DetailText label="Organisasi" value={active?.org} />
+              <DetailText label="Organisasi" value={experience?.org} />
             </div>
             <div className="grid gap-2.5 sm:grid-cols-2">
-              <DetailText label="Periode" value={active?.period} />
+              <DetailText label="Periode" value={periodLabel(experience)} />
               <DetailText label="Konteks" value={active?.context} />
             </div>
             <DetailList label="Poin pencapaian" items={active?.points ?? []} />

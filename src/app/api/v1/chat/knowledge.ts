@@ -220,7 +220,7 @@ export const executeChatTool = async (
           .from("experience_list")
           .select("slug,locale,period,role,org,context,points,stack,sort_order")
           .eq("locale", locale)
-          .order("sort_order", { ascending: true })
+          .order("start_date", { ascending: false, nullsFirst: false })
 
         if (!error && data && data.length > 0) {
           let experiences = (data as ExperienceRow[]).map(toExperience).map((e) => {

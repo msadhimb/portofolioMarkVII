@@ -4,18 +4,16 @@ export const SLUG_PATTERN = /^[a-z0-9-]+$/
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
 
 export type ExperienceTranslationInput = {
-  period?: string
   role?: string
-  org?: string
   context?: string
   points?: string[]
 }
 
 export type ExperiencePayload = {
   slug?: string
-  sort_order?: number
   start_date?: string | null
   end_date?: string | null
+  org?: string
   stacks?: string[]
   translations?: { id?: ExperienceTranslationInput; en?: ExperienceTranslationInput }
 }
@@ -39,15 +37,9 @@ export const validateExperiencePayload = (
     if (!translation.role?.trim()) {
       issues.push(`Peran (${locale}) wajib diisi.`)
     }
-    if (!translation.org?.trim()) {
-      issues.push(`Organisasi (${locale}) wajib diisi.`)
-    }
   }
-  if (
-    body.sort_order !== undefined &&
-    (!Number.isInteger(body.sort_order) || body.sort_order < 0)
-  ) {
-    issues.push("Urutan harus bilangan bulat >= 0.")
+  if (!body.org?.trim()) {
+    issues.push("Organisasi wajib diisi.")
   }
   for (const [label, value] of [
     ["Tanggal mulai", body.start_date],
@@ -77,9 +69,9 @@ type ExperienceTranslationRow = {
 
 type ExperienceWithRelations = {
   slug: string
-  sort_order?: number | null
   start_date?: string | null
   end_date?: string | null
+  org?: string | null
   experience_translations?: ExperienceTranslationRow[] | null
   experience_points?: ExperiencePointRow[] | null
   experience_stacks?: ExperienceStackRow[] | null
@@ -95,9 +87,9 @@ export const toAdminExperience = (experience: ExperienceWithRelations) => {
 
   return {
     slug: experience.slug,
-    sort_order: experience.sort_order ?? 0,
     start_date: experience.start_date ?? null,
     end_date: experience.end_date ?? null,
+    org: experience.org ?? "",
     stacks: [...(experience.experience_stacks ?? [])]
       .sort(byOrder)
       .map((row) => row.name),
@@ -136,9 +128,7 @@ export const writeExperienceRelations = async (
       return {
         experience_id: experienceId,
         locale,
-        period: translation.period?.trim() ?? "",
         role: translation.role?.trim() ?? "",
-        org: translation.org?.trim() ?? "",
         context: translation.context?.trim() ?? "",
       }
     })
@@ -148,6 +138,13 @@ export const writeExperienceRelations = async (
       .insert(translations)
 
     if (translationError) return translationError.message
+
+    const { error: orgError } = await supabase
+      .from("experiences")
+      .update({ org: body.org?.trim() ?? "" })
+      .eq("id", experienceId)
+
+    if (orgError) return orgError.message
 
     const stacks = withOrder(body.stacks, "name").map((row) => ({
       ...row,

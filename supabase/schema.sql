@@ -136,6 +136,7 @@ create table if not exists public.experiences (
   sort_order int not null default 0 check (sort_order >= 0),
   start_date date,   -- opsional, untuk sorting. NULL = tidak tahu
   end_date date,     -- NULL = masih berjalan (Present/Sekarang)
+  org text not null default '',  -- organisasi, berlaku semua locale
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -150,9 +151,7 @@ create table if not exists public.experience_translations (
   id uuid primary key default gen_random_uuid(),
   experience_id uuid not null references public.experiences (id) on delete cascade,
   locale text not null check (locale in ('id', 'en')),
-  period text not null default '',  -- label display: "2023 — Sekarang"
   role text not null,
-  org text not null,
   context text not null default '',
   unique (experience_id, locale)
 );
@@ -302,10 +301,14 @@ select
   e.sort_order,
   e.start_date,
   e.end_date,
+  e.org,
+  case
+    when e.start_date is null then ''
+    when e.end_date is null then trim(to_char(e.start_date, 'Month YYYY')) || ' — Present'
+    else trim(to_char(e.start_date, 'Month YYYY')) || ' — ' || trim(to_char(e.end_date, 'Month YYYY'))
+  end as period,
   t.locale,
-  t.period,
   t.role,
-  t.org,
   t.context,
   coalesce((
     select jsonb_agg(x.body order by x.sort_order)

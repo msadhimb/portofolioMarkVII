@@ -239,38 +239,32 @@ insert into public.project_decisions (project_id, locale, title, detail, sort_or
 -- EXPERIENCES (parent)
 -- ============================================================================
 
-insert into public.experiences (slug, sort_order, start_date, end_date) values
-  ('pln-pusmanpro', 1, '2023-01-01', null),
-  ('duitku', 2, '2022-01-01', null),
-  ('freelance', 3, '2021-01-01', '2023-12-31');
+insert into public.experiences (slug, sort_order, start_date, end_date, org) values
+  ('pln-pusmanpro', 1, '2023-01-01', null, 'PLN Pusmanpro'),
+  ('duitku', 2, '2022-01-01', null, 'Duitku'),
+  ('freelance', 3, '2021-01-01', '2023-12-31', 'Freelance & Client Work');
 
 -- ---------- experience_translations: id ----------
 insert into public.experience_translations
-  (experience_id, locale, period, role, org, context)
+  (experience_id, locale, role, context)
 values
   ((select id from public.experiences where slug = 'pln-pusmanpro'), 'id',
-    $$2023 — Sekarang$$, $$Frontend Engineer$$, $$PLN Pusmanpro$$,
-    $$BUMN · Enterprise systems$$),
+    $$Frontend Engineer$$, $$BUMN · Enterprise systems$$),
   ((select id from public.experiences where slug = 'duitku'), 'id',
-    $$2022 — Sekarang$$, $$Independent Builder$$, $$Duitku$$,
-    $$Produk pribadi · Supabase$$),
+    $$Independent Builder$$, $$Produk pribadi · Supabase$$),
   ((select id from public.experiences where slug = 'freelance'), 'id',
-    $$2021 — 2023$$, $$Web Developer$$, $$Freelance & Client Work$$,
-    $$Website profesional & kreatif$$);
+    $$Web Developer$$, $$Website profesional & kreatif$$);
 
 -- ---------- experience_translations: en ----------
 insert into public.experience_translations
-  (experience_id, locale, period, role, org, context)
+  (experience_id, locale, role, context)
 values
   ((select id from public.experiences where slug = 'pln-pusmanpro'), 'en',
-    $$2023 — Present$$, $$Frontend Engineer$$, $$PLN Pusmanpro$$,
-    $$State-owned · Enterprise systems$$),
+    $$Frontend Engineer$$, $$State-owned · Enterprise systems$$),
   ((select id from public.experiences where slug = 'duitku'), 'en',
-    $$2022 — Present$$, $$Independent Builder$$, $$Duitku$$,
-    $$Personal product · Supabase$$),
+    $$Independent Builder$$, $$Personal product · Supabase$$),
   ((select id from public.experiences where slug = 'freelance'), 'en',
-    $$2021 — 2023$$, $$Web Developer$$, $$Freelance & Client Work$$,
-    $$Professional & creative websites$$);
+    $$Web Developer$$, $$Professional & creative websites$$);
 
 -- ---------- experience_points: id ----------
 insert into public.experience_points (experience_id, locale, body, sort_order) values

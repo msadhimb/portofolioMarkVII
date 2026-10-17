@@ -115,7 +115,6 @@ export const PUT = async (req: NextRequest, { params }: RouteParams) => {
     const { error: updateError } = await supabase
       .from("experiences")
       .update({
-        sort_order: body.sort_order ?? 0,
         start_date: body.start_date || null,
         end_date: body.end_date || null,
       })

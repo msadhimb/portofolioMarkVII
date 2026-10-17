@@ -13,7 +13,6 @@ import { BriefcaseBusiness, Languages, Loader2, Plus, Save, Settings2 } from "lu
 import { Button } from "@/components/ui/button"
 import { DialogModal } from "@/components/DialogModal"
 import { FormInput } from "@/components/Forms/FormInput"
-import { FormNumber } from "@/components/Forms/FormNumber"
 import { FormTextArea } from "@/components/Forms/FormTextArea"
 import { useActionModal } from "@/components/ActionModal/store"
 import { getErrorMessage } from "@/view/Admin/components/getErrorMessage"
@@ -196,7 +195,7 @@ export const ExperienceDialog = ({
           subtitle="Slug, periode tanggal & stack — berlaku semua bahasa"
           errorCount={errorCounts.umum}
         >
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4">
             <FormInput
               label="Slug"
               placeholder="nama-perusahaan"
@@ -210,40 +209,49 @@ export const ExperienceDialog = ({
               error={errors.slug?.message}
               {...register("slug")}
             />
+          </div>
+          <FormInput
+            label="Organisasi"
+            required
+            disabled={isPending}
+            error={errors.org?.message}
+            {...register("org")}
+            className="col-span-2"
+          />
+          <div className="grid gap-4 sm:grid-cols-2">
             <Controller
               control={control}
-              name="sortOrder"
+              name="startDate"
               render={({ field }) => (
-                <FormNumber
-                  label="Urutan"
-                  min={0}
-                  required
+                <FormInput
+                  label="Tanggal mulai"
+                  type="date"
                   disabled={isPending}
-                  error={errors.sortOrder?.message}
+                  hint="Boleh dikosongkan."
+                  error={errors.startDate?.message}
                   value={field.value}
-                  onValueChange={field.onChange}
+                  onChange={field.onChange}
                   onBlur={field.onBlur}
                   name={field.name}
                 />
               )}
             />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <FormInput
-              label="Tanggal mulai"
-              type="date"
-              disabled={isPending}
-              hint="Boleh dikosongkan."
-              error={errors.startDate?.message}
-              {...register("startDate")}
-            />
-            <FormInput
-              label="Tanggal selesai"
-              type="date"
-              disabled={isPending}
-              hint="Kosongkan jika masih berjalan."
-              error={errors.endDate?.message}
-              {...register("endDate")}
+            <Controller
+              control={control}
+              name="endDate"
+              render={({ field }) => (
+                <FormInput
+                  label="Tanggal selesai"
+                  type="date"
+                  disabled={isPending}
+                  hint="Kosongkan jika masih berjalan."
+                  error={errors.endDate?.message}
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                />
+              )}
             />
           </div>
           <FormTextArea
@@ -326,22 +334,6 @@ const LocaleFields = ({
           disabled={disabled}
           error={errorOf("role")}
           {...field("role")}
-        />
-        <FormInput
-          label="Organisasi"
-          required={required}
-          disabled={disabled}
-          error={errorOf("org")}
-          {...field("org")}
-        />
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <FormInput
-          label="Periode"
-          placeholder="2023 — Sekarang"
-          disabled={disabled}
-          error={errorOf("period")}
-          {...field("period")}
         />
         <FormInput
           label="Konteks"
