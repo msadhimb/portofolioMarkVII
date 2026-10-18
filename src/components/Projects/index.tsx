@@ -20,8 +20,6 @@ export const Projects = () => {
 
   const { getProjectsPage } = useProjects()
 
-  const [pageSize, setPageSize] = useState(3)
-
   const {
     data: projectsData,
     isPending,
@@ -30,8 +28,7 @@ export const Projects = () => {
     fetchNextPage,
   } = useInfiniteQuery({
     queryKey: ["projects", "feed", i18n.language],
-    queryFn: ({ pageParam }) =>
-      getProjectsPage(i18n.language, pageParam, pageSize),
+    queryFn: ({ pageParam }) => getProjectsPage(i18n.language, pageParam, 2),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       const pagination = lastPage.pagination
@@ -43,17 +40,19 @@ export const Projects = () => {
   })
 
   const data = projectsData?.pages.flatMap((page: any) => page.data) ?? []
-  const featured: any = data.find((p: any) => p.featured === true)
+  const featured =
+    projectsData?.pages
+      ?.flatMap((page: any) => page.featured)
+      .filter(
+        (f: any, index: number, arr: any[]) =>
+          arr.findIndex((x) => x.slug === f.slug) === index
+      ) ?? []
   const rest = data.filter((p: any) => p.featured === false) ?? []
   const hasLoadedData = hasNextPage || isFetchingNextPage
 
   const handleNextPage = async () => {
-    await setPageSize(4)
     fetchNextPage()
   }
-
-  console.log("featured", featured)
-  console.log("rest", rest)
 
   if (!featured || !rest) return null
 
@@ -87,64 +86,66 @@ export const Projects = () => {
         </Reveal>
 
         <Shimmer loading={isPending}>
-          <Reveal delay={0.05}>
-            <article className="card-futuristic mt-12 overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(2,132,199,0.5)] transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.45)]">
-              <div className="grid lg:grid-cols-2">
-                <div className="bg-muted/60">
-                  {featured?.image && (
-                    <Image
-                      src={featured?.image}
-                      alt={featured?.title}
-                      width={1000}
-                      height={1000}
-                      className="h-full w-full object-cover"
-                    />
-                  )}
-                </div>
-                <div className="flex flex-col justify-center p-7 sm:p-10">
-                  <p className="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] uppercase">
-                    <span className="rounded-full bg-signal px-2.5 py-1 text-signal-foreground">
-                      {t("featured")}
-                    </span>
-                    <span className="text-muted-foreground">
-                      {featured?.context}
-                    </span>
-                  </p>
-                  <h3 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                    {featured?.title}
-                  </h3>
-                  <p className="mt-1 font-display text-lg text-muted-foreground italic">
-                    {featured?.tagline}
-                  </p>
-                  <p className="mt-4 line-clamp-3 text-[15px] leading-relaxed text-muted-foreground">
-                    {featured?.description}
-                  </p>
-                  <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-border py-5 sm:grid-cols-4">
-                    {(featured?.metrics ?? []).map((m: any) => (
-                      <div key={m.label}>
-                        <dt className="font-mono text-[11px] text-muted-foreground uppercase">
-                          {m.label}
-                        </dt>
-                        <dd className="tabular mt-1 font-mono text-sm font-semibold text-foreground">
-                          {m.value}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                  <div className="mt-5">
-                    <TechList items={featured?.technologies} limit={7} />
+          {featured?.map((f: any) => (
+            <Reveal key={f.slug} delay={0.05}>
+              <article className="card-futuristic mt-12 overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(2,132,199,0.5)] transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.45)]">
+                <div className="grid lg:grid-cols-2">
+                  <div className="bg-muted/60">
+                    {f?.image && (
+                      <Image
+                        src={f?.image}
+                        alt={f?.title}
+                        width={1000}
+                        height={1000}
+                        className="h-full w-full object-cover"
+                      />
+                    )}
                   </div>
-                  <div className="mt-7">
-                    <ProjectLinks project={featured} t={t} />
+                  <div className="flex flex-col justify-center p-7 sm:p-10">
+                    <p className="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] uppercase">
+                      <span className="rounded-full bg-signal px-2.5 py-1 text-signal-foreground">
+                        {t("featured")}
+                      </span>
+                      <span className="text-muted-foreground">
+                        {f?.context}
+                      </span>
+                    </p>
+                    <h3 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+                      {f?.title}
+                    </h3>
+                    <p className="mt-1 font-display text-lg text-muted-foreground italic">
+                      {f?.tagline}
+                    </p>
+                    <p className="mt-4 line-clamp-3 text-[15px] leading-relaxed text-muted-foreground">
+                      {f?.description}
+                    </p>
+                    <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-border py-5 sm:grid-cols-4">
+                      {(f?.metrics ?? []).map((m: any) => (
+                        <div key={m.label}>
+                          <dt className="font-mono text-[11px] text-muted-foreground uppercase">
+                            {m.label}
+                          </dt>
+                          <dd className="tabular mt-1 font-mono text-sm font-semibold text-foreground">
+                            {m.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <div className="mt-5">
+                      <TechList items={f?.technologies} limit={7} />
+                    </div>
+                    <div className="mt-7">
+                      <ProjectLinks project={f} t={t} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
-          </Reveal>
+              </article>
+            </Reveal>
+          ))}
 
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
             {rest.map((p: any, i: number) => (
-              <Reveal key={p.slug} delay={0.05 * (i % pageSize)}>
+              <Reveal key={p.slug} delay={0.05 * (i % 2)}>
                 <article className="card-futuristic flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(2,132,199,0.5)] transition-all duration-300 hover:-translate-y-1 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.45)]">
                   <div className="h-64 border-b border-border bg-muted/60">
                     {p?.image && (

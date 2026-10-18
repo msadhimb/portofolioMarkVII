@@ -56,6 +56,12 @@ export const GET = async (req: Request) => {
       .order("sort_order", { ascending: true })
       .range(from, to)
 
+    const { data: featuredData } = await supabase
+      .from("project_list")
+      .select("*")
+      .eq("locale", locale)
+      .eq("featured", true)
+
     if (error) {
       console.error("[GET /api/projects] Supabase error:", error.message)
       return NextResponse.json(
@@ -68,11 +74,13 @@ export const GET = async (req: Request) => {
     }
 
     const projects = (data ?? []).map(toProjectCard)
+    const featuredProjects = featuredData?.map(toProjectCard) || []
 
     return NextResponse.json({
       ...paginated(projects, buildPaginationMeta(params, count ?? 0)),
       locale,
       variant: "card",
+      featured: featuredProjects,
     })
   } catch (err) {
     console.error("[GET /api/projects] Unexpected error:", err)
