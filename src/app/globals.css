@@ -73,34 +73,34 @@
 
 .dark {
   color-scheme: dark;
-  /* Dark — "deep space": navy hampir-hitam + neon cyan & violet */
-  --background: #04060e;
-  --foreground: #e6edff;
-  --card: #0a1122;
-  --card-foreground: #e6edff;
-  --popover: #0a1122;
-  --popover-foreground: #e6edff;
-  --primary: #22d3ee;
-  --primary-foreground: #032630;
-  --secondary: #0f1830;
-  --secondary-foreground: #e6edff;
-  --muted: #0f1830;
-  --muted-foreground: #8ea0c9;
-  --accent: #0f1830;
-  --accent-foreground: #e6edff;
+  /* Dark — "warm terminal": charcoal hangat + aksen amber & teal */
+  --background: #0b0b0d;
+  --foreground: #ece7dd;
+  --card: #141311;
+  --card-foreground: #ece7dd;
+  --popover: #141311;
+  --popover-foreground: #ece7dd;
+  --primary: #f59e0b;
+  --primary-foreground: #1a1206;
+  --secondary: #1c1a15;
+  --secondary-foreground: #ece7dd;
+  --muted: #1c1a15;
+  --muted-foreground: #a8a294;
+  --accent: #1c1a15;
+  --accent-foreground: #ece7dd;
   --destructive: #f87171;
-  --border: rgba(148, 178, 255, 0.16);
-  --input: rgba(148, 178, 255, 0.22);
-  --ring: #22d3ee;
-  /* Aksen: violet neon agar kontras dengan primary cyan */
-  --signal: #a78bfa;
-  --signal-foreground: #12082e;
-  --hl: #22d3ee;
-  --hl-foreground: #032630;
-  --surface: #0a1122;
-  --ink-soft: #a9b8dc;
-  --grid-line: rgba(140, 170, 255, 0.08);
-  --code-bg: #0a1122;
+  --border: rgba(231, 214, 186, 0.14);
+  --input: rgba(231, 214, 186, 0.2);
+  --ring: #f59e0b;
+  /* Aksen: teal agar kontras dengan primary amber */
+  --signal: #2dd4bf;
+  --signal-foreground: #03211d;
+  --hl: #f59e0b;
+  --hl-foreground: #1a1206;
+  --surface: #141311;
+  --ink-soft: #b8b2a4;
+  --grid-line: rgba(231, 214, 186, 0.07);
+  --code-bg: #141311;
 }
 
 @layer base {

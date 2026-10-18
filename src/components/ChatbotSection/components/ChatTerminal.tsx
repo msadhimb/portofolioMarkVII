@@ -50,16 +50,16 @@ export const ChatTerminal = ({
   onClear,
 }: ChatTerminalProps) => {
   return (
-    <div className="crt relative overflow-hidden rounded-2xl border border-cyan-400/20 bg-[#050b1d] shadow-[0_0_90px_-18px_rgba(34,211,238,0.4),0_40px_90px_-30px_rgba(0,0,0,0.6)]">
+    <div className="crt relative overflow-hidden rounded-2xl border border-teal-400/20 bg-[#141311] shadow-[0_0_90px_-18px_rgba(245,158,11,0.3),0_40px_90px_-30px_rgba(0,0,0,0.6)]">
       {/* Title bar */}
       <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-5 py-3.5">
         <span className="size-3 rounded-full bg-[#ff5f57]" />
         <span className="size-3 rounded-full bg-[#febc2e]" />
         <span className="size-3 rounded-full bg-[#28c840]" />
-        <span className="ml-3 font-mono text-xs text-[#8ea0c9]">salman-ai — ollama console</span>
+         <span className="ml-3 font-mono text-xs text-[#a8a294]">salman-ai — ollama console</span>
         <Badge
           variant="secondary"
-          className="ml-auto border-white/10 bg-white/[0.06] font-mono text-[10px] text-[#22d3ee]"
+          className="ml-auto border-white/10 bg-white/[0.06] font-mono text-[10px] text-[#f59e0b]"
         >
           <Sparkles className="mr-1 size-3" />
           {model}

@@ -51,7 +51,7 @@ export const Contact = () => {
               {t("description")}
             </SectionHeading>
             <ClickSpark
-              sparkColor={["#22D3EE", "#A78BFA"]}
+              sparkColor={["#F59E0B", "#2DD4BF"]}
               sparkCount={10}
               sparkRadius={48}
               className="h-auto!"

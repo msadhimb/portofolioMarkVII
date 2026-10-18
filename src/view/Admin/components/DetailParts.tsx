@@ -16,11 +16,11 @@ export const DetailSection = ({
   return (
     <section
       aria-label={title}
-      className="card-futuristic overflow-hidden rounded-xl border bg-card shadow-[0_16px_40px_-28px_rgba(2,132,199,0.55)]"
+      className="card-futuristic overflow-hidden rounded-xl border bg-card shadow-[0_16px_40px_-28px_rgba(245,158,11,0.4)]"
     >
       <header className="flex items-center gap-2.5 border-b border-border/70 bg-muted/50 px-4 py-2.5">
         {icon ? (
-          <span className="flex size-7 items-center justify-center rounded-lg border border-signal/25 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 text-signal [&_svg]:size-3.5">
+           <span className="flex size-7 items-center justify-center rounded-lg border border-signal/25 bg-gradient-to-br from-amber-500/20 to-teal-500/20 text-signal [&_svg]:size-3.5">
             {icon}
           </span>
         ) : null}
@@ -89,7 +89,7 @@ export const DetailList = ({
           >
             <span
               aria-hidden="true"
-              className="tabular flex size-5 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-cyan-500/25 to-violet-500/25 font-mono text-[10px] font-bold text-signal"
+               className="tabular flex size-5 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-amber-500/25 to-teal-500/25 font-mono text-[10px] font-bold text-signal"
             >
               {index + 1}
             </span>
@@ -124,7 +124,7 @@ export const DetailChips = ({
             <Badge
               key={item}
               variant="secondary"
-              className="gap-1.5 border-signal/20 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 py-1 font-normal hover:border-signal/50"
+               className="gap-1.5 border-signal/20 bg-gradient-to-br from-amber-500/10 to-teal-500/10 py-1 font-normal hover:border-signal/50"
             >
               <span
                 aria-hidden="true"
@@ -156,16 +156,16 @@ export const DetailHero = ({
 }) => {
   const wash =
     tone === "violet"
-      ? "from-violet-500/[0.18] via-transparent to-transparent"
+      ? "from-amber-500/[0.18] via-transparent to-transparent"
       : tone === "emerald"
         ? "from-emerald-500/[0.16] via-transparent to-transparent"
-        : "from-cyan-500/[0.16] via-transparent to-transparent"
+        : "from-teal-500/[0.16] via-transparent to-transparent"
   const blob =
     tone === "violet"
-      ? "bg-violet-500/30"
+      ? "bg-amber-500/30"
       : tone === "emerald"
         ? "bg-emerald-400/30"
-        : "bg-cyan-400/30"
+        : "bg-teal-400/30"
   return (
     <div className="relative overflow-hidden rounded-xl border bg-card">
       <div
@@ -184,7 +184,7 @@ export const DetailHero = ({
         )}
       />
       <div className="relative flex items-start gap-4 p-4 sm:p-5">
-        <span className="font-display flex size-14 shrink-0 items-center justify-center rounded-2xl border border-signal/25 bg-gradient-to-br from-cyan-500/25 to-violet-500/25 text-2xl font-bold text-signal shadow-lg">
+         <span className="font-display flex size-14 shrink-0 items-center justify-center rounded-2xl border border-signal/25 bg-gradient-to-br from-amber-500/25 to-teal-500/25 text-2xl font-bold text-signal shadow-lg">
           {letter}
         </span>
         <div className="min-w-0 flex-1">
@@ -254,7 +254,7 @@ export const LocaleTabs = ({
               className={cn(
                 "flex size-5 items-center justify-center rounded-md font-mono text-[9px] font-bold",
                 selected
-                  ? "bg-gradient-to-br from-cyan-500/30 to-violet-500/30 text-signal"
+                   ? "bg-gradient-to-br from-amber-500/30 to-teal-500/30 text-signal"
                   : "bg-muted text-muted-foreground"
               )}
             >
@@ -291,7 +291,7 @@ export const MetricGrid = ({
         {items.map((metric, index) => (
           <div
             key={`${metric.label}-${index}`}
-            className="relative overflow-hidden rounded-lg border border-border/60 bg-gradient-to-b from-cyan-500/[0.08] to-violet-500/[0.08] p-3 text-center transition-colors hover:border-signal/40"
+             className="relative overflow-hidden rounded-lg border border-border/60 bg-gradient-to-b from-amber-500/[0.08] to-teal-500/[0.08] p-3 text-center transition-colors hover:border-signal/40"
           >
             <p className="tabular font-display text-lg leading-tight font-bold text-signal">
               {metric.value}

@@ -99,7 +99,7 @@ export const Skills = () => {
             ))}
 
             <Reveal delay={0.2}>
-              <article className="card-futuristic flex h-full flex-col justify-between rounded-2xl bg-foreground p-6 text-background shadow-[0_24px_55px_-30px_rgba(2,132,199,0.6)]">
+              <article className="card-futuristic flex h-full flex-col justify-between rounded-2xl bg-foreground p-6 text-background shadow-[0_24px_55px_-30px_rgba(245,158,11,0.4)]">
                 <div>
                   <h3 className="font-mono text-sm font-semibold tracking-wide uppercase">
                     {t("rangeTitle")}

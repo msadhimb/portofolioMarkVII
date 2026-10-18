@@ -274,7 +274,7 @@ export const DataTable = <TData extends RowData>({
                 className={cn(
                   "tabular h-8 min-w-8 rounded-lg border px-2 font-mono text-[13px] transition-all",
                   item === pageIndex
-                    ? "border-signal/60 bg-gradient-to-br from-cyan-500/25 to-violet-500/25 font-bold text-signal shadow-[0_0_18px_-6px_rgba(34,211,238,0.7)]"
+                    ? "border-signal/60 bg-gradient-to-br from-amber-500/25 to-teal-500/25 font-bold text-signal shadow-[0_0_18px_-6px_rgba(245,158,11,0.5)]"
                     : "border-transparent text-muted-foreground hover:border-border hover:bg-muted hover:text-foreground"
                 )}
               >

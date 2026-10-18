@@ -21,22 +21,22 @@ type DialogModalTone = "cyan" | "violet" | "emerald" | "amber"
 
 const TONE_STYLES: Record<DialogModalTone, { wash: string; blobA: string; blobB: string; tile: string }> = {
   cyan: {
-    wash: "from-cyan-500/[0.14] via-transparent to-transparent",
-    blobA: "bg-cyan-400/30",
-    blobB: "bg-violet-500/20",
-    tile: "border-cyan-400/30 bg-gradient-to-br from-cyan-500/25 to-violet-500/20 text-cyan-600 dark:text-cyan-300",
+    wash: "from-teal-500/[0.14] via-transparent to-transparent",
+    blobA: "bg-teal-400/30",
+    blobB: "bg-amber-500/20",
+    tile: "border-teal-400/30 bg-gradient-to-br from-teal-500/25 to-amber-500/20 text-teal-600 dark:text-teal-300",
   },
   violet: {
-    wash: "from-violet-500/[0.16] via-transparent to-transparent",
-    blobA: "bg-violet-500/30",
-    blobB: "bg-cyan-400/20",
-    tile: "border-violet-400/30 bg-gradient-to-br from-violet-500/25 to-cyan-500/15 text-violet-600 dark:text-violet-300",
+    wash: "from-amber-500/[0.16] via-transparent to-transparent",
+    blobA: "bg-amber-500/30",
+    blobB: "bg-teal-400/20",
+    tile: "border-amber-400/30 bg-gradient-to-br from-amber-500/25 to-teal-500/15 text-amber-600 dark:text-amber-300",
   },
   emerald: {
     wash: "from-emerald-500/[0.14] via-transparent to-transparent",
     blobA: "bg-emerald-400/30",
-    blobB: "bg-cyan-400/20",
-    tile: "border-emerald-400/30 bg-gradient-to-br from-emerald-500/25 to-cyan-500/15 text-emerald-600 dark:text-emerald-300",
+    blobB: "bg-teal-400/20",
+    tile: "border-emerald-400/30 bg-gradient-to-br from-emerald-500/25 to-teal-500/15 text-emerald-600 dark:text-emerald-300",
   },
   amber: {
     wash: "from-amber-500/[0.16] via-transparent to-transparent",

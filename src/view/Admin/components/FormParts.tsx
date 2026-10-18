@@ -40,7 +40,7 @@ export const FormTabBar = ({
             className={cn(
               "relative flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-[13px] font-medium transition-all",
               selected
-                ? "bg-gradient-to-br from-cyan-500/20 to-violet-500/20 text-foreground shadow-sm ring-1 ring-signal/30"
+                ? "bg-gradient-to-br from-amber-500/20 to-teal-500/20 text-foreground shadow-sm ring-1 ring-signal/30"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
           >
@@ -89,7 +89,7 @@ export const FormSectionCard = ({
       className="card-futuristic overflow-hidden rounded-xl border bg-card"
     >
       <header className="flex items-center gap-3 border-b border-border/70 bg-muted/50 px-4 py-3 sm:px-5">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-signal/25 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 text-signal [&_svg]:size-4">
+         <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-signal/25 bg-gradient-to-br from-amber-500/20 to-teal-500/20 text-signal [&_svg]:size-4">
           {icon}
         </span>
         <div className="min-w-0 flex-1">

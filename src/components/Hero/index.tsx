@@ -58,10 +58,10 @@ export const Hero = () => {
 
   const firstName = siteConfig.siteName.split(" ")[0]
   const restName = siteConfig.siteName.split(" ").slice(1).join(" ")
-  const nameColor = resolvedTheme === "dark" ? "#22D3EE" : "#6D28D9"
+  const nameColor = resolvedTheme === "dark" ? "#F59E0B" : "#6D28D9"
   // Shine harus tetap terlihat: putih hanya untuk dark, violet muda untuk light
   // (putih di atas background terang membuat teks tampak transparan).
-  const shineColor = resolvedTheme === "dark" ? "#77deee" : "#9972d9"
+  const shineColor = resolvedTheme === "dark" ? "#FCD34D" : "#9972d9"
   const techCount = new Set(
     getProjects(i18n.language).flatMap((p) => p.technologies)
   ).size
@@ -239,7 +239,7 @@ export const Hero = () => {
           <Animated
             {...(!reduce ? item(0.32) : {})}
             aria-hidden="true"
-            className="card-futuristic hidden overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_20px_60px_-30px_rgba(2,132,199,0.5)] lg:block"
+            className="card-futuristic hidden overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_20px_60px_-30px_rgba(245,158,11,0.35)] lg:block"
           >
             <div className="flex items-center gap-1.5 border-b border-border px-4 py-3">
               <span className="size-2.5 rounded-full bg-border" />

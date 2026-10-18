@@ -159,7 +159,7 @@ export const Awards = () => {
 
                 return (
                   <Reveal key={item.slug} delay={0.04 * i} className="h-full">
-                    <article className="card-futuristic group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card/80 p-6 transition-all duration-200 hover:-translate-y-1 hover:border-signal/40 hover:shadow-[0_16px_36px_-18px_rgba(2,132,199,0.25)]">
+                    <article className="card-futuristic group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card/80 p-6 transition-all duration-200 hover:-translate-y-1 hover:border-signal/40 hover:shadow-[0_16px_36px_-18px_rgba(245,158,11,0.2)]">
                       <div>
                         {/* Top Meta: Category Badge + Year */}
                         <div className="flex items-center justify-between gap-2">
@@ -246,7 +246,7 @@ export const Awards = () => {
                 type="button"
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
-                className="rounded-full border border-border/70 bg-card px-6 py-2.5 font-mono text-xs tracking-[0.16em] text-foreground uppercase transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_30px_-10px_rgba(34,211,238,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-full border border-border/70 bg-card px-6 py-2.5 font-mono text-xs tracking-[0.16em] text-foreground uppercase transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_30px_-10px_rgba(245,158,11,0.3)] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isFetchingNextPage ? t("loadingMore") : t("loadMore")}
               </button>

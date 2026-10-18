@@ -106,7 +106,7 @@ function formatDateID() {
   }).format(new Date())
 }
 
-const DONUT_COLORS = ["#22d3ee", "#a78bfa", "#34d399", "#fbbf24"]
+const DONUT_COLORS = ["#f59e0b", "#2dd4bf", "#34d399", "#fb7185"]
 
 function OverviewContent() {
   const { getAdminProjects } = useProjects()
@@ -194,9 +194,9 @@ function OverviewContent() {
       hint: `${stats.featured} unggulan · ${stats.bilingual} bilingual`,
       href: "/admin/dashboard/projects",
       icon: <FolderKanbanIcon className="size-4" />,
-      tile: "bg-cyan-500/15 text-cyan-600 dark:text-cyan-300",
+      tile: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
       sparkData: spark([3, 5, 4, 7, 6, 9, 8]),
-      sparkColor: "#22d3ee",
+      sparkColor: "#f59e0b",
     },
     {
       label: "Experiences",
@@ -204,9 +204,9 @@ function OverviewContent() {
       hint: "Riwayat kerja & peran",
       href: "/admin/dashboard/experiences",
       icon: <BriefcaseBusinessIcon className="size-4" />,
-      tile: "bg-violet-500/15 text-violet-600 dark:text-violet-300",
+      tile: "bg-teal-500/15 text-teal-600 dark:text-teal-300",
       sparkData: spark([2, 3, 5, 4, 6, 5, 7]),
-      sparkColor: "#a78bfa",
+      sparkColor: "#2dd4bf",
     },
     {
       label: "Awards",
@@ -282,7 +282,7 @@ function OverviewContent() {
       >
         <div className="bg-grid bg-grid-fade pointer-events-none absolute inset-0" />
         <div className="animate-aurora pointer-events-none absolute -top-24 -left-16 size-72 rounded-full bg-cyan-400/25 blur-3xl" />
-        <div className="animate-aurora-slow pointer-events-none absolute -right-20 -bottom-28 size-80 rounded-full bg-violet-500/25 blur-3xl" />
+         <div className="animate-aurora-slow pointer-events-none absolute -right-20 -bottom-28 size-80 rounded-full bg-teal-500/25 blur-3xl" />
 
         <div className="relative grid gap-6 p-6 md:grid-cols-[1fr_280px] md:p-8">
           <div>
@@ -326,7 +326,7 @@ function OverviewContent() {
           </div>
 
           {/* Mini terminal / status */}
-          <div className="crt relative hidden overflow-hidden rounded-xl border bg-[#04060e] p-4 font-mono text-[11px] leading-relaxed text-cyan-200 md:block">
+          <div className="crt relative hidden overflow-hidden rounded-xl border bg-[#141311] p-4 font-mono text-[11px] leading-relaxed text-amber-200 md:block">
             <div className="crt-scanlines pointer-events-none absolute inset-0" />
             <div className="flex items-center gap-1.5 border-b border-white/10 pb-2.5">
               <span className="size-2.5 rounded-full bg-red-400/80" />
@@ -558,7 +558,7 @@ function OverviewContent() {
                     href="/admin/dashboard/projects"
                     className="group flex items-center gap-3 rounded-xl border bg-muted/40 p-3 transition-colors hover:border-signal/50 hover:bg-muted"
                   >
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/25 to-violet-500/25 font-mono text-sm font-bold text-signal">
+                     <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500/25 to-teal-500/25 font-mono text-sm font-bold text-signal">
                       {(p?.translations?.id?.title?.[0] ||
                         p?.slug?.[0] ||
                         "?")?.toUpperCase()}
@@ -623,7 +623,7 @@ function OverviewContent() {
                         initial={{ width: 0 }}
                         animate={{ width: `${c.value}%` }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-violet-500"
+                        className="h-full rounded-full bg-gradient-to-r from-amber-400 to-teal-500"
                       />
                     </div>
                   </div>

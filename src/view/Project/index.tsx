@@ -201,7 +201,7 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
                 <Link
                   key={p.slug}
                   href={`/projects/${p.slug}`}
-                  className="group rounded-2xl border border-border bg-card p-5 transition-all hover:border-signal/50 hover:shadow-[0_0_40px_-12px_rgba(34,211,238,0.4)]"
+                  className="group rounded-2xl border border-border bg-card p-5 transition-all hover:border-signal/50 hover:shadow-[0_0_40px_-12px_rgba(245,158,11,0.3)]"
                 >
                   <p className="font-mono text-[11px] text-muted-foreground uppercase">
                     {t("nextCase")}

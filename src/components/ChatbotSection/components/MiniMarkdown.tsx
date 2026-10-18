@@ -16,7 +16,7 @@ const Inline = ({ text }: InlineProps) => {
       {parts.map((part, i) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           return (
-            <strong key={i} className="font-semibold text-[#22d3ee]">
+            <strong key={i} className="font-semibold text-[#f59e0b]">
               {part.slice(2, -2)}
             </strong>
           );
@@ -51,7 +51,7 @@ export const MiniMarkdown = ({ text }: MiniMarkdownProps) => {
         if (/^[-*]\s/.test(trimmed)) {
           return (
             <p key={i} className="flex gap-2">
-              <span className="text-[#22d3ee]">▸</span>
+              <span className="text-[#f59e0b]">▸</span>
               <Inline text={trimmed.replace(/^[-*]\s/, "")} />
             </p>
           );
@@ -59,7 +59,7 @@ export const MiniMarkdown = ({ text }: MiniMarkdownProps) => {
         if (/^\d+\.\s/.test(trimmed)) {
           return (
             <p key={i} className="flex gap-2">
-              <span className="font-mono text-[#22d3ee]">{trimmed.match(/^\d+/)?.[0]}.</span>
+              <span className="font-mono text-[#f59e0b]">{trimmed.match(/^\d+/)?.[0]}.</span>
               <Inline text={trimmed.replace(/^\d+\.\s/, "")} />
             </p>
           );

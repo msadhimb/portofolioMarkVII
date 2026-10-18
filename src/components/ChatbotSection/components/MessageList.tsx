@@ -42,7 +42,7 @@ export const MessageList = ({
       className="h-[380px] space-y-4 overflow-y-auto px-5 py-5 touch-pan-y overscroll-contain [scrollbar-width:thin] sm:h-[420px]"
     >
       {messages.length === 0 && !loading ? (
-        <p className="font-mono text-xs leading-relaxed text-[#8ea0c9]">{emptyStateLabel}</p>
+         <p className="font-mono text-xs leading-relaxed text-[#a8a294]">{emptyStateLabel}</p>
       ) : null}
 
       {messages.map((message) => (
@@ -59,12 +59,12 @@ export const MessageList = ({
               {[0, 1, 2].map((i) => (
                 <span
                   key={i}
-                  className="animate-typing-dot size-1.5 rounded-full bg-[#22d3ee]"
+                  className="animate-typing-dot size-1.5 rounded-full bg-[#f59e0b]"
                   style={{ animationDelay: `${i * 0.18}s` }}
                 />
               ))}
             </span>
-            <span className="font-mono text-[11px] text-[#8ea0c9]">{thinkingLabel}…</span>
+             <span className="font-mono text-[11px] text-[#a8a294]">{thinkingLabel}…</span>
           </div>
         </div>
       ) : null}

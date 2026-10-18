@@ -88,7 +88,7 @@ export const Projects = () => {
         <Shimmer loading={isPending}>
           {featured?.map((f: any) => (
             <Reveal key={f.slug} delay={0.05}>
-              <article className="card-futuristic mt-12 overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(2,132,199,0.5)] transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.45)]">
+              <article className="card-futuristic mt-12 overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(245,158,11,0.35)] transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(245,158,11,0.3)]">
                 <div className="grid lg:grid-cols-2">
                   <div className="bg-muted/60">
                     {f?.image && (
@@ -146,7 +146,7 @@ export const Projects = () => {
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
             {rest.map((p: any, i: number) => (
               <Reveal key={p.slug} delay={0.05 * (i % 2)}>
-                <article className="card-futuristic flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(2,132,199,0.5)] transition-all duration-300 hover:-translate-y-1 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.45)]">
+                <article className="card-futuristic flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(245,158,11,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(245,158,11,0.3)]">
                   <div className="h-64 border-b border-border bg-muted/60">
                     {p?.image && (
                       <Image
@@ -191,7 +191,7 @@ export const Projects = () => {
                   type="button"
                   onClick={() => handleNextPage()}
                   disabled={isFetchingNextPage}
-                  className="rounded-full border border-border/70 bg-card px-6 py-2.5 font-mono text-xs tracking-[0.16em] text-foreground uppercase transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_30px_-10px_rgba(34,211,238,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
+                  className="rounded-full border border-border/70 bg-card px-6 py-2.5 font-mono text-xs tracking-[0.16em] text-foreground uppercase transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_30px_-10px_rgba(245,158,11,0.3)] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isFetchingNextPage ? t("loading") : t("loadMore")}
                 </button>

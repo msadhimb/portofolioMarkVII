@@ -37,9 +37,9 @@ type Settings = {
 
 const THEMES: Record<'dark' | 'light', Palette> = {
   dark: {
-    surface: '#0a1122',
-    border: 'rgba(34, 211, 238, 0.16)',
-    shadow: '0 24px 50px -24px rgba(2, 132, 199, 0.4), 0 24px 48px -24px rgba(0, 0, 0, 0.6)',
+    surface: '#141311',
+    border: 'rgba(245, 158, 11, 0.18)',
+    shadow: '0 24px 50px -24px rgba(245, 158, 11, 0.35), 0 24px 48px -24px rgba(0, 0, 0, 0.6)',
     light: '#ffffff',
     fill: 1,
     edge: 1
