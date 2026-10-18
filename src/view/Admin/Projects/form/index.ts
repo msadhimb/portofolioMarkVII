@@ -17,20 +17,18 @@ export type ProjectFormData = {
   demoUrl: string
   repositoryUrl: string
   featured: string
-  sortOrder: number
   technologies: string
   tagline: string
   role: string
   startDate: string
   endDate: string
   context: string
-  idTitle: string
+  title: string
   idDescription: string
   idProblem: string
   idHighlights: string
   idMetrics: MetricItem[]
   idDecisions: DecisionItem[]
-  enTitle: string
   enDescription: string
   enProblem: string
   enHighlights: string
@@ -44,20 +42,18 @@ export const projectDefaultValues: ProjectFormData = {
   demoUrl: "",
   repositoryUrl: "",
   featured: "tidak",
-  sortOrder: 0,
   technologies: "",
   tagline: "",
   role: "",
   startDate: "",
   endDate: "",
   context: "",
-  idTitle: "",
+  title: "",
   idDescription: "",
   idProblem: "",
   idHighlights: "",
   idMetrics: [],
   idDecisions: [],
-  enTitle: "",
   enDescription: "",
   enProblem: "",
   enHighlights: "",
@@ -155,14 +151,13 @@ export const projectToFormValues = (project: AdminProject): ProjectFormData => {
     demoUrl: project.demo_url ?? "",
     repositoryUrl: project.repository_url ?? "",
     featured: project.featured ? "ya" : "tidak",
-    sortOrder: project.sort_order ?? 0,
     technologies: toLines(project.technologies ?? []),
     tagline: project.tagline || id.tagline || en.tagline || "",
     role: project.role || id.role || en.role || "",
     startDate,
     endDate,
     context: project.context || id.context || en.context || "",
-    idTitle: id.title ?? "",
+    title: project.title ?? "",
     idDescription: id.description ?? "",
     idProblem: id.problem ?? "",
     idHighlights: toLines(id.highlights ?? []),
@@ -174,7 +169,6 @@ export const projectToFormValues = (project: AdminProject): ProjectFormData => {
       title: d.title ?? "",
       detail: d.detail ?? "",
     })),
-    enTitle: en.title ?? "",
     enDescription: en.description ?? "",
     enProblem: en.problem ?? "",
     enHighlights: toLines(en.highlights ?? []),
@@ -209,7 +203,6 @@ export const projectFormToPayload = (values: ProjectFormData, slug: string) => {
       .filter((item) => item.title)
 
   const translation = (prefix: "id" | "en") => ({
-    title: values[`${prefix}Title`].trim(),
     description: values[`${prefix}Description`].trim(),
     problem: values[`${prefix}Problem`].trim(),
     highlights: fromLines(values[`${prefix}Highlights`]),
@@ -223,7 +216,7 @@ export const projectFormToPayload = (values: ProjectFormData, slug: string) => {
     demo_url: values.demoUrl.trim() || null,
     repository_url: values.repositoryUrl.trim() || null,
     featured: values.featured === "ya",
-    sort_order: Number(values.sortOrder) || 0,
+    title: values.title.trim(),
     tagline: values.tagline.trim(),
     role: values.role.trim(),
     period,

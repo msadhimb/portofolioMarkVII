@@ -6,7 +6,6 @@ export type MetricInput = { label: string; value: string }
 export type DecisionInput = { title: string; detail: string }
 
 export type TranslationInput = {
-  title?: string
   tagline?: string
   description?: string
   problem?: string
@@ -24,7 +23,7 @@ export type ProjectPayload = {
   demo_url?: string | null
   repository_url?: string | null
   featured?: boolean
-  sort_order?: number
+  title?: string
   technologies?: string[]
   tagline?: string
   role?: string
@@ -45,21 +44,14 @@ export const validateProjectPayload = (
   if (requireSlug && (!body.slug || !SLUG_PATTERN.test(body.slug))) {
     issues.push("Slug wajib diisi dengan huruf kecil, angka, atau strip.")
   }
+  if (!body.title?.trim()) {
+    issues.push("Judul wajib diisi.")
+  }
   for (const locale of ["id", "en"] as const) {
     const translation = body.translations?.[locale]
     if (!translation) {
       issues.push(`Terjemahan "${locale}" wajib ada.`)
-      continue
     }
-    if (!translation.title?.trim()) {
-      issues.push(`Judul (${locale}) wajib diisi.`)
-    }
-  }
-  if (
-    body.sort_order !== undefined &&
-    (!Number.isInteger(body.sort_order) || body.sort_order < 0)
-  ) {
-    issues.push("Urutan harus bilangan bulat >= 0.")
   }
   return issues
 }
@@ -93,7 +85,6 @@ type DecisionRow = {
 
 type ProjectTranslationRow = {
   locale: string
-  title: string
   tagline?: string | null
   description?: string | null
   problem?: string | null
@@ -109,7 +100,7 @@ type ProjectWithRelations = {
   demo_url?: string | null
   repository_url?: string | null
   featured?: boolean | null
-  sort_order?: number | null
+  title?: string | null
   project_translations?: ProjectTranslationRow[] | null
   project_technologies?: TechnologyRow[] | null
 }
@@ -130,7 +121,6 @@ export const toAdminProject = (
     (project.project_translations ?? []).map((row) => [
       row.locale,
       {
-        title: row.title,
         tagline: row.tagline ?? "",
         description: row.description ?? "",
         problem: row.problem ?? "",
@@ -160,7 +150,7 @@ export const toAdminProject = (
     demo_url: project.demo_url ?? null,
     repository_url: project.repository_url ?? null,
     featured: project.featured ?? false,
-    sort_order: project.sort_order ?? 0,
+    title: project.title ?? "",
     tagline: idTrans.tagline ?? "",
     role: idTrans.role ?? "",
     period: idTrans.period ?? "",
@@ -246,7 +236,7 @@ export const fetchAdminProjects = async (
   let query = supabase
     .from("projects")
     .select(PROJECT_WITH_RELATIONS, { count: "exact" })
-    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false })
 
   if (slug) query = query.eq("slug", slug)
 
@@ -303,7 +293,6 @@ export const writeProjectRelations = async (
       return {
         project_id: projectId,
         locale,
-        title: translation.title?.trim() ?? "",
         tagline:
           (body.tagline !== undefined ? body.tagline : translation.tagline)?.trim() ?? "",
         description: translation.description?.trim() ?? "",

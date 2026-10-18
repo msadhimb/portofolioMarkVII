@@ -6,7 +6,6 @@ export type ProjectRow = {
   demo_url: string | null
   repository_url: string | null
   featured: boolean
-  sort_order: number
   locale: string
   title: string
   tagline: string
@@ -53,6 +52,5 @@ export type ProjectCardRow = Pick<
   | "technologies"
   | "highlights"
   | "metrics"
-  | "sort_order"
   | "image"
 >

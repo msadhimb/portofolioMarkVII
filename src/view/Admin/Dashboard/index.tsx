@@ -71,9 +71,9 @@ type AdminProjectLike = {
   featured?: boolean
   image?: string | null
   demo_url?: string | null
-  sort_order?: number
+  title?: string
   technologies?: string[]
-  translations?: Record<string, { title?: string }>
+  translations?: Record<string, { description?: string }>
 }
 
 type AdminSkillGroupLike = {
@@ -163,7 +163,7 @@ function OverviewContent() {
     const withImage = projects.filter((p) => Boolean(p?.image)).length
     const withDemo = projects.filter((p) => Boolean(p?.demo_url)).length
     const bilingual = projects.filter(
-      (p) => p?.translations?.id?.title && p?.translations?.en?.title
+      (p) => p?.translations?.id?.description && p?.translations?.en?.description
     ).length
     return { featured, totalSkills, withImage, withDemo, bilingual }
   }, [projects, skillGroups])
@@ -240,11 +240,7 @@ function OverviewContent() {
     },
   ]
 
-  const recentProjects = [...projects]
-    .sort(
-      (a, b) => (a?.sort_order ?? 0) - (b?.sort_order ?? 0)
-    )
-    .slice(0, 4)
+  const recentProjects = projects.slice(0, 4)
 
   const completeness = [
     {
@@ -522,7 +518,7 @@ function OverviewContent() {
                   Project terbaru
                 </CardTitle>
                 <CardDescription>
-                  Urutan sesuai sort_order terkecil.
+                  Urutan terbaru di atas.
                 </CardDescription>
               </div>
               <Button variant="ghost" size="sm" asChild>
@@ -559,14 +555,12 @@ function OverviewContent() {
                     className="group flex items-center gap-3 rounded-xl border bg-muted/40 p-3 transition-colors hover:border-signal/50 hover:bg-muted"
                   >
                      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500/25 to-teal-500/25 font-mono text-sm font-bold text-signal">
-                      {(p?.translations?.id?.title?.[0] ||
-                        p?.slug?.[0] ||
-                        "?")?.toUpperCase()}
+                      {(p?.title?.[0] || p?.slug?.[0] || "?")?.toUpperCase()}
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <p className="truncate text-sm font-medium">
-                          {p?.translations?.id?.title || p?.slug}
+                          {p?.title || p?.slug}
                         </p>
                         {p?.featured && (
                           <Badge className="gap-1 text-[10px]">

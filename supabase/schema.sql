@@ -54,7 +54,8 @@ create table if not exists public.projects (
   demo_url text,
   repository_url text,
   featured boolean not null default false,
-  sort_order int not null default 0 check (sort_order >= 0),
+  sort_order int generated always as identity,
+  title text not null default '',
   tagline text not null default '',
   role text not null default '',
   period text not null default '',
@@ -70,12 +71,11 @@ create trigger projects_updated_at
   before update on public.projects
   for each row execute function public.handle_updated_at();
 
--- Teks per locale (di-loop sebagai field project.title, .tagline, dst.)
+-- Teks per locale (tagline, description, dll). Title bersifat umum -> tabel projects.
 create table if not exists public.project_translations (
   id uuid primary key default gen_random_uuid(),
   project_id uuid not null references public.projects (id) on delete cascade,
   locale text not null check (locale in ('id', 'en')),
-  title text not null,
   tagline text not null default '',
   description text not null default '',
   problem text not null default '',
@@ -269,8 +269,9 @@ select
   p.repository_url,
   p.featured,
   p.sort_order,
+  p.created_at,
   t.locale,
-  t.title,
+  p.title,
   coalesce(nullif(p.tagline, ''), t.tagline, '') as tagline,
   t.description,
   t.problem,

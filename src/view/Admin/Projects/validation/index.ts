@@ -20,14 +20,6 @@ export const schemaProject = yup.object().shape({
   demoUrl: yup.string().default(""),
   repositoryUrl: yup.string().default(""),
   featured: yup.string().oneOf(["ya", "tidak"]).required("Pilih status unggulan."),
-  sortOrder: yup
-    .number()
-    .transform((value, originalValue) =>
-      originalValue === "" || originalValue === null || isNaN(value) ? 0 : value
-    )
-    .typeError("Urutan harus angka.")
-    .min(0, "Urutan minimal 0.")
-    .default(0),
   technologies: yup.string().default(""),
 
   tagline: yup.string().default(""),
@@ -36,14 +28,13 @@ export const schemaProject = yup.object().shape({
   endDate: yup.string().default(""),
   context: yup.string().default(""),
 
-  idTitle: yup.string().trim().required("Judul (ID) wajib diisi."),
+  title: yup.string().trim().required("Judul wajib diisi."),
   idDescription: yup.string().default(""),
   idProblem: yup.string().default(""),
   idHighlights: yup.string().default(""),
   idMetrics: yup.array().of(metricItemSchema).ensure(),
   idDecisions: yup.array().of(decisionItemSchema).ensure(),
 
-  enTitle: yup.string().trim().required("Judul (EN) wajib diisi."),
   enDescription: yup.string().default(""),
   enProblem: yup.string().default(""),
   enHighlights: yup.string().default(""),

@@ -22,8 +22,8 @@ export const GET = async (req: Request) => {
         .from("project_list")
         .select("*")
         .eq("locale", locale)
-        .eq("slug", slug)
-        .order("sort_order", { ascending: true })
+      .eq("slug", slug)
+      .order("created_at", { ascending: false })
 
       if (error) {
         console.error("[GET /api/projects] Supabase error:", error.message)
@@ -53,7 +53,7 @@ export const GET = async (req: Request) => {
       .from("project_list")
       .select("*", { count: "exact" })
       .eq("locale", locale)
-      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false })
       .range(from, to)
 
     const { data: featuredData } = await supabase

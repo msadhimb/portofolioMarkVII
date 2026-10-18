@@ -100,7 +100,7 @@ export const POST = async (req: Request) => {
         demo_url: body.demo_url?.trim() || null,
         repository_url: body.repository_url?.trim() || null,
         featured: body.featured ?? false,
-        sort_order: body.sort_order ?? 0,
+        title: body.title?.trim() || "",
       })
       .select("id, slug")
       .single()

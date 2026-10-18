@@ -46,7 +46,7 @@ export const ProjectDetailDialog = ({
   const id = project?.translations?.id
   const en = project?.translations?.en
   const active = locale === "id" ? id : en
-  const heroTitle = id?.title || en?.title || project?.slug || "Project"
+  const heroTitle = project?.title || project?.slug || "Project"
 
   return (
     <DialogModal
@@ -101,12 +101,9 @@ export const ProjectDetailDialog = ({
                 ) : (
                   <Badge variant="secondary">Reguler</Badge>
                 )}
-                <Badge variant="secondary" className="tabular">
-                  #{project.sort_order ?? 0}
-                </Badge>
                 <Badge variant="secondary" className="gap-1">
                   <Languages className="size-2.5" />
-                  {id?.title && en?.title ? "ID + EN" : "Sebagian"}
+                  {id?.description && en?.description ? "ID + EN" : "Sebagian"}
                 </Badge>
               </>
             }
@@ -140,6 +137,7 @@ export const ProjectDetailDialog = ({
 
           <DetailSection title="Data umum" icon={<Database />}>
             <div className="grid gap-2.5 sm:grid-cols-3">
+              <DetailText label="Judul" value={project.title || "—"} />
               <DetailText
                 label="Slug"
                 value={
@@ -148,7 +146,6 @@ export const ProjectDetailDialog = ({
                   </code>
                 }
               />
-              <DetailText label="Urutan" value={project.sort_order ?? 0} />
               <DetailText
                 label="Unggulan"
                 value={
@@ -234,13 +231,12 @@ export const ProjectDetailDialog = ({
             }
           >
             <div className="grid gap-2.5 sm:grid-cols-2">
-              <DetailText label="Judul" value={active?.title} />
               <DetailText label="Tagline" value={active?.tagline} />
+              <DetailText label="Peran" value={active?.role} />
             </div>
             <DetailText label="Deskripsi" value={active?.description} />
             <DetailText label="Masalah" value={active?.problem} />
-            <div className="grid gap-2.5 sm:grid-cols-3">
-              <DetailText label="Peran" value={active?.role} />
+            <div className="grid gap-2.5 sm:grid-cols-2">
               <DetailText label="Periode" value={active?.period} />
               <DetailText label="Konteks" value={active?.context} />
             </div>

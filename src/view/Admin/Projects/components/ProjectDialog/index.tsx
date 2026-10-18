@@ -25,7 +25,6 @@ import { Label } from "@/components/ui/label"
 import { DialogModal } from "@/components/DialogModal"
 import { FormInput } from "@/components/Forms/FormInput"
 import { FormImageUpload } from "@/components/Forms/FormImageUpload"
-import { FormNumber } from "@/components/Forms/FormNumber"
 import { FormSelect } from "@/components/Forms/FormSelect"
 import { FormTextArea } from "@/components/Forms/FormTextArea"
 import { useActionModal } from "@/components/ActionModal/store"
@@ -212,7 +211,7 @@ export const ProjectDialog = ({
           subtitle="Identitas & tautan — berlaku untuk semua bahasa"
           errorCount={errorCounts.umum}
         >
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2">
             <FormInput
               label="Slug"
               placeholder="nama-project"
@@ -225,23 +224,6 @@ export const ProjectDialog = ({
               }
               error={errors.slug?.message}
               {...register("slug")}
-            />
-            <Controller
-              control={control}
-              name="sortOrder"
-              render={({ field }) => (
-                <FormNumber
-                  label="Urutan"
-                  min={0}
-                  required
-                  disabled={isPending}
-                  error={errors.sortOrder?.message}
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                />
-              )}
             />
             <Controller
               control={control}
@@ -259,6 +241,14 @@ export const ProjectDialog = ({
               )}
             />
           </div>
+          <FormInput
+            label="Judul"
+            placeholder="Judul project"
+            required
+            disabled={isPending}
+            error={errors.title?.message}
+            {...register("title")}
+          />
 
           <Controller
             control={control}
@@ -414,7 +404,7 @@ type LocaleFieldsProps = {
   disabled: boolean
 }
 
-type LocaleBaseField = "title" | "description" | "problem" | "highlights"
+type LocaleBaseField = "description" | "problem" | "highlights"
 
 const LocaleFields = ({
   prefix,
@@ -450,13 +440,6 @@ const LocaleFields = ({
 
   return (
     <div className="space-y-4">
-      <FormInput
-        label="Judul"
-        required
-        disabled={disabled}
-        error={errorOf("title")}
-        {...field("title")}
-      />
       <FormTextArea
         label="Deskripsi"
         rows={3}

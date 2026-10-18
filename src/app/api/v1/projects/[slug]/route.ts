@@ -25,7 +25,7 @@ export const GET = async (
         .select("slug, title")
         .eq("locale", locale)
         .neq("slug", slug)
-        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false })
         .limit(2),
     ])
 

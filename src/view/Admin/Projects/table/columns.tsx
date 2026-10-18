@@ -8,7 +8,6 @@ import {
 } from "@/view/Admin/components/DataTable"
 
 export type AdminProjectTranslation = {
-  title?: string
   tagline?: string
   description?: string
   problem?: string
@@ -26,7 +25,7 @@ export type AdminProject = {
   demo_url?: string | null
   repository_url?: string | null
   featured?: boolean
-  sort_order?: number
+  title?: string
   tagline?: string
   role?: string
   period?: string
@@ -50,14 +49,14 @@ export const getProjectColumns = ({
 }: ProjectColumnOptions): ColumnDef<DataTableFeatures, AdminProject>[] => [
   {
     id: "title",
-    accessorFn: (row) => row.translations?.id?.title || row.slug,
+    accessorFn: (row) => row.title || row.slug,
     header: ({ column }) => <SortableHeader column={column} label="Judul" />,
     filterFn: "includesString",
     sortFn: "text",
     cell: ({ row }) => (
       <div className="min-w-48">
         <p className="font-medium text-foreground">
-          {row.original.translations?.id?.title || row.original.slug}
+          {row.original.title || row.original.slug}
         </p>
         <code className="mt-1 inline-block rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
           {row.original.slug}
@@ -82,14 +81,6 @@ export const getProjectColumns = ({
       ) : (
         <span className="text-muted-foreground">—</span>
       ),
-  },
-  {
-    id: "sort_order",
-    accessorFn: (row) => row.sort_order ?? 0,
-    header: ({ column }) => <SortableHeader column={column} label="Urutan" />,
-    cell: ({ row }) => (
-      <span className="tabular-nums">{row.original.sort_order ?? 0}</span>
-    ),
   },
   {
     id: "actions",
