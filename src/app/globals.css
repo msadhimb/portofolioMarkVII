@@ -147,6 +147,7 @@
   /* --- Unik: marquee, aurora, CRT chatbot, sticker --- */
   .animate-marquee {
     animation: marquee 28s linear infinite;
+    will-change: transform;
   }
   .animate-marquee:hover {
     animation-play-state: paused;
@@ -161,9 +162,11 @@
   }
   .animate-typing-dot {
     animation: typing-dot 1.1s ease-in-out infinite;
+    will-change: opacity, transform;
   }
   .animate-spin-slow {
     animation: spin 14s linear infinite;
+    will-change: transform;
   }
   .crt-scanlines {
     background: repeating-linear-gradient(
@@ -254,6 +257,9 @@
       right bottom,
       right bottom;
     background-repeat: no-repeat;
+    /* GPU compositing: isolasi paint area agar hover tidak repaint seluruh halaman */
+    contain: layout style;
+    transform: translateZ(0);
   }
   /* Teks neon: glow halus mengikuti --signal */
   .text-glow {
@@ -312,24 +318,77 @@
   }
 }
 
+/**
+ * Mobile performance — iOS 27+ Safari.
+ * Tujuan: hanya nonaktifkan animasi BERAT (aurora, marquee, spin) yang
+ * menguras GPU; animasi UI ringan (menu, hover, transition) tetap berjalan
+ * karena sudah di-GPU-composite via transform: translateZ(0).
+ */
 @media (max-width: 768px) {
   html {
+    /* instant jump tetap lebih baik di mobile: smooth scroll memakai main thread */
     scroll-behavior: auto;
   }
+
+  /* Matikan hanya animasi dekoratif berat */
   .animate-marquee,
   .animate-aurora,
   .animate-aurora-slow,
-  .animate-typing-dot,
   .animate-spin-slow {
     animation: none !important;
+    will-change: auto;
   }
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
+
+  /* Typing dot & animasi UI ringan: tetap jalan, kurangi durasi sedikit */
+  .animate-typing-dot {
+    animation-duration: 0.9s;
   }
-  * {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+
+  /*
+   * backdrop-filter: kurangi intensitas di mobile, JANGAN hapus total.
+   * Safari iOS 26+ mendukung backdrop-filter dengan baik, tapi layer yang
+   * di-blur perlu dipromote ke GPU layer sendiri supaya tidak repaint.
+   */
+  [style*="backdrop-filter"],
+  [style*="-webkit-backdrop-filter"] {
+    /* Promote ke GPU layer agar blur tidak menyebabkan main-thread jank */
+    transform: translateZ(0);
+    isolation: isolate;
+  }
+
+  /*
+   * Animasi transisi Navbar & overlay: percepat sedikit di mobile
+   * agar terasa snappier tanpa menghilangkan animasinya.
+   */
+  #mobile-menu [class*="transition"] {
+    transition-duration: 200ms !important;
+  }
+}
+
+/*
+ * iOS Safari-specific: gunakan @supports untuk menarget fitur rendering
+ * yang hanya tersedia di engine WebKit/Safari.
+ * `(hanging-punctuation: first)` adalah quirk CSS yang hanya diparse Safari.
+ */
+@supports (hanging-punctuation: first) {
+  /*
+   * Elemen dengan backdrop-filter perlu forced GPU layer di WebKit.
+   * Tanpa ini, backdrop-filter di iOS bisa menyebabkan off-screen rendering
+   * yang lambat saat elemen muncul/hilang.
+   */
+  [style*="backdrop-filter"],
+  [style*="-webkit-backdrop-filter"] {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  /*
+   * iOS 26/27 "Liquid Glass" engine: animasi opacity + transform berjalan
+   * lebih mulus saat elemen punya explicit stacking context.
+   * `isolation: isolate` membuat stacking context tanpa z-index.
+   */
+  .card-futuristic,
+  #mobile-menu > div {
+    isolation: isolate;
   }
 }

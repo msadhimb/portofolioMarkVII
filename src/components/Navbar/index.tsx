@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import i18next from "i18next"
 import { useTranslation } from "react-i18next"
-import { GlassSurface } from "@/components/GlassSurface"
+
 import { LocaleToggle } from "@/components/LocaleToggle"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
@@ -23,61 +23,24 @@ import en from "./i18n/en"
 i18next.addResourceBundle("id", "Navbar", id)
 i18next.addResourceBundle("en", "Navbar", en)
 
-/**
- * SVG filter di backdrop-filter (dipakai GlassSurface) hanya bekerja
- * di Chromium non-iOS. Safari, Firefox, dan semua browser iOS tidak mendukung.
- */
-const useSupportsSvgBackdrop = () => {
-  const [supported, setSupported] = useState(false)
-
-  useEffect(() => {
-    const ua = navigator.userAgent
-    const isIOS = /iPhone|iPad|iPod/.test(ua)
-    const isChromium = /Chrome|Chromium|Edg/.test(ua)
-    setSupported(isChromium && !isIOS)
-  }, [])
-
-  return supported
-}
-
 type NavGlassProps = {
   borderRadius: number
   className?: string
 }
 
-const NavGlass = ({ borderRadius, className }: NavGlassProps) => {
-  const supportsSvg = useSupportsSvgBackdrop()
-
-  if (supportsSvg) {
-    return (
-      <GlassSurface
-        width="100%"
-        height="100%"
-        borderRadius={borderRadius}
-        displace={1.4}
-        distortionScale={-70}
-        blur={14}
-        backgroundOpacity={0.4}
-        shadow={false}
-        className={cn("h-full w-full", className)}
-      />
-    )
-  }
-
-  return (
-    <div
-      style={{
-        borderRadius,
-        WebkitBackdropFilter: "blur(20px) saturate(160%)",
-        backdropFilter: "blur(20px) saturate(160%)",
-      }}
-      className={cn(
-        "h-full w-full border border-foreground/10 bg-background/40 shadow-lg",
-        className
-      )}
-    />
-  )
-}
+const NavGlass = ({ borderRadius, className }: NavGlassProps) => (
+  <div
+    style={{
+      borderRadius,
+      WebkitBackdropFilter: "blur(20px) saturate(160%)",
+      backdropFilter: "blur(20px) saturate(160%)",
+    }}
+    className={cn(
+      "h-full w-full border border-foreground/10 bg-background/40 shadow-lg",
+      className
+    )}
+  />
+)
 
 export const Navbar = () => {
   const { t } = useTranslation("Navbar")
@@ -129,7 +92,7 @@ export const Navbar = () => {
   const showBackground = scrolled || open
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-3 sm:px-6">
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-4 pt-3 sm:px-6">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-primary-foreground"
@@ -138,7 +101,7 @@ export const Navbar = () => {
       </a>
 
       <div className="mx-auto max-w-6xl">
-        <div className="relative flex items-center justify-between gap-4 rounded-2xl px-4 py-3">
+        <div className="pointer-events-auto relative z-[45] flex items-center justify-between gap-4 rounded-2xl px-4 py-3">
           <div
             className={cn(
               "pointer-events-none absolute inset-0 transition-opacity duration-300",
@@ -228,14 +191,14 @@ export const Navbar = () => {
           aria-label={t("closeMenu")}
           onClick={() => setOpen(false)}
           className={cn(
-            "fixed inset-0 -z-10 bg-background/30 backdrop-blur-sm md:hidden",
+            "fixed inset-0 z-40 bg-background/60 md:hidden",
             "transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none",
-            open ? "visible opacity-100" : "invisible opacity-0"
+            open ? "visible opacity-100 pointer-events-auto" : "invisible opacity-0 pointer-events-none"
           )}
         />
 
         <div
-          className="mt-2 md:hidden"
+          className={cn("relative z-50 mt-2 md:hidden", !open && "pointer-events-none")}
           id="mobile-menu"
           role="dialog"
           aria-label="Menu"
@@ -254,7 +217,7 @@ export const Navbar = () => {
               "motion-reduce:transition-none",
               open
                 ? "visible translate-y-0 scale-100 opacity-100"
-                : "invisible -translate-y-2 scale-95 opacity-0"
+                : "invisible -translate-y-2 scale-95 opacity-0 pointer-events-none"
             )}
           >
             <nav aria-label="Mobile" className="flex w-full flex-col gap-1 p-2">
