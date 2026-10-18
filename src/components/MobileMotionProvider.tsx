@@ -15,7 +15,7 @@ export function MobileMotionProvider({ children }: { children: React.ReactNode }
   }, [])
 
   return (
-    <MotionConfig reducedMotion={isMobile ? "always" : "user"}>
+    <MotionConfig reducedMotion="user">
       {children}
     </MotionConfig>
   )

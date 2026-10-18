@@ -168,6 +168,10 @@
     animation: spin 14s linear infinite;
     will-change: transform;
   }
+  .animate-pulse-slow {
+    animation: pulse-slow 7s ease-in-out infinite alternate;
+    will-change: opacity, transform;
+  }
   .crt-scanlines {
     background: repeating-linear-gradient(
       to bottom,
@@ -296,6 +300,17 @@
   50% {
     opacity: 1;
     transform: translateY(-3px);
+  }
+}
+
+@keyframes pulse-slow {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 0.95;
+    transform: scale(1.02);
   }
 }
 

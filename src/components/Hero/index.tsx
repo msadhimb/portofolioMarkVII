@@ -29,9 +29,13 @@ export const Hero = () => {
   const { resolvedTheme } = useTheme()
 
   const item = (delay: number) => ({
-    initial: reduce ? {} : { opacity: 0, y: 22 },
+    initial: reduce ? {} : { opacity: 0, y: isMobile ? 12 : 22 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.65, delay, ease },
+    transition: {
+      duration: isMobile ? 0.42 : 0.65,
+      delay: isMobile ? Math.min(delay, 0.2) : delay,
+      ease,
+    },
   })
 
   const { settings } = useSiteSettings()
@@ -41,7 +45,7 @@ export const Hero = () => {
       : settings.available_label_id
   const availabilityOpen = settings.is_available
 
-  // Di mobile: nonaktifkan semua JS-driven animations (Magnet rAF, framer-motion)
+  // Di mobile: matikan rAF mouse Magnet, tapi tetap aktifkan animasi entrance yang ringan
   const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)")
@@ -69,8 +73,8 @@ export const Hero = () => {
     { to: techCount, label: statsLabels[2] },
   ]
 
-  // Wrapper animasi: di mobile render div biasa, di desktop pakai motion.div
-  const Animated = isMobile || reduce ? "div" : motion.div
+  // Wrapper animasi: tetap gunakan motion.div (hardware accelerated), fallback div hanya jika reduced motion
+  const Animated = reduce ? "div" : motion.div
 
   return (
     <section
@@ -84,7 +88,7 @@ export const Hero = () => {
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.35fr_0.85fr] lg:items-end">
           <div>
-            <Animated {...(!isMobile && !reduce ? item(0) : {})}>
+            <Animated {...(!reduce ? item(0) : {})}>
               <p className="inline-flex flex-wrap items-center gap-2 rounded-full border border-border bg-card py-1.5 pr-4 pl-1.5 text-xs text-muted-foreground">
                 <span
                   className={
@@ -113,7 +117,7 @@ export const Hero = () => {
             </Animated>
 
             <Animated
-              {...(!isMobile && !reduce ? item(0.08) : {})}
+              {...(!reduce ? item(0.08) : {})}
               className="mt-8 font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase"
             >
               {t("role")}
@@ -121,7 +125,7 @@ export const Hero = () => {
 
             {/* Stiker keahlian miring — sentuhan playful khas */}
             <Animated
-              {...(!isMobile && !reduce ? item(0.11) : {})}
+              {...(!reduce ? item(0.11) : {})}
               aria-hidden="true"
               className="mt-4 flex flex-wrap items-center gap-2"
             >
@@ -147,7 +151,7 @@ export const Hero = () => {
             </Animated>
 
             <Animated
-              {...(!isMobile && !reduce ? item(0.14) : {})}
+              {...(!reduce ? item(0.14) : {})}
               className="mt-3 text-5xl font-semibold tracking-[-0.03em] text-balance text-foreground sm:text-6xl lg:text-7xl"
             >
               {firstName}{" "}
@@ -170,7 +174,7 @@ export const Hero = () => {
             />
 
             <Animated
-              {...(!isMobile && !reduce ? item(0.3) : {})}
+              {...(!reduce ? item(0.3) : {})}
               className="mt-8 flex flex-wrap items-center gap-3"
             >
               <Magnet
@@ -215,7 +219,7 @@ export const Hero = () => {
             </Animated>
 
             <Animated
-              {...(!isMobile && !reduce ? item(0.38) : {})}
+              {...(!reduce ? item(0.38) : {})}
               className="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-6"
             >
               {stats.map((s) => (
@@ -233,7 +237,7 @@ export const Hero = () => {
 
           {/* Decorative code snippet — static, lightweight */}
           <Animated
-            {...(!isMobile && !reduce ? item(0.32) : {})}
+            {...(!reduce ? item(0.32) : {})}
             aria-hidden="true"
             className="card-futuristic hidden overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_20px_60px_-30px_rgba(2,132,199,0.5)] lg:block"
           >
