@@ -38,6 +38,7 @@
 }
 
 :root {
+  color-scheme: light;
   --radius: 0.625rem;
   /* Light — "lab": putih kebiruan + tinta navy, aksen violet elektrik + cyan neon */
   --background: #edf1f9;
@@ -71,6 +72,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   /* Dark — "deep space": navy hampir-hitam + neon cyan & violet */
   --background: #04060e;
   --foreground: #e6edff;

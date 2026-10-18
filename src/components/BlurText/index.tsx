@@ -24,6 +24,8 @@ export const BlurText = ({
   className = "",
   animateBy = "words",
   direction = "top",
+  animationFrom,
+  animationTo,
   onAnimationComplete,
 }: BlurTextProps) => {
   const elements = animateBy === "words" ? text.split(" ") : text.split("")
@@ -80,30 +82,28 @@ export const BlurText = ({
   const wordDelay = isMobile ? Math.min(delay, 22) / 1000 : delay / 1000
   const yOffset = direction === "top" ? -10 : 10
 
+  const defaultFrom = isMobile
+    ? { opacity: 0, y: yOffset }
+    : { opacity: 0.2, y: yOffset, filter: "blur(14px)" }
+
+  const defaultTo = isMobile
+    ? { opacity: 1, y: 0, filter: "blur(0px)" }
+    : { opacity: 1, y: 0, filter: "blur(0px)" }
+
   return (
     <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
       {elements.map((segment, index) => {
         return (
           <motion.span
             key={index}
-            initial={{
-              opacity: 0,
-              y: yOffset,
-            }}
+            initial={animationFrom ?? defaultFrom}
             animate={
               inView
-                ? {
-                    opacity: 1,
-                    y: 0,
-                    filter: "none",
-                  }
-                : {
-                    opacity: 0,
-                    y: yOffset,
-                  }
+                ? (animationTo?.[0] ?? defaultTo)
+                : (animationFrom ?? defaultFrom)
             }
             transition={{
-              duration: isMobile ? 0.32 : 0.45,
+              duration: isMobile ? 0.32 : 0.55,
               delay: index * wordDelay,
               ease: [0.22, 1, 0.36, 1],
             }}
@@ -120,8 +120,11 @@ export const BlurText = ({
             }}
             style={{
               display: "inline-block",
-              willChange: inView ? "auto" : "transform, opacity",
-              filter: "none",
+              willChange: inView
+                ? "auto"
+                : isMobile
+                  ? "transform, opacity"
+                  : "transform, opacity, filter",
             }}
           >
             {segment === " " ? "\u00A0" : segment}

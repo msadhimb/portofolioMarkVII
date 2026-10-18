@@ -18,6 +18,7 @@ import { siteConfig } from "@/data/profile"
 import { cn } from "@/lib/utils"
 import id from "./i18n/id"
 import en from "./i18n/en"
+import { GlassSurface } from "@/components/GlassSurface"
 
 // Dipanggil sekali di level modul, bukan di setiap render
 i18next.addResourceBundle("id", "Navbar", id)
@@ -28,19 +29,66 @@ type NavGlassProps = {
   className?: string
 }
 
-const NavGlass = ({ borderRadius, className }: NavGlassProps) => (
-  <div
-    style={{
-      borderRadius,
-      WebkitBackdropFilter: "blur(20px) saturate(160%)",
-      backdropFilter: "blur(20px) saturate(160%)",
-    }}
-    className={cn(
-      "h-full w-full border border-foreground/10 bg-background/40 shadow-lg",
-      className
-    )}
-  />
-)
+const NavGlass = ({ borderRadius, className }: NavGlassProps) => {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  return (
+    <>
+      {/* Desktop: Tetap menggunakan GlassSurface (WebGL / SVG shader) tanpa border, outline, dan shadow */}
+      <div className={cn("hidden h-full w-full overflow-hidden rounded-2xl md:block", className)}>
+        {mounted ? (
+          <GlassSurface
+            borderRadius={borderRadius}
+            width="100%"
+            height="100%"
+            blur={36}
+            backgroundOpacity={0.65}
+            saturation={1.8}
+            shadow={false}
+            border={false}
+            className="h-full w-full border-none shadow-none outline-none"
+            style={{
+              border: "none",
+              outline: "none",
+              boxShadow: "none",
+              WebkitBackdropFilter: "blur(36px) saturate(180%)",
+              backdropFilter: "blur(36px) saturate(180%)",
+              backgroundColor: "color-mix(in srgb, var(--background) 70%, transparent)",
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              borderRadius,
+              WebkitBackdropFilter: "blur(36px) saturate(180%)",
+              backdropFilter: "blur(36px) saturate(180%)",
+              backgroundColor: "color-mix(in srgb, var(--background) 70%, transparent)",
+            }}
+            className="h-full w-full"
+          />
+        )}
+      </div>
+
+      {/* Mobile: CSS backdrop-filter ringan agar bebas lag dengan kontras teks yang jelas */}
+      <div
+        style={{
+          borderRadius,
+          WebkitBackdropFilter: "blur(24px) saturate(160%)",
+          backdropFilter: "blur(24px) saturate(160%)",
+          backgroundColor: "color-mix(in srgb, var(--background) 75%, transparent)",
+        }}
+        className={cn(
+          "h-full w-full border border-foreground/10 shadow-lg md:hidden",
+          className
+        )}
+      />
+    </>
+  )
+}
 
 export const Navbar = () => {
   const { t } = useTranslation("Navbar")
@@ -105,7 +153,7 @@ export const Navbar = () => {
           <div
             className={cn(
               "pointer-events-none absolute inset-0 transition-opacity duration-300",
-              showBackground ? "opacity-100" : "opacity-0"
+              showBackground ? "opacity-100" : "opacity-0 md:opacity-100"
             )}
             aria-hidden="true"
           >

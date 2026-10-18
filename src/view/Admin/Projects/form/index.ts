@@ -67,7 +67,7 @@ export const projectDefaultValues: ProjectFormData = {
 
 export const toLines = (items: string[]): string => items.join("\n")
 
-export const fromLines = (value: string): string =>
+export const fromLines = (value: string): string[] =>
   value
     .split("\n")
     .map((line) => line.trim())

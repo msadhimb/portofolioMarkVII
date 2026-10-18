@@ -72,6 +72,7 @@ export interface GlassSurfaceProps {
   backdrop?: RefObject<GlassSurfaceBackdrop | null> | GlassSurfaceBackdrop | null;
   shape?: string;
   shadow?: boolean;
+  border?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -427,6 +428,7 @@ const GlassSurface = ({
   backdrop,
   shape,
   shadow = true,
+  border = true,
   className = '',
   style = {}
 }: GlassSurfaceProps) => {
@@ -876,33 +878,42 @@ const GlassSurface = ({
   const fallbackFilter = `blur(12px) saturate(${saturation * 1.4}) brightness(1.04)`;
 
   const modeStyle: CSSProperties = webgl
-    ? { boxShadow: WEBGL_SHADOW }
+    ? {
+        boxShadow: shadow ? WEBGL_SHADOW : 'none',
+        WebkitBackdropFilter: `blur(${blur || 16}px) saturate(${saturation})`,
+        backdropFilter: `blur(${blur || 16}px) saturate(${saturation})`,
+      }
     : refractive
       ? {
-          background: `light-dark(hsl(0 0% 100% / ${backgroundOpacity}), hsl(0 0% 0% / ${backgroundOpacity}))`,
-          backdropFilter: `url(#${filterId}) saturate(${saturation})`,
+          background: `light-dark(hsl(0 0% 100% / ${backgroundOpacity || 0.35}), hsl(0 0% 0% / ${backgroundOpacity || 0.35}))`,
+          WebkitBackdropFilter: `blur(${blur || 16}px) saturate(${saturation})`,
+          backdropFilter: `blur(${blur || 16}px) saturate(${saturation})`,
           boxShadow: shadow ? SVG_SHADOW : 'none'
         }
       : {
           background: frost,
-          WebkitBackdropFilter: fallbackFilter,
-          backdropFilter: fallbackFilter,
-          boxShadow: FALLBACK_SHADOW
+          WebkitBackdropFilter: `blur(${blur || 16}px) saturate(${saturation * 1.4}) brightness(1.04)`,
+          backdropFilter: `blur(${blur || 16}px) saturate(${saturation * 1.4}) brightness(1.04)`,
+          boxShadow: shadow ? FALLBACK_SHADOW : 'none'
         };
 
   const containerStyle = {
-    ...style,
     width: typeof width === 'number' ? `${width}px` : width,
     height: typeof height === 'number' ? `${height}px` : height,
     borderRadius: `${borderRadius}px`,
+    border: border ? undefined : 'none',
+    outline: border ? undefined : 'none',
     ...modeStyle,
-    ...shapeStyle
+    ...shapeStyle,
+    ...(!shadow ? { boxShadow: 'none' } : {}),
+    ...(!border ? { border: 'none', outline: 'none' } : {}),
+    ...style,
   } as CSSProperties;
 
   return (
     <div
       ref={containerRef}
-      className={`relative flex items-center justify-center overflow-hidden transition-opacity duration-[260ms] ease-out focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:[outline-color:light-dark(#007aff,#0a84ff)] ${className}`}
+      className={`relative flex items-center justify-center overflow-hidden transition-opacity duration-[260ms] ease-out ${border ? 'focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:[outline-color:light-dark(#007aff,#0a84ff)]' : 'outline-none focus:outline-none focus-visible:outline-none'} ${className}`}
       style={containerStyle}
     >
       <svg
@@ -972,7 +983,7 @@ const GlassSurface = ({
           className="pointer-events-none absolute inset-0 rounded-[inherit]"
           style={{
             background: `light-dark(hsl(0 0% 100% / ${backgroundOpacity}), hsl(0 0% 0% / ${backgroundOpacity}))`,
-            boxShadow: outline ? 'none' : FRAME_SHADOW
+            boxShadow: !shadow || outline ? 'none' : FRAME_SHADOW
           }}
         />
       )}
@@ -983,7 +994,7 @@ const GlassSurface = ({
           style={{ background: SHEEN }}
         />
       )}
-      {frosted && !outline && (
+      {frosted && !outline && border && (
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 rounded-[inherit] p-[3px]"
