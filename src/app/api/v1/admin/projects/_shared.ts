@@ -26,6 +26,12 @@ export type ProjectPayload = {
   featured?: boolean
   sort_order?: number
   technologies?: string[]
+  tagline?: string
+  role?: string
+  period?: string
+  context?: string
+  start_date?: string | null
+  end_date?: string | null
   translations?: { id?: TranslationInput; en?: TranslationInput }
 }
 
@@ -119,17 +125,8 @@ const EMPTY_CHILDREN: ProjectChildRows = { highlights: [], metrics: [], decision
 export const toAdminProject = (
   project: ProjectWithRelations,
   children: ProjectChildRows = EMPTY_CHILDREN
-) => ({
-  slug: project.slug,
-  image: project.image ?? "",
-  demo_url: project.demo_url ?? null,
-  repository_url: project.repository_url ?? null,
-  featured: project.featured ?? false,
-  sort_order: project.sort_order ?? 0,
-  technologies: [...(project.project_technologies ?? [])]
-    .sort(byOrder)
-    .map((row) => row.name),
-  translations: Object.fromEntries(
+) => {
+  const translations = Object.fromEntries(
     (project.project_translations ?? []).map((row) => [
       row.locale,
       {
@@ -154,8 +151,26 @@ export const toAdminProject = (
           .map((item) => ({ title: item.title, detail: item.detail ?? "" })),
       },
     ])
-  ),
-})
+  )
+  const idTrans = translations.id || translations.en || {}
+
+  return {
+    slug: project.slug,
+    image: project.image ?? "",
+    demo_url: project.demo_url ?? null,
+    repository_url: project.repository_url ?? null,
+    featured: project.featured ?? false,
+    sort_order: project.sort_order ?? 0,
+    tagline: idTrans.tagline ?? "",
+    role: idTrans.role ?? "",
+    period: idTrans.period ?? "",
+    context: idTrans.context ?? "",
+    technologies: [...(project.project_technologies ?? [])]
+      .sort(byOrder)
+      .map((row) => row.name),
+    translations,
+  }
+}
 
 export const PROJECT_WITH_RELATIONS =
   "*, project_translations(*), project_technologies(name, sort_order)"
@@ -289,12 +304,16 @@ export const writeProjectRelations = async (
         project_id: projectId,
         locale,
         title: translation.title?.trim() ?? "",
-        tagline: translation.tagline?.trim() ?? "",
+        tagline:
+          (body.tagline !== undefined ? body.tagline : translation.tagline)?.trim() ?? "",
         description: translation.description?.trim() ?? "",
         problem: translation.problem?.trim() ?? "",
-        role: translation.role?.trim() ?? "",
-        period: translation.period?.trim() ?? "",
-        context: translation.context?.trim() ?? "",
+        role:
+          (body.role !== undefined ? body.role : translation.role)?.trim() ?? "",
+        period:
+          (body.period !== undefined ? body.period : translation.period)?.trim() ?? "",
+        context:
+          (body.context !== undefined ? body.context : translation.context)?.trim() ?? "",
       }
     })
 

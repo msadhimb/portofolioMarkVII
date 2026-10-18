@@ -11,6 +11,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
 import { useProjects } from "./store"
 import { useState } from "react"
+import Image from "next/image"
 
 export const Projects = () => {
   i18next.addResourceBundle("id", "Projects", id)
@@ -86,7 +87,15 @@ export const Projects = () => {
           <Reveal delay={0.05}>
             <article className="card-futuristic mt-12 overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(2,132,199,0.5)] transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.45)]">
               <div className="grid lg:grid-cols-2">
-                <div className="bg-muted/60"></div>
+                <div className="bg-muted/60">
+                  <Image
+                    src={featured?.image}
+                    alt={featured?.title}
+                    width={1000}
+                    height={1000}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
                 <div className="flex flex-col justify-center p-7 sm:p-10">
                   <p className="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.16em] uppercase">
                     <span className="rounded-full bg-signal px-2.5 py-1 text-signal-foreground">
@@ -133,7 +142,13 @@ export const Projects = () => {
               <Reveal key={p.slug} delay={0.05 * (i % pageSize)}>
                 <article className="card-futuristic flex h-full flex-col overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(2,132,199,0.5)] transition-all duration-300 hover:-translate-y-1 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(34,211,238,0.45)]">
                   <div className="h-64 border-b border-border bg-muted/60">
-                    {" "}
+                    <Image
+                      src={p?.image}
+                      alt={p?.title}
+                      width={1000}
+                      height={1000}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                   <div className="flex flex-1 flex-col p-7">
                     <p className="font-mono text-[11px] tracking-[0.16em] text-muted-foreground uppercase">

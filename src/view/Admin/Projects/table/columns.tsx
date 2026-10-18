@@ -27,6 +27,12 @@ export type AdminProject = {
   repository_url?: string | null
   featured?: boolean
   sort_order?: number
+  tagline?: string
+  role?: string
+  period?: string
+  context?: string
+  start_date?: string | null
+  end_date?: string | null
   technologies?: string[]
   translations?: Record<string, AdminProjectTranslation>
 }

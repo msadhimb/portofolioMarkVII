@@ -3,16 +3,28 @@
 import { useEffect, useId, useState } from "react"
 import {
   Controller,
+  useFieldArray,
   useForm,
+  type Control,
   type FieldErrors,
   type Resolver,
   type UseFormRegister,
 } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { FolderKanban, Languages, Loader2, Plus, Save, Settings2 } from "lucide-react"
+import {
+  FolderKanban,
+  Languages,
+  Loader2,
+  Plus,
+  Save,
+  Settings2,
+  Trash2,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { DialogModal } from "@/components/DialogModal"
 import { FormInput } from "@/components/Forms/FormInput"
+import { FormImageUpload } from "@/components/Forms/FormImageUpload"
 import { FormNumber } from "@/components/Forms/FormNumber"
 import { FormSelect } from "@/components/Forms/FormSelect"
 import { FormTextArea } from "@/components/Forms/FormTextArea"
@@ -129,7 +141,7 @@ export const ProjectDialog = ({
   const errorCounts = countErrorsByPrefix(errors as Record<string, unknown>, {
     en: (key) => /^en[A-Z]/.test(key),
     id: (key) => /^id[A-Z]/.test(key),
-    umum: () => true,
+    umum: (key) => !/^en[A-Z]/.test(key) && !/^id[A-Z]/.test(key),
   })
   const totalErrors = Object.keys(errors).length
 
@@ -200,7 +212,7 @@ export const ProjectDialog = ({
           subtitle="Identitas & tautan — berlaku untuk semua bahasa"
           errorCount={errorCounts.umum}
         >
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-3">
             <FormInput
               label="Slug"
               placeholder="nama-project"
@@ -231,8 +243,6 @@ export const ProjectDialog = ({
                 />
               )}
             />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
             <Controller
               control={control}
               name="featured"
@@ -248,15 +258,25 @@ export const ProjectDialog = ({
                 />
               )}
             />
-            <FormInput
-              label="Gambar"
-              placeholder="/images/project.svg"
-              disabled={isPending}
-              hint="Path atau URL gambar. Boleh dikosongkan."
-              error={errors.image?.message}
-              {...register("image")}
-            />
           </div>
+
+          <Controller
+            control={control}
+            name="image"
+            render={({ field }) => (
+              <FormImageUpload
+                label="Gambar Sampul"
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                disabled={isPending}
+                hint="Unggah file gambar ke Supabase Storage (JPG, PNG, WebP, SVG) atau masukkan URL manual."
+                error={errors.image?.message}
+                bucket="projects"
+                folder="covers"
+              />
+            )}
+          />
           <div className="grid gap-4 sm:grid-cols-2">
             <FormInput
               label="URL demo"
@@ -273,6 +293,70 @@ export const ProjectDialog = ({
               {...register("repositoryUrl")}
             />
           </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FormInput
+              label="Tagline"
+              placeholder="Tagline singkat project"
+              disabled={isPending}
+              hint="Berlaku untuk semua bahasa."
+              error={errors.tagline?.message}
+              {...register("tagline")}
+            />
+            <FormInput
+              label="Peran"
+              placeholder="Contoh: Frontend Engineer / Solo Builder"
+              disabled={isPending}
+              hint="Berlaku untuk semua bahasa."
+              error={errors.role?.message}
+              {...register("role")}
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Controller
+              control={control}
+              name="startDate"
+              render={({ field }) => (
+                <FormInput
+                  label="Periode mulai"
+                  type="date"
+                  dateMode="month"
+                  disabled={isPending}
+                  hint="Pilih bulan & tahun mulai."
+                  error={errors.startDate?.message}
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="endDate"
+              render={({ field }) => (
+                <FormInput
+                  label="Periode selesai"
+                  type="date"
+                  dateMode="month"
+                  disabled={isPending}
+                  hint="Kosongkan jika masih berjalan."
+                  error={errors.endDate?.message}
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                />
+              )}
+            />
+          </div>
+          <FormInput
+            label="Konteks"
+            placeholder="Contoh: Produk independen · Supabase + Next.js"
+            disabled={isPending}
+            hint="Berlaku untuk semua bahasa."
+            error={errors.context?.message}
+            {...register("context")}
+          />
           <FormTextArea
             label="Teknologi"
             placeholder="Satu teknologi per baris"
@@ -295,6 +379,7 @@ export const ProjectDialog = ({
           <LocaleFields
             prefix="id"
             register={register}
+            control={control}
             errors={errors}
             disabled={isPending}
           />
@@ -311,6 +396,7 @@ export const ProjectDialog = ({
           <LocaleFields
             prefix="en"
             register={register}
+            control={control}
             errors={errors}
             disabled={isPending}
           />
@@ -323,25 +409,17 @@ export const ProjectDialog = ({
 type LocaleFieldsProps = {
   prefix: "id" | "en"
   register: UseFormRegister<ProjectFormData>
+  control: Control<ProjectFormData>
   errors: FieldErrors<ProjectFormData>
   disabled: boolean
 }
 
-type LocaleBaseField =
-  | "title"
-  | "tagline"
-  | "description"
-  | "problem"
-  | "role"
-  | "period"
-  | "context"
-  | "highlights"
-  | "metrics"
-  | "decisions"
+type LocaleBaseField = "title" | "description" | "problem" | "highlights"
 
 const LocaleFields = ({
   prefix,
   register,
+  control,
   errors,
   disabled,
 }: LocaleFieldsProps) => {
@@ -352,23 +430,33 @@ const LocaleFields = ({
     errors[`${prefix}${capitalize(name)}` as keyof ProjectFormData]?.message as
       string | undefined
 
+  const {
+    fields: metricFields,
+    append: appendMetric,
+    remove: removeMetric,
+  } = useFieldArray({
+    control,
+    name: `${prefix}Metrics` as "idMetrics" | "enMetrics",
+  })
+
+  const {
+    fields: decisionFields,
+    append: appendDecision,
+    remove: removeDecision,
+  } = useFieldArray({
+    control,
+    name: `${prefix}Decisions` as "idDecisions" | "enDecisions",
+  })
+
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <FormInput
-          label="Judul"
-          required
-          disabled={disabled}
-          error={errorOf("title")}
-          {...field("title")}
-        />
-        <FormInput
-          label="Tagline"
-          disabled={disabled}
-          error={errorOf("tagline")}
-          {...field("tagline")}
-        />
-      </div>
+      <FormInput
+        label="Judul"
+        required
+        disabled={disabled}
+        error={errorOf("title")}
+        {...field("title")}
+      />
       <FormTextArea
         label="Deskripsi"
         rows={3}
@@ -383,27 +471,6 @@ const LocaleFields = ({
         error={errorOf("problem")}
         {...field("problem")}
       />
-      <div className="grid gap-4 sm:grid-cols-3">
-        <FormInput
-          label="Peran"
-          disabled={disabled}
-          error={errorOf("role")}
-          {...field("role")}
-        />
-        <FormInput
-          label="Periode"
-          placeholder="2023 — Sekarang"
-          disabled={disabled}
-          error={errorOf("period")}
-          {...field("period")}
-        />
-        <FormInput
-          label="Konteks"
-          disabled={disabled}
-          error={errorOf("context")}
-          {...field("context")}
-        />
-      </div>
       <FormTextArea
         label="Highlights"
         rows={3}
@@ -412,22 +479,153 @@ const LocaleFields = ({
         error={errorOf("highlights")}
         {...field("highlights")}
       />
-      <FormTextArea
-        label="Metrik"
-        rows={3}
-        disabled={disabled}
-        hint='Satu metrik per baris dengan format "label | nilai".'
-        error={errorOf("metrics")}
-        {...field("metrics")}
-      />
-      <FormTextArea
-        label="Keputusan"
-        rows={3}
-        disabled={disabled}
-        hint='Satu keputusan per baris dengan format "judul | detail".'
-        error={errorOf("decisions")}
-        {...field("decisions")}
-      />
+
+      {/* Array Metrik */}
+      <div className="space-y-3 pt-2">
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-sm font-medium">Metrik Proyek</Label>
+            <p className="text-xs text-muted-foreground">
+              Statistik atau capaian utama (label & nilai).
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={disabled}
+            onClick={() => appendMetric({ label: "", value: "" })}
+            className="gap-1.5 text-xs"
+          >
+            <Plus className="size-3.5" /> Tambah metrik
+          </Button>
+        </div>
+
+        {metricFields.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border/70 p-4 text-center text-xs text-muted-foreground">
+            Belum ada metrik. Klik &ldquo;Tambah metrik&rdquo; jika ingin menambahkan.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {metricFields.map((fieldItem, index) => {
+              const currentErrors =
+                errors[`${prefix}Metrics` as "idMetrics" | "enMetrics"]?.[index]
+              return (
+                <div
+                  key={fieldItem.id}
+                  className="flex items-start gap-3 rounded-xl border border-border/60 bg-muted/20 p-3"
+                >
+                  <div className="grid flex-1 gap-3 sm:grid-cols-2">
+                    <FormInput
+                      label="Label"
+                      placeholder="Contoh: Pengguna Aktif"
+                      disabled={disabled}
+                      error={currentErrors?.label?.message}
+                      {...register(
+                        `${prefix}Metrics.${index}.label` as unknown as `idMetrics.${number}.label`
+                      )}
+                    />
+                    <FormInput
+                      label="Nilai"
+                      placeholder="Contoh: 10.000+"
+                      disabled={disabled}
+                      error={currentErrors?.value?.message}
+                      {...register(
+                        `${prefix}Metrics.${index}.value` as unknown as `idMetrics.${number}.value`
+                      )}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    disabled={disabled}
+                    onClick={() => removeMetric(index)}
+                    className="mt-7 text-muted-foreground hover:text-destructive shrink-0"
+                    title="Hapus metrik"
+                  >
+                    <Trash2 className="size-4" />
+                  </Button>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Array Keputusan */}
+      <div className="space-y-3 pt-2">
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-sm font-medium">Keputusan Teknis / Desain</Label>
+            <p className="text-xs text-muted-foreground">
+              Keputusan arsitektur atau rekayasa (judul & detail).
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={disabled}
+            onClick={() => appendDecision({ title: "", detail: "" })}
+            className="gap-1.5 text-xs"
+          >
+            <Plus className="size-3.5" /> Tambah keputusan
+          </Button>
+        </div>
+
+        {decisionFields.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border/70 p-4 text-center text-xs text-muted-foreground">
+            Belum ada keputusan. Klik &ldquo;Tambah keputusan&rdquo; jika ingin menambahkan.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {decisionFields.map((fieldItem, index) => {
+              const currentErrors =
+                errors[`${prefix}Decisions` as "idDecisions" | "enDecisions"]?.[index]
+              return (
+                <div
+                  key={fieldItem.id}
+                  className="flex items-start gap-3 rounded-xl border border-border/60 bg-muted/20 p-3"
+                >
+                  <div className="flex-1 space-y-3">
+                    <FormInput
+                      label="Judul Keputusan"
+                      placeholder="Contoh: RLS sebagai garis pertahanan utama"
+                      disabled={disabled}
+                      error={currentErrors?.title?.message}
+                      {...register(
+                        `${prefix}Decisions.${index}.title` as unknown as `idDecisions.${number}.title`
+                      )}
+                    />
+                    <FormTextArea
+                      label="Detail"
+                      placeholder="Penjelasan latar belakang keputusan..."
+                      rows={2}
+                      disabled={disabled}
+                      error={currentErrors?.detail?.message}
+                      {...register(
+                        `${prefix}Decisions.${index}.detail` as unknown as `idDecisions.${number}.detail`
+                      )}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    disabled={disabled}
+                    onClick={() => removeDecision(index)}
+                    className="mt-7 text-muted-foreground hover:text-destructive shrink-0"
+                    title="Hapus keputusan"
+                  >
+                    <Trash2 className="size-4" />
+                  </Button>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

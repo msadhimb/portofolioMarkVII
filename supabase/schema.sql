@@ -55,6 +55,12 @@ create table if not exists public.projects (
   repository_url text,
   featured boolean not null default false,
   sort_order int not null default 0 check (sort_order >= 0),
+  tagline text not null default '',
+  role text not null default '',
+  period text not null default '',
+  start_date date,
+  end_date date,
+  context text not null default '',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -265,12 +271,20 @@ select
   p.sort_order,
   t.locale,
   t.title,
-  t.tagline,
+  coalesce(nullif(p.tagline, ''), t.tagline, '') as tagline,
   t.description,
   t.problem,
-  t.role,
-  t.period,
-  t.context,
+  coalesce(nullif(p.role, ''), t.role, '') as role,
+  case
+    when p.period is not null and p.period <> '' then p.period
+    when p.start_date is not null then
+      case
+        when p.end_date is null then trim(to_char(p.start_date, 'Month YYYY')) || ' — Present'
+        else trim(to_char(p.start_date, 'Month YYYY')) || ' — ' || trim(to_char(p.end_date, 'Month YYYY'))
+      end
+    else t.period
+  end as period,
+  coalesce(nullif(p.context, ''), t.context, '') as context,
   coalesce((
     select jsonb_agg(x.name order by x.sort_order)
     from public.project_technologies x
@@ -469,3 +483,40 @@ create policy "auth write principles"
 drop policy if exists "auth write principle_translations" on public.principle_translations;
 create policy "auth write principle_translations"
   on public.principle_translations for all to authenticated using (true) with check (true);
+
+-- ============================================================================
+-- STORAGE: BUCKET 'projects' UNTUK UPLOAD GAMBAR PROYEK
+-- ============================================================================
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'projects',
+  'projects',
+  true,
+  5242880, -- 5 MB
+  array['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif']
+)
+on conflict (id) do update set
+  public = true,
+  file_size_limit = 5242880,
+  allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif'];
+
+drop policy if exists "Public read project images" on storage.objects;
+create policy "Public read project images"
+  on storage.objects for select to public
+  using (bucket_id = 'projects');
+
+drop policy if exists "Authenticated upload project images" on storage.objects;
+create policy "Authenticated upload project images"
+  on storage.objects for insert to authenticated
+  with check (bucket_id = 'projects');
+
+drop policy if exists "Authenticated update project images" on storage.objects;
+create policy "Authenticated update project images"
+  on storage.objects for update to authenticated
+  using (bucket_id = 'projects');
+
+drop policy if exists "Authenticated delete project images" on storage.objects;
+create policy "Authenticated delete project images"
+  on storage.objects for delete to authenticated
+  using (bucket_id = 'projects');
+

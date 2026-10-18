@@ -1,4 +1,15 @@
+import moment from "moment"
 import type { AdminProject } from "../table/columns"
+
+export type MetricItem = {
+  label: string
+  value: string
+}
+
+export type DecisionItem = {
+  title: string
+  detail: string
+}
 
 export type ProjectFormData = {
   slug: string
@@ -8,26 +19,23 @@ export type ProjectFormData = {
   featured: string
   sortOrder: number
   technologies: string
+  tagline: string
+  role: string
+  startDate: string
+  endDate: string
+  context: string
   idTitle: string
-  idTagline: string
   idDescription: string
   idProblem: string
-  idRole: string
-  idPeriod: string
-  idContext: string
   idHighlights: string
-  idMetrics: string
-  idDecisions: string
+  idMetrics: MetricItem[]
+  idDecisions: DecisionItem[]
   enTitle: string
-  enTagline: string
   enDescription: string
   enProblem: string
-  enRole: string
-  enPeriod: string
-  enContext: string
   enHighlights: string
-  enMetrics: string
-  enDecisions: string
+  enMetrics: MetricItem[]
+  enDecisions: DecisionItem[]
 }
 
 export const projectDefaultValues: ProjectFormData = {
@@ -38,69 +46,108 @@ export const projectDefaultValues: ProjectFormData = {
   featured: "tidak",
   sortOrder: 0,
   technologies: "",
+  tagline: "",
+  role: "",
+  startDate: "",
+  endDate: "",
+  context: "",
   idTitle: "",
-  idTagline: "",
   idDescription: "",
   idProblem: "",
-  idRole: "",
-  idPeriod: "",
-  idContext: "",
   idHighlights: "",
-  idMetrics: "",
-  idDecisions: "",
+  idMetrics: [],
+  idDecisions: [],
   enTitle: "",
-  enTagline: "",
   enDescription: "",
   enProblem: "",
-  enRole: "",
-  enPeriod: "",
-  enContext: "",
   enHighlights: "",
-  enMetrics: "",
-  enDecisions: "",
+  enMetrics: [],
+  enDecisions: [],
 }
 
 export const toLines = (items: string[]): string => items.join("\n")
 
-export const fromLines = (value: string): string[] =>
+export const fromLines = (value: string): string =>
   value
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean)
 
-export const pairsToLines = (
-  items: { label: string; value: string }[] | { title: string; detail: string }[],
-  firstKey: string,
-  secondKey: string
-): string =>
-  items
-    .map(
-      (item) =>
-        `${(item as Record<string, string>)[firstKey] ?? ""} | ${(item as Record<string, string>)[secondKey] ?? ""}`
-    )
-    .join("\n")
+export const parsePeriodToDates = (
+  period?: string | null
+): { startDate: string; endDate: string } => {
+  if (!period || !period.trim()) return { startDate: "", endDate: "" }
 
-export const fromPairLines = (
-  value: string,
-  firstKey: string,
-  secondKey: string
-): Record<string, string>[] =>
-  fromLines(value)
-    .map((line) => {
-      const separatorIndex = line.indexOf("|")
-      if (separatorIndex === -1) {
-        return { [firstKey]: line.trim(), [secondKey]: "" }
+  const clean = period.trim()
+  const parts = clean.split(/\s*(?:—|--|-|s\/d|to)\s*/i)
+
+  const parsePart = (str?: string): string => {
+    if (!str || !str.trim()) return ""
+    const s = str.trim().toLowerCase()
+    if (s === "sekarang" || s === "present" || s === "current") return ""
+
+    const formats = [
+      "YYYY-MM-DD",
+      "YYYY-MM",
+      "MMM YYYY",
+      "MMMM YYYY",
+      "YYYY",
+      "MMM YY",
+      "MMMM",
+    ]
+    for (const f of formats) {
+      const m = moment(str.trim(), f, true)
+      if (m.isValid()) {
+        return m.date(1).format("YYYY-MM-DD")
       }
-      return {
-        [firstKey]: line.slice(0, separatorIndex).trim(),
-        [secondKey]: line.slice(separatorIndex + 1).trim(),
-      }
-    })
-    .filter((item) => item[firstKey])
+    }
+    const loose = moment(str.trim())
+    if (loose.isValid()) {
+      return loose.date(1).format("YYYY-MM-DD")
+    }
+    return ""
+  }
+
+  const startDate = parsePart(parts[0])
+  const endDate = parts.length > 1 ? parsePart(parts[1]) : ""
+
+  return { startDate, endDate }
+}
+
+export const formatPeriodFromDates = (
+  startDate?: string,
+  endDate?: string
+): string => {
+  if (!startDate && !endDate) return ""
+  const startMoment = startDate ? moment(startDate) : null
+  const endMoment = endDate ? moment(endDate) : null
+
+  const startStr =
+    startMoment && startMoment.isValid() ? startMoment.format("MMM YYYY") : ""
+  const endStr =
+    endMoment && endMoment.isValid()
+      ? endMoment.format("MMM YYYY")
+      : startDate
+        ? "Sekarang"
+        : ""
+
+  if (startStr && endStr) return `${startStr} — ${endStr}`
+  if (startStr) return `${startStr} — Sekarang`
+  return endStr
+}
 
 export const projectToFormValues = (project: AdminProject): ProjectFormData => {
   const id = project.translations?.id ?? {}
   const en = project.translations?.en ?? {}
+
+  const rawPeriod = project.period || id.period || en.period || ""
+  const { startDate, endDate } =
+    project.start_date || project.end_date
+      ? {
+          startDate: project.start_date ?? "",
+          endDate: project.end_date ?? "",
+        }
+      : parsePeriodToDates(rawPeriod)
 
   return {
     slug: project.slug,
@@ -110,43 +157,64 @@ export const projectToFormValues = (project: AdminProject): ProjectFormData => {
     featured: project.featured ? "ya" : "tidak",
     sortOrder: project.sort_order ?? 0,
     technologies: toLines(project.technologies ?? []),
+    tagline: project.tagline || id.tagline || en.tagline || "",
+    role: project.role || id.role || en.role || "",
+    startDate,
+    endDate,
+    context: project.context || id.context || en.context || "",
     idTitle: id.title ?? "",
-    idTagline: id.tagline ?? "",
     idDescription: id.description ?? "",
     idProblem: id.problem ?? "",
-    idRole: id.role ?? "",
-    idPeriod: id.period ?? "",
-    idContext: id.context ?? "",
     idHighlights: toLines(id.highlights ?? []),
-    idMetrics: pairsToLines(id.metrics ?? [], "label", "value"),
-    idDecisions: pairsToLines(id.decisions ?? [], "title", "detail"),
+    idMetrics: (id.metrics ?? []).map((m) => ({
+      label: m.label ?? "",
+      value: m.value ?? "",
+    })),
+    idDecisions: (id.decisions ?? []).map((d) => ({
+      title: d.title ?? "",
+      detail: d.detail ?? "",
+    })),
     enTitle: en.title ?? "",
-    enTagline: en.tagline ?? "",
     enDescription: en.description ?? "",
     enProblem: en.problem ?? "",
-    enRole: en.role ?? "",
-    enPeriod: en.period ?? "",
-    enContext: en.context ?? "",
     enHighlights: toLines(en.highlights ?? []),
-    enMetrics: pairsToLines(en.metrics ?? [], "label", "value"),
-    enDecisions: pairsToLines(en.decisions ?? [], "title", "detail"),
+    enMetrics: (en.metrics ?? []).map((m) => ({
+      label: m.label ?? "",
+      value: m.value ?? "",
+    })),
+    enDecisions: (en.decisions ?? []).map((d) => ({
+      title: d.title ?? "",
+      detail: d.detail ?? "",
+    })),
   }
 }
 
 export const projectFormToPayload = (values: ProjectFormData, slug: string) => {
+  const period = formatPeriodFromDates(values.startDate, values.endDate)
+
+  const cleanMetrics = (items: MetricItem[] = []) =>
+    items
+      .map((item) => ({
+        label: (item.label ?? "").trim(),
+        value: (item.value ?? "").trim(),
+      }))
+      .filter((item) => item.label && item.value)
+
+  const cleanDecisions = (items: DecisionItem[] = []) =>
+    items
+      .map((item) => ({
+        title: (item.title ?? "").trim(),
+        detail: (item.detail ?? "").trim(),
+      }))
+      .filter((item) => item.title)
+
   const translation = (prefix: "id" | "en") => ({
     title: values[`${prefix}Title`].trim(),
-    tagline: values[`${prefix}Tagline`].trim(),
     description: values[`${prefix}Description`].trim(),
     problem: values[`${prefix}Problem`].trim(),
-    role: values[`${prefix}Role`].trim(),
-    period: values[`${prefix}Period`].trim(),
-    context: values[`${prefix}Context`].trim(),
     highlights: fromLines(values[`${prefix}Highlights`]),
-    metrics: fromPairLines(values[`${prefix}Metrics`], "label", "value").filter(
-      (metric) => metric.label && metric.value
-    ),
-    decisions: fromPairLines(values[`${prefix}Decisions`], "title", "detail"),
+    metrics: cleanMetrics(values[`${prefix}Metrics`]),
+    decisions: cleanDecisions(values[`${prefix}Decisions`]),
   })
 
   return {
@@ -156,6 +224,12 @@ export const projectFormToPayload = (values: ProjectFormData, slug: string) => {
     repository_url: values.repositoryUrl.trim() || null,
     featured: values.featured === "ya",
     sort_order: Number(values.sortOrder) || 0,
+    tagline: values.tagline.trim(),
+    role: values.role.trim(),
+    period,
+    start_date: values.startDate || null,
+    end_date: values.endDate || null,
+    context: values.context.trim(),
     technologies: fromLines(values.technologies),
     translations: {
       id: translation("id"),

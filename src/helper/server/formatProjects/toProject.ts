@@ -13,6 +13,7 @@ export const toProjectCard = (row: ProjectCardRow): ProjectCard => ({
   technologies: (row.technologies ?? []).slice(0, 7),
   highlights: (row.highlights ?? []).slice(0, 3),
   demoUrl: row.demo_url || "",
+  image: row.image || "",
   ...(row.featured && row.metrics?.length ? { metrics: row.metrics } : {}),
 })
 

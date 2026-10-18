@@ -35,6 +35,7 @@ export type ProjectCard = Pick<
   demoUrl?: string
   featured?: boolean
   metrics?: { label: string; value: string }[]
+  image?: string
 }
 
 /** Subset kolom yang dibaca untuk varian card (list ringan). */
@@ -53,4 +54,5 @@ export type ProjectCardRow = Pick<
   | "highlights"
   | "metrics"
   | "sort_order"
+  | "image"
 >

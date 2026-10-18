@@ -6,12 +6,13 @@ import i18next from "i18next"
 import { useTranslation } from "react-i18next"
 import id from "./i18n/id"
 import en from "./i18n/en"
-import { ProjectVisual, TechList } from "@/components/ProjectCard"
+import { TechList } from "@/components/ProjectCard"
 
 import { useProjectsDetail } from "./store"
 import { useQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
 import { projectTemplate } from "./template"
+import Image from "next/image"
 
 type ProjectViewProps = {
   slug: string
@@ -102,7 +103,13 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
           </dl>
 
           <div className="mt-8 overflow-hidden rounded-3xl border border-border bg-muted/60">
-            <ProjectVisual project={project} />
+            <Image
+              src={project?.image}
+              alt={project?.title}
+              width={1000}
+              height={1000}
+              className="h-100 w-full object-cover"
+            />
           </div>
 
           <div className="prose-portfolio mt-10 space-y-10">
