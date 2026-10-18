@@ -15,10 +15,9 @@ import { ChatTerminal } from "./components/ChatTerminal"
 import { ModelCard } from "./components/ModelCard"
 import { PromptChips } from "./components/PromptChips"
 
-i18next.addResourceBundle("id", "Chatbot", id)
-i18next.addResourceBundle("en", "Chatbot", en)
-
 export const ChatbotSection = () => {
+  i18next.addResourceBundle("id", "Chatbot", id)
+  i18next.addResourceBundle("en", "Chatbot", en)
   const { t, i18n } = useTranslation("Chatbot")
 
   const locale: ChatLocale = i18n.language === "en" ? "en" : "id"
@@ -76,8 +75,8 @@ export const ChatbotSection = () => {
     >
       {/* Aurora di belakang section */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="animate-aurora absolute -top-24 left-1/4 size-[28rem] rounded-full opacity-20 [background:radial-gradient(circle,var(--signal),transparent_70%)]" />
-        <div className="animate-aurora-slow absolute right-1/5 -bottom-32 size-[24rem] rounded-full opacity-20 [background:radial-gradient(circle,#22d3ee,transparent_70%)]" />
+        <div className="animate-aurora absolute -top-24 left-1/4 size-[28rem] rounded-full bg-signal/20 blur-[110px]" />
+        <div className="animate-aurora-slow absolute right-1/5 -bottom-32 size-[24rem] rounded-full bg-cyan-400/20 blur-[110px]" />
         <div className="bg-grid bg-grid-fade absolute inset-0 opacity-60" />
       </div>
 

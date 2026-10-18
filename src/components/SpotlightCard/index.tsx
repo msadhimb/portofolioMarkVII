@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { useIsCoarsePointer } from '@/hooks/use-media-query';
 
 export type SpotlightShape = 'circle' | 'beam';
 
@@ -104,7 +103,6 @@ const SpotlightCard = ({
   const grainRef = useRef<HTMLSpanElement>(null);
   const edgeRef = useRef<HTMLSpanElement>(null);
   const wakeRef = useRef<(() => void) | null>(null);
-  const coarse = useIsCoarsePointer();
   const palette = THEMES[theme] ?? THEMES.dark;
   const color = spotlightColor ?? palette.light;
   const form = SHAPES.includes(shape) ? shape : 'circle';
@@ -139,8 +137,6 @@ const SpotlightCard = ({
     if (!root || !light || !noise || !edge) return undefined;
 
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    // Touch: no hover proximity — only react when the pointer is over the card.
-    // iOS emits pointermove during scroll; proximity would wake every card.
     const state = { x: 0, y: 0, presence: 0, flare: 0, time: Math.random() * 60, pressed: false, visible: true };
     const pointer = { x: 0, y: 0, active: false };
     const drawn = { light: '', edge: '', noise: '' };
@@ -200,9 +196,8 @@ const SpotlightCard = ({
         tx = pointer.x - rect.left;
         ty = pointer.y - rect.top;
         const gap = Math.hypot(Math.max(0, -tx, tx - rect.width), Math.max(0, -ty, ty - rect.height));
-        const prox = coarse ? 0 : s.proximity;
         if (gap === 0) target = 1;
-        else if (prox > 0) target = Math.max(0, 1 - gap / prox) ** 2;
+        else if (s.proximity > 0) target = Math.max(0, 1 - gap / s.proximity) ** 2;
       }
       if (target < 0.6 && s.ambient && state.visible) {
         if (!reduce) state.time += dt;
@@ -238,20 +233,10 @@ const SpotlightCard = ({
     wakeRef.current = wake;
 
     const onMove = (event: PointerEvent) => {
-      const over = root.contains(event.target as Node | null);
-      if (coarse) {
-        // Touch: ignore global moves unless already lit or pointer is on us.
-        if (!over && state.presence <= 0) return;
-        pointer.x = event.clientX;
-        pointer.y = event.clientY;
-        pointer.active = over;
-        wake();
-        return;
-      }
       pointer.x = event.clientX;
       pointer.y = event.clientY;
       pointer.active = true;
-      if (state.presence > 0 || over || settingsRef.current.proximity > 0) wake();
+      if (state.presence > 0 || settingsRef.current.proximity > 0 || root.contains(event.target as Node | null)) wake();
     };
     const onOut = (event: PointerEvent) => {
       if (event.relatedTarget) return;
@@ -314,7 +299,7 @@ const SpotlightCard = ({
       root.removeEventListener('focusout', onFocusOut);
       wakeRef.current = null;
     };
-  }, [coarse]);
+  }, []);
 
   return (
     <div

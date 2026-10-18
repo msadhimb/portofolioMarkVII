@@ -89,6 +89,15 @@ export const useChatbot = create<ChatbotStore>()((set, get) => ({
     const controller = new AbortController();
     aborter = controller;
 
+    const appendToken = (chunk: string) => {
+      if (!chunk) return;
+      set((state) => ({
+        messages: state.messages.map((m) =>
+          m.id === assistantId ? { ...m, content: m.content + chunk } : m
+        ),
+      }));
+    };
+
     const setAssistantContent = (content: string) =>
       set((state) => ({
         messages: state.messages.map((m) =>
@@ -98,32 +107,6 @@ export const useChatbot = create<ChatbotStore>()((set, get) => ({
 
     let seen = 0;
     let acc = "";
-    // Batch token updates: `acc` sudah mengakumulasi teks penuh, cukup tunda
-    // satu `set` per frame lewat rAF, buatu set per chunk.
-    let flushRaf = 0;
-
-    const cancelFlush = () => {
-      if (flushRaf) {
-        cancelAnimationFrame(flushRaf);
-        flushRaf = 0;
-      }
-    };
-
-    const flushBuffer = () => {
-      flushRaf = 0;
-      setAssistantContent(acc);
-    };
-
-    /** Sinkron sekarang juga: buang rAF tertunda, tulis acc penuh. */
-    const flushNow = () => {
-      cancelFlush();
-      setAssistantContent(acc);
-    };
-
-    /** Jadwalkan satu flush per frame; teks penuh dibaca dari `acc`. */
-    const scheduleFlush = () => {
-      if (!flushRaf) flushRaf = requestAnimationFrame(flushBuffer);
-    };
 
     try {
       // `clientApi` meneruskan config Axios: `onDownloadProgress` memberi
@@ -141,26 +124,20 @@ export const useChatbot = create<ChatbotStore>()((set, get) => ({
             const chunk = full.slice(seen);
             seen = full.length;
             acc += chunk;
-            scheduleFlush();
+            appendToken(chunk);
           }
         },
       });
 
       const full = typeof res === "string" ? res : "";
       if (full.length > seen) {
-        acc += full.slice(seen);
-        scheduleFlush();
+        const chunk = full.slice(seen);
+        acc += chunk;
+        appendToken(chunk);
       }
 
-      // Selesai: sinkron final agar token terakhir tidak hilang di rAF tertunda.
-      if (!acc.trim()) {
-        cancelFlush();
-        setAssistantContent(feedback.emptyReply);
-      } else {
-        flushNow();
-      }
+      if (!acc.trim()) setAssistantContent(feedback.emptyReply);
     } catch (error) {
-      cancelFlush();
       if (controller.signal.aborted) {
         // Stop oleh user: buang placeholder kosong agar riwayat tetap bersih.
         set((state) => ({
@@ -183,7 +160,6 @@ export const useChatbot = create<ChatbotStore>()((set, get) => ({
         setAssistantContent(message);
       }
     } finally {
-      cancelFlush();
       if (aborter === controller) aborter = null;
       set({ loading: false });
     }
