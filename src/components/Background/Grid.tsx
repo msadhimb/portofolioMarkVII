@@ -8,8 +8,8 @@ const Grid = () => {
         className="bg-grid bg-grid-fade absolute inset-0"
       />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="animate-aurora absolute -top-20 left-[8%] size-[26rem] rounded-full bg-signal/15 blur-[110px]" />
-        <div className="animate-aurora-slow absolute top-24 right-[4%] size-[22rem] rounded-full bg-cyan-400/20 blur-[110px]" />
+        <div className="animate-aurora absolute -top-20 left-[8%] size-[26rem] rounded-full opacity-15 [background:radial-gradient(circle,var(--signal),transparent_70%)]" />
+        <div className="animate-aurora-slow absolute top-24 right-[4%] size-[22rem] rounded-full opacity-20 [background:radial-gradient(circle,#22d3ee,transparent_70%)]" />
       </div>
       <div
         aria-hidden="true"

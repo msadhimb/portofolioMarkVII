@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
+import { useIsMobileViewport, usePrefersReducedMotion } from "@/hooks/use-media-query";
 
 type RevealProps = {
   children: ReactNode;
@@ -11,16 +11,8 @@ type RevealProps = {
 };
 
 export const Reveal = ({ children, delay = 0, className }: RevealProps) => {
-  const reduce = useReducedMotion();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)");
-    const update = () => setIsMobile(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
+  const reduce = usePrefersReducedMotion();
+  const isMobile = useIsMobileViewport();
 
   if (reduce || isMobile) {
     return <div className={className}>{children}</div>;

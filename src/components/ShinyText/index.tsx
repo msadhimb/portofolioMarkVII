@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
+import { useIsCoarsePointer } from '@/hooks/use-media-query';
 
 type Easing = 'smooth' | 'linear' | 'snappy';
 type Trigger = 'loop' | 'hover' | 'view';
@@ -114,6 +115,7 @@ const ShinyText = ({
   const settingsRef = useRef<Settings | null>(null);
   const syncRef = useRef<(() => void) | null>(null);
   const content = children ?? text;
+  const coarse = useIsCoarsePointer();
 
   const nextSettings: Settings = {
     color,
@@ -147,6 +149,8 @@ const ShinyText = ({
     if (!root) return undefined;
 
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    // Touch devices: Safari (esp. iOS 26+/27 CoreGraphics filter path) re-computes
+    // blur whenever its input changes — run a single sweep, then stay static.
     const state = {
       pos: null as number | null,
       vel: 0,
@@ -161,11 +165,11 @@ const ShinyText = ({
       target: 0,
       visible: true,
       seen: false,
+      ran: false,
       colors: ''
     };
     let base: number[] | null = null;
     let shine: number[] | null = null;
-    let clear: number[] | null = null;
     let raf = 0;
     let timer = 0;
     let last = 0;
@@ -208,7 +212,12 @@ const ShinyText = ({
         state.colors = key;
         base = parseColor(s.color);
         shine = parseColor(s.shineColor);
-        clear = shine ? [shine[0], shine[1], shine[2], 0] : null;
+        // Static glow: a solid shine-color layer blurred ONCE. Never rewritten
+        // per frame, so the blur input never changes (CoreGraphics safe).
+        if (glowRef.current && shine) {
+          glowRef.current.style.backgroundImage = `linear-gradient(${s.shineColor}, ${s.shineColor})`;
+          glowRef.current.style.opacity = String(s.glow);
+        }
       }
       if (!base || !shine) {
         root.style.backgroundImage = `linear-gradient(${s.color}, ${s.color})`;
@@ -216,14 +225,11 @@ const ShinyText = ({
       }
       if (state.pos === null || s.disabled) {
         root.style.backgroundImage = `linear-gradient(${s.color}, ${s.color})`;
-        if (glowRef.current) glowRef.current.style.backgroundImage = 'none';
+        if (glowRef.current) glowRef.current.style.opacity = '0';
         return;
       }
+      if (glowRef.current) glowRef.current.style.opacity = String(s.glow);
       root.style.backgroundImage = gradient(state.pos, base!);
-      if (glowRef.current) {
-        glowRef.current.style.backgroundImage = gradient(state.pos, clear!);
-        glowRef.current.style.opacity = String(s.glow);
-      }
     };
 
     const sweep = (from: number, to: number, now: number) => {
@@ -284,7 +290,7 @@ const ShinyText = ({
           raf = requestAnimationFrame(tick);
           return;
         }
-        if (s.trigger !== 'loop' || reduce) {
+        if (s.trigger !== 'loop' || reduce || coarse) {
           state.phase = 'idle';
           state.pos = null;
           draw();
@@ -310,6 +316,9 @@ const ShinyText = ({
         return;
       }
       if (state.phase === 'idle' && s.trigger === 'loop' && !reduce && state.visible) {
+        // Touch devices: one sweep on view, then stay static (no perpetual rAF).
+        if (coarse && state.ran) return;
+        state.ran = true;
         state.flip = false;
         sweep(entry(), exit(), now);
         raf = requestAnimationFrame(tick);
@@ -391,7 +400,7 @@ const ShinyText = ({
       root.removeEventListener('pointerleave', onLeave);
       syncRef.current = null;
     };
-  }, []);
+  }, [coarse]);
 
   return (
     <span

@@ -1,22 +1,14 @@
 "use client"
 
 import { MotionConfig } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useIsMobileViewport } from "@/hooks/use-media-query"
 
 export function MobileMotionProvider({ children }: { children: React.ReactNode }) {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)")
-    const update = () => setIsMobile(mq.matches)
-    update()
-    mq.addEventListener("change", update)
-    return () => mq.removeEventListener("change", update)
-  }, [])
+  const isMobile = useIsMobileViewport()
 
   return (
     <MotionConfig reducedMotion={isMobile ? "always" : "user"}>
       {children}
     </MotionConfig>
   )
-} 
+}

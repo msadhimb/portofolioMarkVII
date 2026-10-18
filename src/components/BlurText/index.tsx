@@ -1,7 +1,8 @@
 'use client';
 
-import { motion, type Transition, type Easing } from 'motion/react';
+import { motion, type Transition, type Easing } from 'framer-motion';
 import { useEffect, useRef, useState, useMemo } from 'react';
+import { useIsCoarsePointer, usePrefersReducedMotion } from '@/hooks/use-media-query';
 
 export type BlurTextProps = {
   text?: string;
@@ -49,6 +50,12 @@ export const BlurText = ({
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
 
+  // MotionConfig's reducedMotion does not suppress `filter` keys (not a
+  // positional key), and touch Safari re-runs filter on the CoreGraphics path
+  // (iOS 26+/27) — so detect touch ourselves and skip the blur animation.
+  const reduced = usePrefersReducedMotion();
+  const coarse = useIsCoarsePointer();
+
   useEffect(() => {
     if (!ref.current) return;
     const observer = new IntersectionObserver(
@@ -92,6 +99,17 @@ export const BlurText = ({
   return (
     <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
       {elements.map((segment, index) => {
+        // Touch devices (iOS 26+/27 CoreGraphics filter path): plain text, no
+        // per-word filter animation. Same for OS-level reduced motion.
+        if (reduced || coarse) {
+          return (
+            <span key={index} style={{ display: 'inline-block' }}>
+              {segment === ' ' ? '\u00A0' : segment}
+              {animateBy === 'words' && index < elements.length - 1 && '\u00A0'}
+            </span>
+          );
+        }
+
         const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
         const spanTransition: Transition = {
@@ -107,7 +125,23 @@ export const BlurText = ({
             initial={fromSnapshot}
             animate={inView ? animateKeyframes : fromSnapshot}
             transition={spanTransition}
-            onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
+            onAnimationComplete={
+              index === elements.length - 1
+                ? () => {
+                    // Release compositor layers once the animation is done.
+                    const node = ref.current?.children[index] as HTMLElement | undefined;
+                    if (node) node.style.willChange = 'auto';
+                    onAnimationComplete?.();
+                  }
+                : index === elements.length - 2
+                  ? () => {
+                      for (let i = 0; i < elements.length - 1; i++) {
+                        const node = ref.current?.children[i] as HTMLElement | undefined;
+                        if (node) node.style.willChange = 'auto';
+                      }
+                    }
+                  : undefined
+            }
             style={{
               display: 'inline-block',
               willChange: 'transform, filter, opacity'
