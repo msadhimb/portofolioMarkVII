@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion"
 import { ArrowDown, ArrowUpRight, Download, MapPin } from "lucide-react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 import { BlurText } from "@/components/BlurText"
 import { CountUp } from "@/components/CountUp"
 import i18next from "i18next"
@@ -40,6 +41,17 @@ export const Hero = () => {
       : settings.available_label_id
   const availabilityOpen = settings.is_available
 
+  // Di mobile: nonaktifkan semua JS-driven animations (Magnet rAF, framer-motion)
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)")
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
+
   const firstName = siteConfig.siteName.split(" ")[0]
   const restName = siteConfig.siteName.split(" ").slice(1).join(" ")
   const nameColor = resolvedTheme === "dark" ? "#22D3EE" : "#6D28D9"
@@ -57,6 +69,9 @@ export const Hero = () => {
     { to: techCount, label: statsLabels[2] },
   ]
 
+  // Wrapper animasi: di mobile render div biasa, di desktop pakai motion.div
+  const Animated = isMobile || reduce ? "div" : motion.div
+
   return (
     <section
       id="top"
@@ -69,7 +84,7 @@ export const Hero = () => {
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.35fr_0.85fr] lg:items-end">
           <div>
-            <motion.div {...item(0)}>
+            <Animated {...(!isMobile && !reduce ? item(0) : {})}>
               <p className="inline-flex flex-wrap items-center gap-2 rounded-full border border-border bg-card py-1.5 pr-4 pl-1.5 text-xs text-muted-foreground">
                 <span
                   className={
@@ -95,18 +110,18 @@ export const Hero = () => {
                   {siteConfig.location}
                 </span>
               </p>
-            </motion.div>
+            </Animated>
 
-            <motion.p
-              {...item(0.08)}
+            <Animated
+              {...(!isMobile && !reduce ? item(0.08) : {})}
               className="mt-8 font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase"
             >
               {t("role")}
-            </motion.p>
+            </Animated>
 
             {/* Stiker keahlian miring — sentuhan playful khas */}
-            <motion.div
-              {...item(0.11)}
+            <Animated
+              {...(!isMobile && !reduce ? item(0.11) : {})}
               aria-hidden="true"
               className="mt-4 flex flex-wrap items-center gap-2"
             >
@@ -129,10 +144,10 @@ export const Hero = () => {
               >
                 {t("stickerAi")}
               </a>
-            </motion.div>
+            </Animated>
 
-            <motion.h1
-              {...item(0.14)}
+            <Animated
+              {...(!isMobile && !reduce ? item(0.14) : {})}
               className="mt-3 text-5xl font-semibold tracking-[-0.03em] text-balance text-foreground sm:text-6xl lg:text-7xl"
             >
               {firstName}{" "}
@@ -145,7 +160,7 @@ export const Hero = () => {
                   glow={0.25}
                 />
               </span>
-            </motion.h1>
+            </Animated>
 
             <BlurText
               text={`${t("statement")} ${t("statementExtra")}`}
@@ -154,11 +169,16 @@ export const Hero = () => {
               className="text-md mt-6 max-w-xl text-justify leading-relaxed text-balance text-muted-foreground md:text-lg"
             />
 
-            <motion.div
-              {...item(0.3)}
+            <Animated
+              {...(!isMobile && !reduce ? item(0.3) : {})}
               className="mt-8 flex flex-wrap items-center gap-3"
             >
-              <Magnet padding={48} magnetStrength={3.5} maxOffset={10}>
+              <Magnet
+                padding={48}
+                magnetStrength={3.5}
+                maxOffset={10}
+                disabled={isMobile}
+              >
                 <Button asChild size="lg" className="h-11 rounded-full px-6">
                   <Link href="#projects">
                     {t("ctaProjects")}
@@ -166,7 +186,12 @@ export const Hero = () => {
                   </Link>
                 </Button>
               </Magnet>
-              <Magnet padding={48} magnetStrength={3.5} maxOffset={10}>
+              <Magnet
+                padding={48}
+                magnetStrength={3.5}
+                maxOffset={10}
+                disabled={isMobile}
+              >
                 <Button
                   asChild
                   variant="outline"
@@ -187,10 +212,10 @@ export const Hero = () => {
                   {t("ctaCv")}
                 </Link>
               </Button>
-            </motion.div>
+            </Animated>
 
-            <motion.dl
-              {...item(0.38)}
+            <Animated
+              {...(!isMobile && !reduce ? item(0.38) : {})}
               className="mt-10 flex flex-wrap gap-x-10 gap-y-4 border-t border-border pt-6"
             >
               {stats.map((s) => (
@@ -203,12 +228,12 @@ export const Hero = () => {
                   </dd>
                 </div>
               ))}
-            </motion.dl>
+            </Animated>
           </div>
 
           {/* Decorative code snippet — static, lightweight */}
-          <motion.aside
-            {...item(0.32)}
+          <Animated
+            {...(!isMobile && !reduce ? item(0.32) : {})}
             aria-hidden="true"
             className="card-futuristic hidden overflow-hidden rounded-2xl border border-border/70 bg-card shadow-[0_20px_60px_-30px_rgba(2,132,199,0.5)] lg:block"
           >
@@ -278,7 +303,7 @@ export const Hero = () => {
                 {t("viewWork")} <ArrowUpRight className="size-3" />
               </Link>
             </div>
-          </motion.aside>
+          </Animated>
         </div>
       </div>
     </section>
