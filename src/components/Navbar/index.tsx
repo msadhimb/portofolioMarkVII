@@ -101,13 +101,6 @@ export const Navbar = () => {
 
   return (
     <>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-primary-foreground"
-      >
-        {t("skipToContent")}
-      </a>
-
       {/* ================= DESKTOP NAVBAR (lg+) ================= */}
       <header
         className={cn(
