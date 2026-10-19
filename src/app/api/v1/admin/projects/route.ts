@@ -101,6 +101,11 @@ export const POST = async (req: Request) => {
         repository_url: body.repository_url?.trim() || null,
         featured: body.featured ?? false,
         title: body.title?.trim() || "",
+        tagline: body.tagline?.trim() || "",
+        role: body.role?.trim() || "",
+        start_date: body.start_date || null,
+        end_date: body.end_date || null,
+        context: body.context?.trim() || "",
       })
       .select("id, slug")
       .single()

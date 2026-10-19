@@ -6,12 +6,8 @@ export type MetricInput = { label: string; value: string }
 export type DecisionInput = { title: string; detail: string }
 
 export type TranslationInput = {
-  tagline?: string
   description?: string
   problem?: string
-  role?: string
-  period?: string
-  context?: string
   highlights?: string[]
   metrics?: MetricInput[]
   decisions?: DecisionInput[]
@@ -27,10 +23,9 @@ export type ProjectPayload = {
   technologies?: string[]
   tagline?: string
   role?: string
-  period?: string
-  context?: string
   start_date?: string | null
   end_date?: string | null
+  context?: string
   translations?: { id?: TranslationInput; en?: TranslationInput }
 }
 
@@ -85,12 +80,8 @@ type DecisionRow = {
 
 type ProjectTranslationRow = {
   locale: string
-  tagline?: string | null
   description?: string | null
   problem?: string | null
-  role?: string | null
-  period?: string | null
-  context?: string | null
 }
 
 type ProjectWithRelations = {
@@ -101,6 +92,11 @@ type ProjectWithRelations = {
   repository_url?: string | null
   featured?: boolean | null
   title?: string | null
+  tagline?: string | null
+  role?: string | null
+  start_date?: string | null
+  end_date?: string | null
+  context?: string | null
   project_translations?: ProjectTranslationRow[] | null
   project_technologies?: TechnologyRow[] | null
 }
@@ -121,12 +117,8 @@ export const toAdminProject = (
     (project.project_translations ?? []).map((row) => [
       row.locale,
       {
-        tagline: row.tagline ?? "",
         description: row.description ?? "",
         problem: row.problem ?? "",
-        role: row.role ?? "",
-        period: row.period ?? "",
-        context: row.context ?? "",
         highlights: children.highlights
           .filter((item) => item.project_id === project.id && item.locale === row.locale)
           .sort(byOrder)
@@ -142,8 +134,6 @@ export const toAdminProject = (
       },
     ])
   )
-  const idTrans = translations.id || translations.en || {}
-
   return {
     slug: project.slug,
     image: project.image ?? "",
@@ -151,10 +141,11 @@ export const toAdminProject = (
     repository_url: project.repository_url ?? null,
     featured: project.featured ?? false,
     title: project.title ?? "",
-    tagline: idTrans.tagline ?? "",
-    role: idTrans.role ?? "",
-    period: idTrans.period ?? "",
-    context: idTrans.context ?? "",
+    tagline: project.tagline ?? "",
+    role: project.role ?? "",
+    start_date: project.start_date ?? null,
+    end_date: project.end_date ?? null,
+    context: project.context ?? "",
     technologies: [...(project.project_technologies ?? [])]
       .sort(byOrder)
       .map((row) => row.name),
@@ -215,24 +206,6 @@ export const fetchAdminProjects = async (
     typeof options === "string" ? { slug: options } : (options ?? {})
   const { slug, search } = opts
 
-  let matchingIds: string[] | null = null
-  if (search?.trim()) {
-    const { data: titleMatches, error: titleError } = await supabase
-      .from("project_translations")
-      .select("project_id")
-      .ilike("title", `%${search.trim().replace(/[%(),"]/g, "")}%`)
-
-    if (titleError) return { data: null, error: titleError.message, total: 0 }
-
-    matchingIds = [
-      ...new Set(
-        ((titleMatches ?? []) as { project_id: string }[]).map(
-          (row) => row.project_id
-        )
-      ),
-    ]
-  }
-
   let query = supabase
     .from("projects")
     .select(PROJECT_WITH_RELATIONS, { count: "exact" })
@@ -242,11 +215,7 @@ export const fetchAdminProjects = async (
 
   if (search?.trim()) {
     const clean = search.trim().replace(/[%(),"]/g, "")
-    if (matchingIds && matchingIds.length > 0) {
-      query = query.or(`slug.ilike.%${clean}%,id.in.(${matchingIds.join(",")})`)
-    } else {
-      query = query.ilike("slug", `%${clean}%`)
-    }
+    query = query.or(`slug.ilike.%${clean}%,title.ilike.%${clean}%`)
   }
 
   // Mode paginasi (list admin). Mode slug tidak dipaginasi.
@@ -293,16 +262,8 @@ export const writeProjectRelations = async (
       return {
         project_id: projectId,
         locale,
-        tagline:
-          (body.tagline !== undefined ? body.tagline : translation.tagline)?.trim() ?? "",
         description: translation.description?.trim() ?? "",
         problem: translation.problem?.trim() ?? "",
-        role:
-          (body.role !== undefined ? body.role : translation.role)?.trim() ?? "",
-        period:
-          (body.period !== undefined ? body.period : translation.period)?.trim() ?? "",
-        context:
-          (body.context !== undefined ? body.context : translation.context)?.trim() ?? "",
       }
     })
 

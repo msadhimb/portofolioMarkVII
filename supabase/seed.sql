@@ -16,62 +16,52 @@ where slug in ('pln-pusmanpro', 'duitku', 'freelance');
 -- PROJECTS (parent)
 -- ============================================================================
 
-insert into public.projects (slug, image, demo_url, repository_url, featured, title) values
-  ('duitku', '/images/duitku.svg', 'https://duitku.app', null, true, $$Duitku$$),
-  ('pln-pusmanpro', '/images/pusmanpro.svg', null, null, false, $$PLN Pusmanpro$$),
-  ('dna-wedding-invitation', '/images/dna.svg', 'https://dna-invitation.vercel.app', null, false, $$DNA Wedding Invitation$$);
+insert into public.projects
+  (slug, image, demo_url, repository_url, featured, title, tagline, role, start_date, end_date, context)
+values
+  ('duitku', '/images/duitku.svg', 'https://duitku.app', null, true, $$Duitku$$,
+    $$Personal finance tracker yang menghormati kepemilikan data.$$,
+    $$Solo builder — product, frontend, backend (Supabase), deployment$$,
+    '2024-01-01T00:00:00Z', null,
+    $$Produk independen · Supabase + Next.js$$),
+  ('pln-pusmanpro', '/images/pusmanpro.svg', null, null, false, $$PLN Pusmanpro$$,
+    $$Sistem enterprise untuk workflow dan dashboard BUMN.$$,
+    $$Frontend Engineer — dashboard, workflow UI, data management$$,
+    '2023-01-01T00:00:00Z', '2024-01-01T00:00:00Z',
+    $$Enterprise · BUMN · tim lintas fungsi$$),
+  ('dna-wedding-invitation', '/images/dna.svg', 'https://dna-invitation.vercel.app', null, false, $$DNA Wedding Invitation$$,
+    $$Undangan digital sebagai visual storytelling.$$,
+    $$Frontend Engineer — motion, storytelling, performa$$,
+    '2023-01-01T00:00:00Z', null,
+    $$Client work · mobile-first$$);
 
 -- ---------- project_translations: id ----------
 insert into public.project_translations
-  (project_id, locale, tagline, description, problem, role, period, context)
+  (project_id, locale, description, problem)
 values
   ((select id from public.projects where slug = 'duitku'), 'id',
-    $$Personal finance tracker yang menghormati kepemilikan data.$$,
     $$Aplikasi pelacak keuangan pribadi berbasis Next.js dan Supabase. Mencatat transaksi multi-wallet, mengelola kategori dan wishlist, menyajikan laporan serta chart, dan memantau portofolio — dengan prinsip data yang jelas.$$,
-    $$Kebanyakan finance tracker mencampur data milik user dengan data pasar eksternal yang live, lalu menyimpannya tanpa alasan. Akibatnya skema membengkak, sulit diaudit, dan rawan basi. Duitku memisahkan keduanya: yang milik user dipersist dengan RLS yang ketat, yang eksternal live hanya di-fetch on-demand.$$,
-    $$Solo builder — product, frontend, backend (Supabase), deployment$$,
-    $$2024 — sekarang$$,
-    $$Produk independen · Supabase + Next.js$$),
+    $$Kebanyakan finance tracker mencampur data milik user dengan data pasar eksternal yang live, lalu menyimpannya tanpa alasan. Akibatnya skema membengkak, sulit diaudit, dan rawan basi. Duitku memisahkan keduanya: yang milik user dipersist dengan RLS yang ketat, yang eksternal live hanya di-fetch on-demand.$$),
   ((select id from public.projects where slug = 'pln-pusmanpro'), 'id',
-    $$Sistem enterprise untuk workflow dan dashboard BUMN.$$,
     $$Aplikasi internal berbasis Next.js untuk lingkungan BUMN: dashboard operasional, alur approval berjenjang, pengelolaan data master, dan pelaporan PDF untuk kebutuhan audit dan manajemen.$$,
-    $$Proses yang sebelumnya tersebar di spreadsheet dan dokumen manual sulit dilacak: siapa menyetujui apa, kapan, dan berdasarkan data versi mana. Dibutuhkan satu pintu dengan jejak audit yang bisa dipertanggungjawabkan.$$,
-    $$Frontend Engineer — dashboard, workflow UI, data management$$,
-    $$2023 — 2024$$,
-    $$Enterprise · BUMN · tim lintas fungsi$$),
+    $$Proses yang sebelumnya tersebar di spreadsheet dan dokumen manual sulit dilacak: siapa menyetujui apa, kapan, dan berdasarkan data versi mana. Dibutuhkan satu pintu dengan jejak audit yang bisa dipertanggungjawabkan.$$),
   ((select id from public.projects where slug = 'dna-wedding-invitation'), 'id',
-    $$Undangan digital sebagai visual storytelling.$$,
     $$Website undangan digital interaktif dengan narasi scroll: pembuka sinematik, galeri, hitung mundur, RSVP, dan amplop digital. Dibangun dengan Next.js, Tailwind, GSAP + ScrollTrigger.$$,
-    $$Undangan digital kebanyakan terasa seperti template: berat, generik, dan tidak berkesan di HP. Tantangannya adalah membuat pengalaman yang ringan namun emosional — dibuka dalam 2 detik di koneksi seluler, tetap sinematik.$$,
-    $$Frontend Engineer — motion, storytelling, performa$$,
-    $$2023$$,
-    $$Client work · mobile-first$$);
+    $$Undangan digital kebanyakan terasa seperti template: berat, generik, dan tidak berkesan di HP. Tantangannya adalah membuat pengalaman yang ringan namun emosional — dibuka dalam 2 detik di koneksi seluler, tetap sinematik.$$);
 
 -- ---------- project_translations: en ----------
 insert into public.project_translations
-  (project_id, locale, tagline, description, problem, role, period, context)
+  (project_id, locale, description, problem)
 values
   ((select id from public.projects where slug = 'duitku'), 'en',
-    $$A personal finance tracker that respects data ownership.$$,
     $$A personal finance tracking app built with Next.js and Supabase. Multi-wallet transactions, categories and wishlists, reports with charts, and portfolio monitoring — with clear data principles.$$,
-    $$Most finance trackers mix user-owned data with live external market data, then persist both for no good reason. Schemas bloat, audits get hard, and data goes stale. Duitku separates the two: user data is persisted under strict RLS, live external data is only fetched on demand.$$,
-    $$Solo builder — product, frontend, backend (Supabase), deployment$$,
-    $$2024 — present$$,
-    $$Independent product · Supabase + Next.js$$),
+    $$Most finance trackers mix user-owned data with live external market data, then persist both for no good reason. Schemas bloat, audits get hard, and data goes stale. Duitku separates the two: user data is persisted under strict RLS, live external data is only fetched on demand.$$),
   ((select id from public.projects where slug = 'pln-pusmanpro'), 'en',
-    $$Enterprise system for state-company workflows and dashboards.$$,
     $$An internal Next.js application for a state-owned enterprise environment: operational dashboards, tiered approval flows, master data management, and PDF reporting for audit and management needs.$$,
-    $$Processes previously scattered across spreadsheets and manual documents were hard to trace: who approved what, when, and against which version of the data. The organization needed a single front door with an accountable audit trail.$$,
-    $$Frontend Engineer — dashboards, workflow UI, data management$$,
-    $$2023 — 2024$$,
-    $$Enterprise · State-owned · cross-functional team$$),
+    $$Processes previously scattered across spreadsheets and manual documents were hard to trace: who approved what, when, and against which version of the data. The organization needed a single front door with an accountable audit trail.$$),
   ((select id from public.projects where slug = 'dna-wedding-invitation'), 'en',
-    $$A digital invitation as visual storytelling.$$,
     $$An interactive digital wedding invitation with scroll-driven narrative: a cinematic opening, gallery, countdown, RSVP, and digital envelope. Built with Next.js, Tailwind, GSAP + ScrollTrigger.$$,
-    $$Most digital invitations feel templated: heavy, generic, and unimpressive on phones. The challenge was crafting an experience that feels light yet emotional — opening in 2 seconds on mobile data, still cinematic.$$,
-    $$Frontend Engineer — motion, storytelling, performance$$,
-    $$2023$$,
-    $$Client work · mobile-first$$);
+    $$Most digital invitations feel templated: heavy, generic, and unimpressive on phones. The challenge was crafting an experience that feels light yet emotional — opening in 2 seconds on mobile data, still cinematic.$$);
 
 -- ---------- project_technologies (sama semua locale) ----------
 insert into public.project_technologies (project_id, name, sort_order) values

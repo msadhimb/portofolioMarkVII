@@ -23,6 +23,7 @@ import {
   MetricGrid,
 } from "@/view/Admin/components/DetailParts"
 import type { AdminProject } from "../../table/columns"
+import { formatPeriodRange } from "../../form"
 
 type ProjectDetailDialogProps = {
   open: boolean
@@ -85,7 +86,7 @@ export const ProjectDetailDialog = ({
             subtitle={
               <span className="flex flex-col gap-1">
                 <span className="line-clamp-2">
-                  {id?.tagline || en?.tagline || "Belum ada tagline."}
+                  {project.tagline || "Belum ada tagline."}
                 </span>
                 <code className="font-mono text-[11px] text-signal">
                   /{project.slug}
@@ -176,6 +177,17 @@ export const ProjectDetailDialog = ({
               <DetailText label="Gambar" value="—" />
             )}
             <div className="grid gap-2.5 sm:grid-cols-2">
+              <DetailText label="Tagline" value={project.tagline || "—"} />
+              <DetailText label="Peran" value={project.role || "—"} />
+              <DetailText
+                label="Periode"
+                value={
+                  formatPeriodRange(project.start_date, project.end_date) || "—"
+                }
+              />
+              <DetailText label="Konteks" value={project.context || "—"} />
+            </div>
+            <div className="grid gap-2.5 sm:grid-cols-2">
               <DetailText
                 label="URL demo"
                 value={
@@ -230,16 +242,8 @@ export const ProjectDetailDialog = ({
               </Badge>
             }
           >
-            <div className="grid gap-2.5 sm:grid-cols-2">
-              <DetailText label="Tagline" value={active?.tagline} />
-              <DetailText label="Peran" value={active?.role} />
-            </div>
             <DetailText label="Deskripsi" value={active?.description} />
             <DetailText label="Masalah" value={active?.problem} />
-            <div className="grid gap-2.5 sm:grid-cols-2">
-              <DetailText label="Periode" value={active?.period} />
-              <DetailText label="Konteks" value={active?.context} />
-            </div>
             <DetailList label="Highlights" items={active?.highlights ?? []} />
             <MetricGrid items={active?.metrics ?? []} />
             <DetailList

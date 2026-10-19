@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
 import { projectTemplate } from "./template"
 import Image from "next/image"
+import moment from "moment"
 
 type ProjectViewProps = {
   slug: string
@@ -60,7 +61,10 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
               <dt className="font-mono text-[11px] text-muted-foreground uppercase">
                 {t("period")}
               </dt>
-              <dd className="mt-1 text-sm font-medium">{project.period}</dd>
+              <dd className="mt-1 text-sm font-medium">
+                {moment(project.start_date).format("MMM YYYY")} -{" "}
+                {moment(project.end_date).format("MMM YYYY")}
+              </dd>
             </div>
             <div>
               <dt className="font-mono text-[11px] text-muted-foreground uppercase">

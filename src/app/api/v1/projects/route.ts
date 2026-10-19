@@ -8,6 +8,30 @@ import {
   toSupabaseRange,
 } from "@/helper/server/pagination"
 
+const SELECT = `
+  *,
+  metrics:project_metrics!project_id (
+    id,
+    label,
+    value,
+    sort_order
+  ),
+  decisions:project_decisions!project_id (
+    id,
+    title,
+    detail,
+    sort_order
+  )
+`
+
+const errorResponse = (detail: string) => {
+  console.error("[GET /api/projects] Supabase error:", detail)
+  return NextResponse.json(
+    { error: "Gagal mengambil project dari Supabase.", detail },
+    { status: 500 }
+  )
+}
+
 export const GET = async (req: Request) => {
   try {
     const { searchParams } = new URL(req.url)
@@ -16,25 +40,19 @@ export const GET = async (req: Request) => {
 
     const supabase = await createClient()
 
-    // Mode detail-per-slug: tanpa pagination, bentuk respons lama dipertahankan.
     if (slug) {
       const { data, error } = await supabase
         .from("project_list")
-        .select("*")
+        .select(SELECT)
         .eq("locale", locale)
-      .eq("slug", slug)
-      .order("created_at", { ascending: false })
+        .eq("slug", slug)
+        .eq("metrics.locale", locale)
+        .eq("decisions.locale", locale)
+        .order("created_at", { ascending: false })
+        .order("sort_order", { referencedTable: "metrics" })
+        .order("sort_order", { referencedTable: "decisions" })
 
-      if (error) {
-        console.error("[GET /api/projects] Supabase error:", error.message)
-        return NextResponse.json(
-          {
-            error: "Gagal mengambil project dari Supabase.",
-            detail: error.message,
-          },
-          { status: 500 }
-        )
-      }
+      if (error) return errorResponse(error.message)
 
       return NextResponse.json({
         data: (data ?? []).map(toProjectCard),
@@ -49,47 +67,41 @@ export const GET = async (req: Request) => {
     })
     const { from, to } = toSupabaseRange(params)
 
-    const { data, error, count } = await supabase
-      .from("project_list")
-      .select("*", { count: "exact" })
-      .eq("locale", locale)
-      .order("created_at", { ascending: false })
-      .range(from, to)
+    const [listRes, featuredRes] = await Promise.all([
+      supabase
+        .from("project_list")
+        .select(SELECT, { count: "exact" })
+        .eq("locale", locale)
+        .eq("metrics.locale", locale)
+        .eq("decisions.locale", locale)
+        .order("created_at", { ascending: false })
+        .order("sort_order", { referencedTable: "metrics" })
+        .order("sort_order", { referencedTable: "decisions" })
+        .range(from, to),
+      supabase
+        .from("project_list")
+        .select(SELECT)
+        .eq("locale", locale)
+        .eq("featured", true)
+        .eq("metrics.locale", locale)
+        .eq("decisions.locale", locale)
+        .order("sort_order", { referencedTable: "metrics" })
+        .order("sort_order", { referencedTable: "decisions" }),
+    ])
 
-    const { data: featuredData } = await supabase
-      .from("project_list")
-      .select("*")
-      .eq("locale", locale)
-      .eq("featured", true)
-
-    if (error) {
-      console.error("[GET /api/projects] Supabase error:", error.message)
-      return NextResponse.json(
-        {
-          error: "Gagal mengambil project dari Supabase.",
-          detail: error.message,
-        },
-        { status: 500 }
-      )
-    }
-
-    const projects = (data ?? []).map(toProjectCard)
-    const featuredProjects = featuredData?.map(toProjectCard) || []
+    if (listRes.error) return errorResponse(listRes.error.message)
+    if (featuredRes.error) return errorResponse(featuredRes.error.message)
 
     return NextResponse.json({
-      ...paginated(projects, buildPaginationMeta(params, count ?? 0)),
+      ...paginated(
+        (listRes.data ?? []).map(toProjectCard),
+        buildPaginationMeta(params, listRes.count ?? 0)
+      ),
       locale,
       variant: "card",
-      featured: featuredProjects,
+      featured: (featuredRes.data ?? []).map(toProjectCard),
     })
   } catch (err) {
-    console.error("[GET /api/projects] Unexpected error:", err)
-    return NextResponse.json(
-      {
-        error: "Gagal mengambil project dari Supabase.",
-        detail: err instanceof Error ? err.message : String(err),
-      },
-      { status: 500 }
-    )
+    return errorResponse(err instanceof Error ? err.message : String(err))
   }
 }

@@ -27,7 +27,7 @@ export const toProject = (row: ProjectRow): Project => ({
   period: row.period ?? "",
   context: row.context ?? "",
   technologies: row.technologies ?? [],
-  highlights: row.highlights ?? [],
+  highlights: row.highlights?.map((h: any) => h.body) ?? [],
   image: row.image ?? "",
   featured: row.featured ?? false,
   demoUrl: row.demo_url || "",

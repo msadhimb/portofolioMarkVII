@@ -58,9 +58,8 @@ create table if not exists public.projects (
   title text not null default '',
   tagline text not null default '',
   role text not null default '',
-  period text not null default '',
-  start_date date,
-  end_date date,
+  start_date timestamptz,
+  end_date timestamptz,
   context text not null default '',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -71,17 +70,14 @@ create trigger projects_updated_at
   before update on public.projects
   for each row execute function public.handle_updated_at();
 
--- Teks per locale (tagline, description, dll). Title bersifat umum -> tabel projects.
+-- Teks per locale (description & problem). Title/tagline/role/period/context
+-- bersifat umum -> tabel projects.
 create table if not exists public.project_translations (
   id uuid primary key default gen_random_uuid(),
   project_id uuid not null references public.projects (id) on delete cascade,
   locale text not null check (locale in ('id', 'en')),
-  tagline text not null default '',
   description text not null default '',
   problem text not null default '',
-  role text not null default '',
-  period text not null default '',
-  context text not null default '',
   unique (project_id, locale)
 );
 create index if not exists project_translations_lookup_idx
@@ -263,49 +259,33 @@ create index if not exists principle_translations_lookup_idx
 create or replace view public.project_list
 with (security_invoker = true) as
 select
+  p.id,
   p.slug,
+  p.title,
+  p.tagline,
+  p.role,
+  case
+    when p.start_date is null then ''
+    when p.end_date is null
+      then trim(to_char(p.start_date, 'Mon YYYY')) || ' — Present'
+    else trim(to_char(p.start_date, 'Mon YYYY')) || ' — ' || trim(to_char(p.end_date, 'Mon YYYY'))
+  end as period,
+  p.context,
   p.image,
   p.demo_url,
   p.repository_url,
   p.featured,
   p.sort_order,
   p.created_at,
+  p.updated_at,
   t.locale,
-  p.title,
-  coalesce(nullif(p.tagline, ''), t.tagline, '') as tagline,
   t.description,
   t.problem,
-  coalesce(nullif(p.role, ''), t.role, '') as role,
-  case
-    when p.period is not null and p.period <> '' then p.period
-    when p.start_date is not null then
-      case
-        when p.end_date is null then trim(to_char(p.start_date, 'Month YYYY')) || ' — Present'
-        else trim(to_char(p.start_date, 'Month YYYY')) || ' — ' || trim(to_char(p.end_date, 'Month YYYY'))
-      end
-    else t.period
-  end as period,
-  coalesce(nullif(p.context, ''), t.context, '') as context,
   coalesce((
     select jsonb_agg(x.name order by x.sort_order)
     from public.project_technologies x
     where x.project_id = p.id
-  ), '[]'::jsonb) as technologies,
-  coalesce((
-    select jsonb_agg(x.body order by x.sort_order)
-    from public.project_highlights x
-    where x.project_id = p.id and x.locale = t.locale
-  ), '[]'::jsonb) as highlights,
-  coalesce((
-    select jsonb_agg(jsonb_build_object('label', x.label, 'value', x.value) order by x.sort_order)
-    from public.project_metrics x
-    where x.project_id = p.id and x.locale = t.locale
-  ), '[]'::jsonb) as metrics,
-  coalesce((
-    select jsonb_agg(jsonb_build_object('title', x.title, 'detail', x.detail) order by x.sort_order)
-    from public.project_decisions x
-    where x.project_id = p.id and x.locale = t.locale
-  ), '[]'::jsonb) as decisions
+  ), '[]'::jsonb) as technologies
 from public.projects p
 join public.project_translations t on t.project_id = p.id;
 

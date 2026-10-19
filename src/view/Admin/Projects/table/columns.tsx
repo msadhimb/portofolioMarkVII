@@ -8,12 +8,8 @@ import {
 } from "@/view/Admin/components/DataTable"
 
 export type AdminProjectTranslation = {
-  tagline?: string
   description?: string
   problem?: string
-  role?: string
-  period?: string
-  context?: string
   highlights?: string[]
   metrics?: { label: string; value: string }[]
   decisions?: { title: string; detail: string }[]
@@ -28,10 +24,9 @@ export type AdminProject = {
   title?: string
   tagline?: string
   role?: string
-  period?: string
-  context?: string
   start_date?: string | null
   end_date?: string | null
+  context?: string
   technologies?: string[]
   translations?: Record<string, AdminProjectTranslation>
 }

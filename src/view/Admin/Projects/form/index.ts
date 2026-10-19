@@ -69,81 +69,47 @@ export const fromLines = (value: string): string[] =>
     .map((line) => line.trim())
     .filter(Boolean)
 
-export const parsePeriodToDates = (
-  period?: string | null
-): { startDate: string; endDate: string } => {
-  if (!period || !period.trim()) return { startDate: "", endDate: "" }
-
-  const clean = period.trim()
-  const parts = clean.split(/\s*(?:—|--|-|s\/d|to)\s*/i)
-
-  const parsePart = (str?: string): string => {
-    if (!str || !str.trim()) return ""
-    const s = str.trim().toLowerCase()
-    if (s === "sekarang" || s === "present" || s === "current") return ""
-
-    const formats = [
-      "YYYY-MM-DD",
-      "YYYY-MM",
-      "MMM YYYY",
-      "MMMM YYYY",
-      "YYYY",
-      "MMM YY",
-      "MMMM",
-    ]
-    for (const f of formats) {
-      const m = moment(str.trim(), f, true)
-      if (m.isValid()) {
-        return m.date(1).format("YYYY-MM-DD")
-      }
-    }
-    const loose = moment(str.trim())
-    if (loose.isValid()) {
-      return loose.date(1).format("YYYY-MM-DD")
-    }
-    return ""
-  }
-
-  const startDate = parsePart(parts[0])
-  const endDate = parts.length > 1 ? parsePart(parts[1]) : ""
-
-  return { startDate, endDate }
+export const timestampToMonthInput = (value?: string | null): string => {
+  if (!value) return ""
+  const parsed = moment.utc(value)
+  return parsed.isValid() ? parsed.startOf("month").format("YYYY-MM-DD") : ""
 }
 
-export const formatPeriodFromDates = (
-  startDate?: string,
-  endDate?: string
+export const monthInputToTimestamp = (value?: string | null): string | null => {
+  if (!value) return null
+  const parsed = moment.utc(value, "YYYY-MM-DD", true)
+  return parsed.isValid() ? parsed.startOf("month").toISOString() : null
+}
+
+export const formatMonthYear = (
+  value?: string | null,
+  locale = "id"
 ): string => {
-  if (!startDate && !endDate) return ""
-  const startMoment = startDate ? moment(startDate) : null
-  const endMoment = endDate ? moment(endDate) : null
+  if (!value) return ""
+  const parsed = moment.utc(value).locale(locale)
+  return parsed.isValid() ? parsed.format("MMM YYYY") : ""
+}
 
-  const startStr =
-    startMoment && startMoment.isValid() ? startMoment.format("MMM YYYY") : ""
-  const endStr =
-    endMoment && endMoment.isValid()
-      ? endMoment.format("MMM YYYY")
-      : startDate
+export const formatPeriodRange = (
+  startDate?: string | null,
+  endDate?: string | null,
+  locale = "id"
+): string => {
+  const start = formatMonthYear(startDate, locale)
+  const end = endDate
+    ? formatMonthYear(endDate, locale)
+    : start
+      ? locale === "id"
         ? "Sekarang"
-        : ""
-
-  if (startStr && endStr) return `${startStr} — ${endStr}`
-  if (startStr) return `${startStr} — Sekarang`
-  return endStr
+        : "Present"
+      : ""
+  if (start && end) return `${start} — ${end}`
+  return start || end
 }
 
 export const projectToFormValues = (project: AdminProject): ProjectFormData => {
   const id = project.translations?.id ?? {}
   const en = project.translations?.en ?? {}
-
-  const rawPeriod = project.period || id.period || en.period || ""
-  const { startDate, endDate } =
-    project.start_date || project.end_date
-      ? {
-          startDate: project.start_date ?? "",
-          endDate: project.end_date ?? "",
-        }
-      : parsePeriodToDates(rawPeriod)
 
   return {
     slug: project.slug,
@@ -152,11 +118,11 @@ export const projectToFormValues = (project: AdminProject): ProjectFormData => {
     repositoryUrl: project.repository_url ?? "",
     featured: project.featured ? "ya" : "tidak",
     technologies: toLines(project.technologies ?? []),
-    tagline: project.tagline || id.tagline || en.tagline || "",
-    role: project.role || id.role || en.role || "",
-    startDate,
-    endDate,
-    context: project.context || id.context || en.context || "",
+    tagline: project.tagline ?? "",
+    role: project.role ?? "",
+    startDate: timestampToMonthInput(project.start_date),
+    endDate: timestampToMonthInput(project.end_date),
+    context: project.context ?? "",
     title: project.title ?? "",
     idDescription: id.description ?? "",
     idProblem: id.problem ?? "",
@@ -184,8 +150,6 @@ export const projectToFormValues = (project: AdminProject): ProjectFormData => {
 }
 
 export const projectFormToPayload = (values: ProjectFormData, slug: string) => {
-  const period = formatPeriodFromDates(values.startDate, values.endDate)
-
   const cleanMetrics = (items: MetricItem[] = []) =>
     items
       .map((item) => ({
@@ -219,9 +183,8 @@ export const projectFormToPayload = (values: ProjectFormData, slug: string) => {
     title: values.title.trim(),
     tagline: values.tagline.trim(),
     role: values.role.trim(),
-    period,
-    start_date: values.startDate || null,
-    end_date: values.endDate || null,
+    start_date: monthInputToTimestamp(values.startDate),
+    end_date: monthInputToTimestamp(values.endDate),
     context: values.context.trim(),
     technologies: fromLines(values.technologies),
     translations: {
