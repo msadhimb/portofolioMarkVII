@@ -11,6 +11,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
 import { useProjects } from "./store"
 import Image from "next/image"
+import { templateProjects, templateRestProject } from "./helper/template"
 
 export const Projects = () => {
   i18next.addResourceBundle("id", "Projects", id)
@@ -47,16 +48,17 @@ export const Projects = () => {
 
   const data: any[] =
     projectsData?.pages.flatMap((page: any) => page.data) ?? []
-
   const featured: any[] =
     projectsData?.pages
       ?.flatMap((page: any) => page.featured ?? [])
       .filter(
         (f: any, index: number, arr: any[]) =>
           arr.findIndex((x) => x.slug === f.slug) === index
-      ) ?? []
+      ) ?? templateProjects
+  const rest =
+    data.filter((p: any) => p.featured === false) ?? templateRestProject
 
-  const rest = data.filter((p: any) => p.featured === false)
+  const isEmpty = !isPending && featured.length === 0 && rest.length === 0
 
   return (
     <section
@@ -87,12 +89,12 @@ export const Projects = () => {
           </div>
         </Reveal>
 
-        <Shimmer loading={isPending}>
+        <Shimmer loading={isPending && !isEmpty}>
           {featured.map((f: any) => (
             <Reveal key={f.slug} delay={0.05}>
               <article className="card-futuristic mt-12 overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(245,158,11,0.35)] transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(245,158,11,0.3)]">
                 <div className="grid lg:grid-cols-2">
-                  <div className="bg-muted/60">
+                  <div className="min-h-64 bg-muted/60">
                     {f?.image && (
                       <Image
                         src={f.image}
@@ -122,8 +124,8 @@ export const Projects = () => {
                       {f?.description}
                     </p>
                     <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-border py-5 sm:grid-cols-4">
-                      {(f?.metrics ?? []).map((m: any) => (
-                        <div key={m.label}>
+                      {(f?.metrics ?? []).map((m: any, mi: number) => (
+                        <div key={`${m.label}-${mi}`}>
                           <dt className="font-mono text-[11px] text-muted-foreground uppercase">
                             {m.label}
                           </dt>
@@ -185,6 +187,12 @@ export const Projects = () => {
               </Reveal>
             ))}
           </div>
+
+          {isEmpty && (
+            <p className="mt-12 text-center font-mono text-xs text-muted-foreground">
+              {t("empty")}
+            </p>
+          )}
 
           {hasNextPage && (
             <div className="mt-10 flex flex-col items-center gap-3">

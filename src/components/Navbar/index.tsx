@@ -26,6 +26,7 @@ export const Navbar = () => {
   i18next.addResourceBundle("en", "Navbar", en)
   const { t } = useTranslation("Navbar")
 
+  const [mounted, setMounted] = useState(false)
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -38,6 +39,39 @@ export const Navbar = () => {
     { href: "#ai", label: t("ai"), highlight: true },
     { href: "#contact", label: t("contact") },
   ]
+
+  // Scroll manual supaya tetap jalan walau hash di URL sudah sama
+  const scrollToSection = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    if (!href.startsWith("#")) return
+    e.preventDefault()
+
+    const wasOpen = open
+    setOpen(false)
+
+    const doScroll = () => {
+      const el = href === "#top" ? null : document.querySelector(href)
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" })
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      }
+      // Update hash tanpa reload / lompat
+      window.history.replaceState(null, "", href)
+    }
+
+    // Kalau menu mobile terbuka, body sedang overflow:hidden.
+    // Tunggu sebentar supaya ter-reset dulu sebelum scroll.
+    if (wasOpen) setTimeout(doScroll, 50)
+    else doScroll()
+  }
+
+  // Tandai navbar sudah mounted di client
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -74,7 +108,15 @@ export const Navbar = () => {
   const showBackground = scrolled || open
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-4 pt-3 sm:px-6">
+    <header
+      className={cn(
+        "pointer-events-none fixed inset-x-0 top-0 z-50 px-4 pt-3 sm:px-6",
+        "transition-[opacity,transform,visibility] duration-500 ease-out motion-reduce:transition-none",
+        mounted
+          ? "visible translate-y-0 opacity-100"
+          : "invisible -translate-y-2 opacity-0"
+      )}
+    >
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-primary-foreground"
@@ -96,6 +138,7 @@ export const Navbar = () => {
 
           <Link
             href="#top"
+            onClick={(e) => scrollToSection(e, "#top")}
             className="relative flex items-center gap-2.5 font-mono text-sm"
             aria-label={t("backToTop")}
           >
@@ -115,6 +158,7 @@ export const Navbar = () => {
               <Link
                 key={l.href}
                 href={l.href}
+                onClick={(e) => scrollToSection(e, l.href)}
                 className={cn(
                   "rounded-full px-3.5 py-2 text-sm transition-colors",
                   "highlight" in l && l.highlight
@@ -139,7 +183,12 @@ export const Navbar = () => {
               <TooltipContent side="bottom">{t("themeHint")}</TooltipContent>
             </Tooltip>
             <Button asChild className="hidden rounded-full md:inline-flex">
-              <Link href="#contact">Hire Me</Link>
+              <Link
+                href="#contact"
+                onClick={(e) => scrollToSection(e, "#contact")}
+              >
+                Hire Me
+              </Link>
             </Button>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -191,8 +240,6 @@ export const Navbar = () => {
           aria-label="Menu"
           aria-hidden={!open}
         >
-          {/* Opacity & transform ditaruh di elemen yang sama dengan backdrop-filter,
-              bukan di induknya, supaya blur tidak hilang saat animasi */}
           <div
             style={{
               WebkitBackdropFilter: "blur(24px) saturate(160%)",
@@ -212,7 +259,7 @@ export const Navbar = () => {
                 <Link
                   key={l.href}
                   href={l.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => scrollToSection(e, l.href)}
                   tabIndex={open ? 0 : -1}
                   style={{ transitionDelay: open ? `${80 + i * 35}ms` : "0ms" }}
                   className={cn(
@@ -245,7 +292,7 @@ export const Navbar = () => {
               >
                 <Link
                   href="#contact"
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => scrollToSection(e, "#contact")}
                   tabIndex={open ? 0 : -1}
                 >
                   Hire Me

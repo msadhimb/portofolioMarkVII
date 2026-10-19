@@ -7,11 +7,6 @@ import id from "../Navbar/i18n/id"
 import en from "../Navbar/i18n/en"
 import FormSwitch from "../Forms/FormSwitch"
 
-/**
- * Language switcher ala PLN: ganti bahasa client-side via
- * i18n.changeLanguage — halaman dipertahankan, tanpa navigasi.
- * Switch off = ID, switch on = EN.
- */
 export const LocaleToggle = () => {
   i18next.addResourceBundle("id", "Navbar", id)
   i18next.addResourceBundle("en", "Navbar", en)
