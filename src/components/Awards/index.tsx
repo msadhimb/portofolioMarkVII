@@ -27,8 +27,6 @@ export const Awards = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all")
   const { getAwardsPage } = useAwards()
 
-  const [pageSize] = useState(3)
-
   const {
     data: awardsData,
     isPending,
@@ -38,7 +36,7 @@ export const Awards = () => {
   } = useInfiniteQuery({
     queryKey: ["awards", "feed", i18n.language, activeCategory],
     queryFn: ({ pageParam }) =>
-      getAwardsPage(i18n.language, pageParam, pageSize, activeCategory),
+      getAwardsPage(i18n.language, pageParam, 3, activeCategory),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       const pagination = lastPage.pagination
@@ -49,8 +47,7 @@ export const Awards = () => {
     staleTime: 60_000,
   })
 
-  const list =
-    awardsData?.pages.flatMap((page: any) => page.data ?? []) ?? []
+  const list = awardsData?.pages.flatMap((page: any) => page.data ?? []) ?? []
   const data = isPending ? awardsTemplate : list
   const isEmpty = !isPending && list.length === 0
 
@@ -101,7 +98,7 @@ export const Awards = () => {
     <section
       id="awards"
       aria-label="Certificates, Awards and Honors"
-      className="scroll-mt-24 border-t border-border bg-card/25 py-20 sm:py-28"
+      className="scroll-mt-24"
     >
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <Reveal>
@@ -170,7 +167,9 @@ export const Awards = () => {
                               config.badgeClass
                             )}
                           >
-                            <IconComponent className={cn("size-3.5", config.iconClass)} />
+                            <IconComponent
+                              className={cn("size-3.5", config.iconClass)}
+                            />
                             <span>{config.label}</span>
                           </Badge>
                           <span className="tabular font-mono text-xs text-muted-foreground">
@@ -196,7 +195,10 @@ export const Awards = () => {
                       <div className="mt-6 border-t border-border/60 pt-4">
                         {item.credentialId ? (
                           <p className="font-mono text-[11px] text-muted-foreground/80">
-                            ID: <span className="text-foreground">{item.credentialId}</span>
+                            ID:{" "}
+                            <span className="text-foreground">
+                              {item.credentialId}
+                            </span>
                           </p>
                         ) : null}
 

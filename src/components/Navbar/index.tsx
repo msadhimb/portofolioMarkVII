@@ -102,7 +102,7 @@ export const Navbar = () => {
               {siteConfig.monogram}
             </span>
             <span className="hidden tracking-tight text-foreground sm:inline">
-              salman<span className="text-signal">.</span>dev
+              salman<span className="text-signal">.</span>adhim
             </span>
           </Link>
 

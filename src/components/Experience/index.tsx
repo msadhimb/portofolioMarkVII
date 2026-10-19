@@ -7,12 +7,10 @@ import id from "./i18n/id"
 import en from "./i18n/en"
 import { Reveal } from "@/components/Reveal"
 import { SectionHeading } from "@/components/SectionHeading"
-import { Badge } from "@/components/ui/badge"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
 import { useExperiences } from "./store"
-import { experiencesTemplate } from "./template"
-import { useState } from "react"
+import { experiencesTemplate } from "./helper/template"
 
 export const Experience = () => {
   i18next.addResourceBundle("id", "Experience", id)
@@ -21,7 +19,7 @@ export const Experience = () => {
 
   const { getExperiencesPage } = useExperiences()
 
-  const [pageSize] = useState(3)
+  const pageSize = 3
 
   const {
     data: experiencesData,
@@ -51,11 +49,7 @@ export const Experience = () => {
   const data = isPending ? experiencesTemplate : list
 
   return (
-    <section
-      id="experience"
-      aria-label="Experience"
-      className="scroll-mt-24 border-t border-border bg-card/40 py-20 sm:py-28"
-    >
+    <section id="experience" aria-label="Experience" className="scroll-mt-24">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <Reveal>
           <SectionHeading
@@ -76,55 +70,56 @@ export const Experience = () => {
 
         <Shimmer loading={isPending}>
           <ol className="mt-12 space-y-0">
-            {data.map((e: any, i: number) => (
-              <li
-                key={e.slug}
-                className="border-t border-border last:border-b"
-              >
-                <Reveal
-                  delay={0.04 * i}
-                  className="grid min-w-0 gap-3 py-8 sm:grid-cols-[180px_1fr] sm:gap-8"
+            {data.map((e: any, i: number) => {
+              return (
+                <li
+                  key={e.slug}
+                  className="border-b border-border last:border-none"
                 >
-                  <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 sm:block">
-                    <p className="tabular font-mono text-xs text-muted-foreground">
-                      {e.period}
-                    </p>
-                    <Badge
-                      variant="outline"
-                      className="h-auto min-w-0 max-w-full justify-start gap-1.5 rounded-full px-2.5 py-1 text-xs font-normal text-muted-foreground sm:mt-2 sm:w-full"
-                    >
-                      <Building2 className="size-3.5 shrink-0" />
-                      <span className="min-w-0 truncate">{e.context}</span>
-                    </Badge>
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-xl font-semibold tracking-tight text-foreground">
-                      {e.role}{" "}
-                      <span className="font-normal text-muted-foreground">
-                        · {e.org}
-                      </span>
-                    </h3>
-                    <ul className="mt-4 space-y-2.5">
-                      {e.points.map((pt: string) => (
-                        <li
-                          key={pt}
-                          className="flex min-w-0 gap-3 text-[15px] leading-relaxed break-words text-muted-foreground"
-                        >
-                          <span
-                            aria-hidden="true"
-                            className="mt-[9px] size-1.5 shrink-0 rounded-full bg-signal"
-                          />
-                          <span className="min-w-0">{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="mt-4 font-mono text-xs break-words text-muted-foreground">
-                      {e.stack.join(" · ")}
-                    </p>
-                  </div>
-                </Reveal>
-              </li>
-            ))}
+                  <Reveal
+                    delay={0.04 * i}
+                    className="grid min-w-0 gap-3 py-8 sm:grid-cols-[180px_1fr] sm:gap-8"
+                  >
+                    <div className="flex flex-col gap-3">
+                      <p className="tabular font-mono text-xs text-muted-foreground">
+                        {e.period}
+                      </p>
+                      <div className="inline-flex items-start gap-1.5 rounded-lg sm:w-full">
+                        <Building2 className="mt-px size-3 shrink-0 text-signal/70" />
+                        <span className="text-justify text-xs leading-snug text-muted-foreground">
+                          {e.context}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-xl font-semibold tracking-tight text-foreground">
+                        {e.role}{" "}
+                        <span className="font-normal text-muted-foreground">
+                          · {e.org}
+                        </span>
+                      </h3>
+                      <ul className="mt-4 space-y-2.5">
+                        {e.points.map((pt: string) => (
+                          <li
+                            key={pt}
+                            className="flex min-w-0 gap-3 text-sm leading-relaxed break-words text-muted-foreground md:text-base"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="mt-[9px] size-1.5 shrink-0 rounded-full bg-signal"
+                            />
+                            <span className="min-w-0 text-justify">{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <p className="mt-4 font-mono text-xs break-words text-muted-foreground">
+                        {e.stack.join(" · ")}
+                      </p>
+                    </div>
+                  </Reveal>
+                </li>
+              )
+            })}
           </ol>
 
           {hasNextPage && (

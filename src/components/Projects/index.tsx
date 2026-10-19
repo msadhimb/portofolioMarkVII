@@ -10,7 +10,6 @@ import { ProjectLinks, TechList } from "@/components/ProjectCard"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
 import { useProjects } from "./store"
-import { useState } from "react"
 import Image from "next/image"
 
 export const Projects = () => {
@@ -19,6 +18,7 @@ export const Projects = () => {
   const { t, i18n } = useTranslation("Projects")
 
   const { getProjectsPage } = useProjects()
+  const pageSize = 2
 
   const {
     data: projectsData,
@@ -28,39 +28,41 @@ export const Projects = () => {
     fetchNextPage,
   } = useInfiniteQuery({
     queryKey: ["projects", "feed", i18n.language],
-    queryFn: ({ pageParam }) => getProjectsPage(i18n.language, pageParam, 2),
+    queryFn: ({ pageParam }) =>
+      getProjectsPage(i18n.language, pageParam, pageSize),
     initialPageParam: 1,
-    getNextPageParam: (lastPage) => {
-      const pagination = lastPage.pagination
-      return pagination.page < pagination.total_pages
-        ? pagination.page + 1
+    getNextPageParam: (lastPage: any) => {
+      const { page, per_page, total } = lastPage.pagination
+
+      if (!lastPage.data || lastPage.data.length === 0) return undefined
+
+      const nonFeaturedTotal = total - (lastPage.featured?.length ?? 0)
+
+      return page * (per_page ?? pageSize) < nonFeaturedTotal
+        ? page + 1
         : undefined
     },
     staleTime: 60_000,
   })
 
-  const data = projectsData?.pages.flatMap((page: any) => page.data) ?? []
-  const featured =
+  const data: any[] =
+    projectsData?.pages.flatMap((page: any) => page.data) ?? []
+
+  const featured: any[] =
     projectsData?.pages
-      ?.flatMap((page: any) => page.featured)
+      ?.flatMap((page: any) => page.featured ?? [])
       .filter(
         (f: any, index: number, arr: any[]) =>
           arr.findIndex((x) => x.slug === f.slug) === index
       ) ?? []
-  const rest = data.filter((p: any) => p.featured === false) ?? []
-  const hasLoadedData = hasNextPage || isFetchingNextPage
 
-  const handleNextPage = async () => {
-    fetchNextPage()
-  }
-
-  if (!featured || !rest) return null
+  const rest = data.filter((p: any) => p.featured === false)
 
   return (
     <section
       id="projects"
       aria-label="Selected projects"
-      className="scroll-mt-24 border-t border-border py-20 sm:py-28"
+      className="scroll-mt-24"
     >
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <Reveal>
@@ -79,22 +81,22 @@ export const Projects = () => {
             >
               {t("description")}
             </SectionHeading>
-            <p className="max-w-xs font-mono text-xs leading-relaxed text-muted-foreground">
+            <p className="w-full text-center font-mono text-xs leading-relaxed text-muted-foreground">
               {t("note")}
             </p>
           </div>
         </Reveal>
 
         <Shimmer loading={isPending}>
-          {featured?.map((f: any) => (
+          {featured.map((f: any) => (
             <Reveal key={f.slug} delay={0.05}>
               <article className="card-futuristic mt-12 overflow-hidden rounded-3xl border border-border/70 bg-card bg-gradient-to-b from-foreground/[0.04] to-transparent shadow-[0_24px_55px_-30px_rgba(245,158,11,0.35)] transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_60px_-15px_rgba(245,158,11,0.3)]">
                 <div className="grid lg:grid-cols-2">
                   <div className="bg-muted/60">
                     {f?.image && (
                       <Image
-                        src={f?.image}
-                        alt={f?.title}
+                        src={f.image}
+                        alt={f.title}
                         width={1000}
                         height={1000}
                         className="h-full w-full object-cover"
@@ -110,13 +112,13 @@ export const Projects = () => {
                         {f?.context}
                       </span>
                     </p>
-                    <h3 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+                    <h3 className="mt-4 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
                       {f?.title}
                     </h3>
                     <p className="mt-1 font-display text-lg text-muted-foreground italic">
                       {f?.tagline}
                     </p>
-                    <p className="mt-4 line-clamp-3 text-[15px] leading-relaxed text-muted-foreground">
+                    <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-muted-foreground md:text-base">
                       {f?.description}
                     </p>
                     <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-border py-5 sm:grid-cols-4">
@@ -150,8 +152,8 @@ export const Projects = () => {
                   <div className="h-64 border-b border-border bg-muted/60">
                     {p?.image && (
                       <Image
-                        src={p?.image}
-                        alt={p?.title}
+                        src={p.image}
+                        alt={p.title}
                         width={1000}
                         height={1000}
                         className="h-full w-full object-cover"
@@ -168,7 +170,7 @@ export const Projects = () => {
                     <p className="mt-1 font-display text-muted-foreground italic">
                       {p.tagline}
                     </p>
-                    <p className="mt-3 line-clamp-3 text-[15px] leading-relaxed text-muted-foreground">
+                    <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground md:text-base">
                       {p.description}
                     </p>
 
@@ -184,18 +186,16 @@ export const Projects = () => {
             ))}
           </div>
 
-          {hasLoadedData && (
+          {hasNextPage && (
             <div className="mt-10 flex flex-col items-center gap-3">
-              {hasNextPage && (
-                <button
-                  type="button"
-                  onClick={() => handleNextPage()}
-                  disabled={isFetchingNextPage}
-                  className="rounded-full border border-border/70 bg-card px-6 py-2.5 font-mono text-xs tracking-[0.16em] text-foreground uppercase transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_30px_-10px_rgba(245,158,11,0.3)] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {isFetchingNextPage ? t("loading") : t("loadMore")}
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className="rounded-full border border-border/70 bg-card px-6 py-2.5 font-mono text-xs tracking-[0.16em] text-foreground uppercase transition-all duration-300 hover:border-signal/60 hover:shadow-[0_0_30px_-10px_rgba(245,158,11,0.3)] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isFetchingNextPage ? t("loading") : t("loadMore")}
+              </button>
             </div>
           )}
         </Shimmer>

@@ -8,33 +8,39 @@ import { projects as projectsId } from "./projects.id"
 import { projects as projectsEn } from "./projects.en"
 import { skillGroups as skillGroupsId } from "./skillGroups.id"
 import { skillGroups as skillGroupsEn } from "./skillGroups.en"
-import { principles as principlesId } from "./principles.id"
-import { principles as principlesEn } from "./principles.en"
 import { awards as awardsId } from "./awards.id"
 import { awards as awardsEn } from "./awards.en"
 import type { AwardItem } from "./profile"
 import { format, isValid } from "date-fns"
 import { id as idLocale } from "date-fns/locale"
 
-export type Principle = {
-  title: string
-  note: string
-}
-
 const pick = <T>(locale: string, id: T, en: T): T => (locale === "en" ? en : id)
 
 const bySlug = <T extends { slug: string }>(items: T[]): Record<string, T> =>
-  Object.fromEntries(items.map((item) => [item.slug, item])) as Record<string, T>
+  Object.fromEntries(items.map((item) => [item.slug, item])) as Record<
+    string,
+    T
+  >
 
 const monthYear = (value: string, locale: string) => {
   const date = new Date(value)
   if (!isValid(date)) return null
-  return format(date, "MMMM yyyy", { locale: locale === "en" ? undefined : idLocale })
+  return format(date, "MMMM yyyy", {
+    locale: locale === "en" ? undefined : idLocale,
+  })
 }
 
-const periodLabel = (startDate: string, endDate: string | null, locale: string) => {
+const periodLabel = (
+  startDate: string,
+  endDate: string | null,
+  locale: string
+) => {
   const start = monthYear(startDate, locale)
-  const end = endDate ? monthYear(endDate, locale) : locale === "en" ? "Present" : "Sekarang"
+  const end = endDate
+    ? monthYear(endDate, locale)
+    : locale === "en"
+      ? "Present"
+      : "Sekarang"
   return start ? `${start} — ${end}` : ""
 }
 
@@ -70,9 +76,6 @@ export const getProjects = (locale: string): Project[] =>
 
 export const getSkillGroups = (locale: string): SkillGroup[] =>
   pick(locale, skillGroupsId, skillGroupsEn)
-
-export const getPrinciples = (locale: string): Principle[] =>
-  pick(locale, principlesId as Principle[], principlesEn as Principle[])
 
 export const getAwards = (locale: string): AwardItem[] =>
   pick(locale, awardsId, awardsEn)

@@ -18,15 +18,37 @@ import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/data/profile"
 import { useSiteSettings } from "@/hooks/useSiteSettings"
 import Grid from "../Background/Grid"
-
-const ease = [0.22, 1, 0.36, 1] as const
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export const Hero = () => {
   i18next.addResourceBundle("id", "Hero", id)
   i18next.addResourceBundle("en", "Hero", en)
   const { t, i18n } = useTranslation("Hero")
+
   const reduce = useReducedMotion()
   const { resolvedTheme } = useTheme()
+  const { settings } = useSiteSettings()
+  const isMobile = useIsMobile()
+
+  const firstName = siteConfig.siteName.split(" ")[0]
+  const restName = siteConfig.siteName.split(" ").slice(1).join(" ")
+  const nameColor = resolvedTheme === "dark" ? "#F59E0B" : "#6D28D9"
+  const shineColor = resolvedTheme === "dark" ? "#FCD34D" : "#9972d9"
+  const techCount = new Set(
+    getProjects(i18n.language).flatMap((p) => p.technologies)
+  ).size
+  const availabilityLabel =
+    i18n.language === "en"
+      ? settings.available_label_en
+      : settings.available_label_id
+  const availabilityOpen = settings.is_available
+  const statsLabels = t("stats", { returnObjects: true }) as string[]
+  const stats = [
+    { to: 4, label: statsLabels[0] },
+    { to: 3, label: statsLabels[1] },
+    { to: techCount, label: statsLabels[2] },
+  ]
+  const Animated = reduce ? "div" : motion.div
 
   const item = (delay: number) => ({
     initial: reduce ? {} : { opacity: 0, y: isMobile ? 12 : 22 },
@@ -34,88 +56,17 @@ export const Hero = () => {
     transition: {
       duration: isMobile ? 0.42 : 0.65,
       delay: isMobile ? Math.min(delay, 0.2) : delay,
-      ease,
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   })
 
-  const { settings } = useSiteSettings()
-  const availabilityLabel =
-    i18n.language === "en"
-      ? settings.available_label_en
-      : settings.available_label_id
-  const availabilityOpen = settings.is_available
-
-  // Di mobile: matikan rAF mouse Magnet, tapi tetap aktifkan animasi entrance yang ringan
-  const [isMobile, setIsMobile] = useState(false)
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)")
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMobile(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener("change", handler)
-    return () => mq.removeEventListener("change", handler)
-  }, [])
-
-  const firstName = siteConfig.siteName.split(" ")[0]
-  const restName = siteConfig.siteName.split(" ").slice(1).join(" ")
-  const nameColor = resolvedTheme === "dark" ? "#F59E0B" : "#6D28D9"
-  // Shine harus tetap terlihat: putih hanya untuk dark, violet muda untuk light
-  // (putih di atas background terang membuat teks tampak transparan).
-  const shineColor = resolvedTheme === "dark" ? "#FCD34D" : "#9972d9"
-  const techCount = new Set(
-    getProjects(i18n.language).flatMap((p) => p.technologies)
-  ).size
-
-  const statsLabels = t("stats", { returnObjects: true }) as string[]
-  const stats = [
-    { to: 4, label: statsLabels[0] },
-    { to: 3, label: statsLabels[1] },
-    { to: techCount, label: statsLabels[2] },
-  ]
-
-  // Wrapper animasi: tetap gunakan motion.div (hardware accelerated), fallback div hanya jika reduced motion
-  const Animated = reduce ? "div" : motion.div
-
   return (
-    <section
-      id="top"
-      aria-label="Intro"
-      className="relative overflow-hidden pt-32 pb-16 sm:pt-40 sm:pb-24"
-    >
-      {/* Grid + aurora backdrop — lebih hidup tapi tetap fungsional */}
+    <section id="top" aria-label="Intro" className="relative overflow-hidden">
       <Grid />
 
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="grid gap-12 lg:grid-cols-[1.35fr_0.85fr] lg:items-end">
+        <div className="grid gap-12 lg:grid-cols-[1.35fr_0.85fr] lg:items-center">
           <div>
-            <Animated {...(!reduce ? item(0) : {})}>
-              <p className="inline-flex flex-wrap items-center gap-2 rounded-full border border-border bg-card py-1.5 pr-4 pl-1.5 text-xs text-muted-foreground">
-                <span
-                  className={
-                    availabilityOpen
-                      ? "inline-flex items-center gap-1.5 rounded-full bg-emerald-500/12 px-2.5 py-1 font-medium text-emerald-700 dark:text-emerald-300"
-                      : "inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 font-medium text-muted-foreground"
-                  }
-                >
-                  <span className="relative flex size-1.5">
-                    {availabilityOpen ? (
-                      <>
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-                        <span className="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
-                      </>
-                    ) : (
-                      <span className="relative inline-flex size-1.5 rounded-full bg-muted-foreground" />
-                    )}
-                  </span>
-                  {availabilityLabel}
-                </span>
-                <span className="inline-flex items-center gap-1 font-mono">
-                  <MapPin className="size-3" />
-                  {siteConfig.location}
-                </span>
-              </p>
-            </Animated>
-
             <Animated
               {...(!reduce ? item(0.08) : {})}
               className="mt-8 font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase"
@@ -290,7 +241,7 @@ export const Hero = () => {
                 <span className="text-foreground">ship</span>
                 <span className="text-muted-foreground">(</span>
                 <span className="text-emerald-700 dark:text-emerald-300">
-                  &quot;duitku&quot;
+                  &quot;SIMPP&quot;
                 </span>
                 <span className="text-muted-foreground">)</span>
                 <span className="text-muted-foreground">;</span>

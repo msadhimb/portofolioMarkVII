@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "id_ID",
-    siteName: "salman.dev",
+    siteName: "salman.adhim",
     title: "Muhamad Salman Adhim Baqy — Web Developer / Frontend Engineer",
     description:
       "Saya membangun aplikasi web yang terstruktur, cepat, dan memiliki pengalaman pengguna yang matang.",

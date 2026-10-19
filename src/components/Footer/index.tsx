@@ -37,7 +37,7 @@ export const Footer = () => {
                 {siteConfig.monogram}
               </span>
               <span className="text-foreground">
-                salman<span className="text-signal">.</span>dev
+                salman<span className="text-signal">.</span>adhim
               </span>
             </p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">

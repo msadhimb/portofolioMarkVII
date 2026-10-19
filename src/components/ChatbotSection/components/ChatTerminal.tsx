@@ -1,31 +1,31 @@
-import { Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import type { ChatInputErrorKey, ChatMsg } from "../store/type";
-import { ChatInput } from "./ChatInput";
-import { MessageList } from "./MessageList";
+import { Sparkles } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import type { ChatInputErrorKey, ChatMsg } from "../store/type"
+import { ChatInput } from "./ChatInput"
+import { MessageList } from "./MessageList"
 
 type ChatTerminalProps = {
-  model: string;
-  messages: ChatMsg[];
-  loading: boolean;
-  error: string | null;
-  input: string;
-  inputErrorKey: ChatInputErrorKey | null;
-  thinkingLabel: string;
-  emptyStateLabel: string;
-  copyLabel: string;
-  placeholder: string;
-  sendLabel: string;
-  stopLabel: string;
-  clearLabel: string;
-  hintLabel: string;
-  validationEmptyLabel: string;
-  validationTooLongLabel: string;
-  onInputChange: (value: string) => void;
-  onSubmitText: (raw: string) => void;
-  onStop: () => void;
-  onClear: () => void;
-};
+  model: string
+  messages: ChatMsg[]
+  loading: boolean
+  error: string | null
+  input: string
+  inputErrorKey: ChatInputErrorKey | null
+  thinkingLabel: string
+  emptyStateLabel: string
+  copyLabel: string
+  placeholder: string
+  sendLabel: string
+  stopLabel: string
+  clearLabel: string
+  hintLabel: string
+  validationEmptyLabel: string
+  validationTooLongLabel: string
+  onInputChange: (value: string) => void
+  onSubmitText: (raw: string) => void
+  onStop: () => void
+  onClear: () => void
+}
 
 export const ChatTerminal = ({
   model,
@@ -56,7 +56,9 @@ export const ChatTerminal = ({
         <span className="size-3 rounded-full bg-[#ff5f57]" />
         <span className="size-3 rounded-full bg-[#febc2e]" />
         <span className="size-3 rounded-full bg-[#28c840]" />
-         <span className="ml-3 font-mono text-xs text-[#a8a294]">salman-ai — ollama console</span>
+        <span className="ml-3 font-mono text-xs text-[#a8a294]">
+          adhim-ai — ollama console
+        </span>
         <Badge
           variant="secondary"
           className="ml-auto border-white/10 bg-white/[0.06] font-mono text-[10px] text-[#f59e0b]"
@@ -95,7 +97,10 @@ export const ChatTerminal = ({
       />
 
       {/* Scanlines CRT */}
-      <div aria-hidden="true" className="crt-scanlines pointer-events-none absolute inset-0" />
+      <div
+        aria-hidden="true"
+        className="crt-scanlines pointer-events-none absolute inset-0"
+      />
     </div>
-  );
-};
+  )
+}

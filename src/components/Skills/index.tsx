@@ -6,14 +6,15 @@ import i18next from "i18next"
 import { useTranslation } from "react-i18next"
 import { useQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
-import { getPrinciples } from "@/data/localized"
 import id from "./i18n/id"
 import en from "./i18n/en"
 import { Reveal } from "@/components/Reveal"
 import { SectionHeading } from "@/components/SectionHeading"
 import { SpotlightCard } from "@/components/SpotlightCard"
 import { useSkills } from "./store"
-import { skillsTemplate } from "./template"
+import { getPrinciples } from "./helper/template/principle"
+import { skillsTemplate } from "./helper/template/dataTemplate"
+import { Separator } from "../ui/separator"
 
 const spotlightStyle = {
   padding: "1.5rem",
@@ -28,22 +29,26 @@ export const Skills = () => {
   i18next.addResourceBundle("id", "Skills", id)
   i18next.addResourceBundle("en", "Skills", en)
   const { t, i18n } = useTranslation("Skills")
+
   const { resolvedTheme } = useTheme()
   const { getSkills } = useSkills()
+
   const { data: skillGroupsData, isLoading } = useQuery({
     queryKey: ["skills", i18n.language],
     queryFn: () => getSkills(i18n.language),
   })
+
   const skillGroups = skillGroupsData ?? skillsTemplate
   const principles = getPrinciples(i18n.language)
   const rangeItems = t("rangeItems", { returnObjects: true }) as string[]
+
   return (
     <section
       id="skills"
       aria-label="Skills and approach"
-      className="scroll-mt-24 border-t border-border py-20 sm:py-28"
+      className="scroll-mt-24"
     >
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+      <div className="mx-auto max-w-6xl space-y-14 px-5 sm:px-8">
         <Reveal>
           <SectionHeading
             index="04"
@@ -62,7 +67,7 @@ export const Skills = () => {
         </Reveal>
 
         <Shimmer loading={isLoading}>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {skillGroups.map((g, i) => (
               <Reveal key={g.title} delay={0.04 * i} className="h-full">
                 <SpotlightCard
@@ -124,7 +129,9 @@ export const Skills = () => {
           </div>
         </Shimmer>
 
-        <div className="mt-12 grid gap-6 border-t border-border pt-10 lg:grid-cols-4">
+        <Separator />
+
+        <div className="grid gap-6 lg:grid-cols-4">
           {principles.map((p, i) => (
             <Reveal key={p.title} delay={0.04 * i}>
               <div>

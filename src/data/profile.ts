@@ -1,7 +1,7 @@
 export const siteConfig = {
   siteName: "Muhamad Salman Adhim Baqy",
   shortName: "Salman",
-  monogram: "ms",
+  monogram: "sa",
   location: "Salatiga, Jawa Tengah",
   email: "adhimbaqy72@gmail.com",
   github: "https://github.com/msadhimb?tab=repositories",

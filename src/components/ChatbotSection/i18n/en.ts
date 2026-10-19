@@ -4,7 +4,7 @@ const locale = {
   titleAccent: "my digital twin.",
   description:
     "An AI terminal powered by Ollama (model from env) that knows this portfolio inside out. Ask about the stack, projects, or how I work — answered streaming, token by token.",
-  placeholder: "Ask anything… e.g. “Tell me about Duitku”",
+  placeholder: "Ask anything… e.g. “Tell me about SIMPP",
   greeting:
     "Hey! I'm EVE 👋 — the digital twin that memorized this portfolio. Ask about skills, the Duitku / PLN Pusmanpro projects, or freelance availability. Just type, I answer fast.",
   prompts: [
@@ -19,7 +19,7 @@ const locale = {
   thinking: "EVE is typing",
   online: "online · Ollama",
   modelLabel: "model",
-  terminalTitle: "salman-ai — ollama console",
+  terminalTitle: "adhim-ai — ollama console",
   apiPath: "/api/v1/chat → ollama",
   disclaimer:
     "Powered by Ollama · model & key from env · may be wrong, verify via email.",

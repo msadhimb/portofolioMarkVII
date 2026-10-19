@@ -14,6 +14,7 @@ import { validateChatInput } from "./validation"
 import { ChatTerminal } from "./components/ChatTerminal"
 import { ModelCard } from "./components/ModelCard"
 import { PromptChips } from "./components/PromptChips"
+import Grid from "../Background/Grid"
 
 export const ChatbotSection = () => {
   i18next.addResourceBundle("id", "Chatbot", id)
@@ -62,7 +63,6 @@ export const ChatbotSection = () => {
 
   const handleClear = () => clear(t("greeting"))
 
-  // Seed/reset greeting; hanya menyentuh chat yang masih perawan.
   useEffect(() => {
     syncGreeting(greeting)
   }, [greeting, syncGreeting])
@@ -71,22 +71,9 @@ export const ChatbotSection = () => {
     <section
       id="ai"
       aria-label="EVE chatbot"
-      className="relative scroll-mt-24 overflow-hidden border-t border-border py-20 sm:py-28"
+      className="relative scroll-mt-24 overflow-hidden border-y border-border py-20 sm:py-28"
     >
-      {/* Aurora Desktop: hanya render di layar ≥ sm */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden sm:block">
-        <div className="animate-aurora absolute -top-24 left-1/4 size-[28rem] rounded-full bg-signal/20 blur-[110px]" />
-        <div className="animate-aurora-slow absolute right-1/5 -bottom-32 size-[24rem] rounded-full bg-teal-400/20 blur-[110px]" />
-        <div className="bg-grid bg-grid-fade absolute inset-0 opacity-60" />
-      </div>
-
-      {/* Aurora Mobile: Menggunakan native CSS radial-gradient (GPU composited) */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 sm:hidden">
-        <div className="animate-pulse-slow absolute -top-16 left-[10%] size-80 rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.15)_0%,transparent_70%)]" />
-        <div className="animate-pulse-slow absolute -bottom-16 right-[5%] size-72 rounded-full bg-[radial-gradient(circle,rgba(45,212,191,0.12)_0%,transparent_70%)]" style={{ animationDelay: "3s" }} />
-        <div className="bg-grid bg-grid-fade absolute inset-0 opacity-60" />
-      </div>
-
+      <Grid />
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           {/* Kolom kiri: heading + prompt keyboard + kartu model */}

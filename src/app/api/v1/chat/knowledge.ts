@@ -8,10 +8,10 @@ import type { ExperienceRow } from "@/helper/server/formatExperiences/type"
 import {
   getAwards,
   getExperiences,
-  getPrinciples,
   getProjects,
   getSkillGroups,
 } from "@/data/localized"
+import { getPrinciples } from "@/components/Skills/helper/template/principle"
 
 export const CHAT_TOOLS: OpenAI.ChatCompletionTool[] = [
   {
