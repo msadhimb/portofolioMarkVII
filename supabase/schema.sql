@@ -521,3 +521,39 @@ create policy "Authenticated delete project images"
   on storage.objects for delete to authenticated
   using (bucket_id = 'projects');
 
+-- ============================================================================
+-- STORAGE: BUCKET 'cv' UNTUK UNDUHAN CV (lihat juga migration_cv_storage.sql)
+-- ============================================================================
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'cv',
+  'cv',
+  true,
+  10485760, -- 10 MB
+  array['application/pdf']
+)
+on conflict (id) do update set
+  public = true,
+  file_size_limit = 10485760,
+  allowed_mime_types = array['application/pdf'];
+
+drop policy if exists "Public read CV" on storage.objects;
+create policy "Public read CV"
+  on storage.objects for select to public
+  using (bucket_id = 'cv');
+
+drop policy if exists "Authenticated upload CV" on storage.objects;
+create policy "Authenticated upload CV"
+  on storage.objects for insert to authenticated
+  with check (bucket_id = 'cv');
+
+drop policy if exists "Authenticated update CV" on storage.objects;
+create policy "Authenticated update CV"
+  on storage.objects for update to authenticated
+  using (bucket_id = 'cv');
+
+drop policy if exists "Authenticated delete CV" on storage.objects;
+create policy "Authenticated delete CV"
+  on storage.objects for delete to authenticated
+  using (bucket_id = 'cv');
+

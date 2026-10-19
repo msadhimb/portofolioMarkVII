@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils"
 import id from "./i18n/id"
 import en from "./i18n/en"
 import NavGlass from "./components/NavGlass"
+import FormSwitch from "../Forms/FormSwitch"
 
 export const Navbar = () => {
   i18next.addResourceBundle("id", "Navbar", id)
@@ -138,7 +139,7 @@ export const Navbar = () => {
               <TooltipContent side="bottom">{t("themeHint")}</TooltipContent>
             </Tooltip>
             <Button asChild className="hidden rounded-full md:inline-flex">
-              <Link href="#contact">{t("hireMe")}</Link>
+              <Link href="#contact">Hire Me</Link>
             </Button>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -247,7 +248,7 @@ export const Navbar = () => {
                   onClick={() => setOpen(false)}
                   tabIndex={open ? 0 : -1}
                 >
-                  {t("hireMe")}
+                  Hire Me
                 </Link>
               </Button>
             </nav>
