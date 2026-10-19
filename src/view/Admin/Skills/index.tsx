@@ -4,7 +4,6 @@ import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useSkills } from "@/components/Skills/store"
 import { useActionModal } from "@/components/ActionModal/store"
 import { useConfirmModal } from "@/components/ConfirmModal/store"
 import { DataTable } from "@/view/Admin/components/DataTable"
@@ -17,9 +16,10 @@ import {
   ADMIN_SKILLS_KEY,
   useDeleteSkillGroup,
 } from "./hooks/useSkillsMutation"
+import { useAdminSkills } from "./store"
 
 export const SkillsAdminView = () => {
-  const { getAdminSkillGroups } = useSkills()
+  const { getAdminSkillGroups } = useAdminSkills()
   const { openModalActions } = useActionModal()
   const { openConfirmModal, closeConfirmModal } = useConfirmModal()
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -90,7 +90,9 @@ export const SkillsAdminView = () => {
     <div className="flex flex-1 flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Skills</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">
+            Skills
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Kelola grup skill dalam dua bahasa.
           </p>
