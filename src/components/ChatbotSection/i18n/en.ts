@@ -3,7 +3,7 @@ const locale = {
   titleA: "Chat first with",
   titleAccent: "my digital twin.",
   description:
-    "An AI terminal powered by Ollama (model from env) that knows this portfolio inside out. Ask about the stack, projects, or how I work — answered streaming, token by token.",
+    "An AI terminal powered by Ollama that knows this portfolio inside out. Ask about the stack, projects, or how I work — answered streaming, token by token.",
   placeholder: "Ask anything… e.g. “Tell me about SIMPP",
   greeting:
     "Hey! I'm EVE 👋 — the digital twin that memorized this portfolio. Ask about skills, the Duitku / PLN Pusmanpro projects, or freelance availability. Just type, I answer fast.",
@@ -21,8 +21,7 @@ const locale = {
   modelLabel: "model",
   terminalTitle: "adhim-ai — ollama console",
   apiPath: "/api/v1/chat → ollama",
-  disclaimer:
-    "Powered by Ollama · model & key from env · may be wrong, verify via email.",
+  disclaimer: "Powered by Ollama · may be wrong, verify via email.",
   validationEmpty: "Message must not be empty.",
   validationTooLong: "Message is too long (max 2000 characters).",
   fallbackError: "Something went wrong.",

@@ -3,7 +3,7 @@ const locale = {
   titleA: "Ngobrol dulu dengan",
   titleAccent: "kembaran digital saya.",
   description:
-    "Terminal AI yang ditenagai Ollama (model dari env) dan tahu isi portofolio ini. Tanya soal stack, proyek, atau cara kerja saya — dijawab streaming, token demi token.",
+    "Terminal AI yang ditenagai Ollama dan tahu isi portofolio ini. Tanya soal stack, proyek, atau cara kerja saya — dijawab streaming, token demi token.",
   placeholder: "Tanya sesuatu… mis. “Ceritakan proyek SIMPP",
   greeting:
     "Halo! Saya EVE 👋 — kembaran digital yang hafal portofolio ini. Mau tanya soal skill, proyek Duitku / PLN Pusmanpro, atau ketersediaan freelance? Ketik aja, saya jawab cepat.",
@@ -21,8 +21,7 @@ const locale = {
   modelLabel: "model",
   terminalTitle: "adhim-ai — ollama console",
   apiPath: "/api/v1/chat → ollama",
-  disclaimer:
-    "Ditenagai Ollama · model & key dari env · bisa salah, verifikasi via email.",
+  disclaimer: "Ditenagai Ollama · bisa salah, verifikasi via email.",
   validationEmpty: "Pesan tidak boleh kosong.",
   validationTooLong: "Pesan terlalu panjang (maks 2000 karakter).",
   fallbackError: "Terjadi kesalahan.",
