@@ -164,7 +164,7 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
                         <p className="text-md text-justify font-medium text-foreground">
                           {h.title}
                         </p>
-                        <p className="text-justify text-sm">detail</p>
+                        <p className="text-justify text-sm">{h.detail}</p>
                       </div>
                     </li>
                   ))}
