@@ -18,80 +18,13 @@ import { siteConfig } from "@/data/profile"
 import { cn } from "@/lib/utils"
 import id from "./i18n/id"
 import en from "./i18n/en"
-import { GlassSurface } from "@/components/GlassSurface"
-
-// Dipanggil sekali di level modul, bukan di setiap render
-i18next.addResourceBundle("id", "Navbar", id)
-i18next.addResourceBundle("en", "Navbar", en)
-
-type NavGlassProps = {
-  borderRadius: number
-  className?: string
-}
-
-const NavGlass = ({ borderRadius, className }: NavGlassProps) => {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  return (
-    <>
-      {/* Desktop: Tetap menggunakan GlassSurface (WebGL / SVG shader) tanpa border, outline, dan shadow */}
-      <div className={cn("hidden h-full w-full overflow-hidden rounded-2xl md:block", className)}>
-        {mounted ? (
-          <GlassSurface
-            borderRadius={borderRadius}
-            width="100%"
-            height="100%"
-            blur={36}
-            backgroundOpacity={0.65}
-            saturation={1.8}
-            shadow={false}
-            border={false}
-            className="h-full w-full border-none shadow-none outline-none"
-            style={{
-              border: "none",
-              outline: "none",
-              boxShadow: "none",
-              WebkitBackdropFilter: "blur(36px) saturate(180%)",
-              backdropFilter: "blur(36px) saturate(180%)",
-              backgroundColor: "color-mix(in srgb, var(--background) 70%, transparent)",
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              borderRadius,
-              WebkitBackdropFilter: "blur(36px) saturate(180%)",
-              backdropFilter: "blur(36px) saturate(180%)",
-              backgroundColor: "color-mix(in srgb, var(--background) 70%, transparent)",
-            }}
-            className="h-full w-full"
-          />
-        )}
-      </div>
-
-      {/* Mobile: CSS backdrop-filter ringan agar bebas lag dengan kontras teks yang jelas */}
-      <div
-        style={{
-          borderRadius,
-          WebkitBackdropFilter: "blur(24px) saturate(160%)",
-          backdropFilter: "blur(24px) saturate(160%)",
-          backgroundColor: "color-mix(in srgb, var(--background) 75%, transparent)",
-        }}
-        className={cn(
-          "h-full w-full border border-foreground/10 shadow-lg md:hidden",
-          className
-        )}
-      />
-    </>
-  )
-}
+import NavGlass from "./components/NavGlass"
 
 export const Navbar = () => {
+  i18next.addResourceBundle("id", "Navbar", id)
+  i18next.addResourceBundle("en", "Navbar", en)
   const { t } = useTranslation("Navbar")
+
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -241,12 +174,17 @@ export const Navbar = () => {
           className={cn(
             "fixed inset-0 z-40 bg-background/60 md:hidden",
             "transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none",
-            open ? "visible opacity-100 pointer-events-auto" : "invisible opacity-0 pointer-events-none"
+            open
+              ? "pointer-events-auto visible opacity-100"
+              : "pointer-events-none invisible opacity-0"
           )}
         />
 
         <div
-          className={cn("relative z-50 mt-2 md:hidden", !open && "pointer-events-none")}
+          className={cn(
+            "relative z-50 mt-2 md:hidden",
+            !open && "pointer-events-none"
+          )}
           id="mobile-menu"
           role="dialog"
           aria-label="Menu"
@@ -265,7 +203,7 @@ export const Navbar = () => {
               "motion-reduce:transition-none",
               open
                 ? "visible translate-y-0 scale-100 opacity-100"
-                : "invisible -translate-y-2 scale-95 opacity-0 pointer-events-none"
+                : "pointer-events-none invisible -translate-y-2 scale-95 opacity-0"
             )}
           >
             <nav aria-label="Mobile" className="flex w-full flex-col gap-1 p-2">
