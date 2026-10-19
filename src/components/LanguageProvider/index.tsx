@@ -15,7 +15,7 @@ type LanguageProviderProps = {
  * Provider i18n ala PLN (nextjs-simpp-eiqc ClientProvider):
  * satu I18nextProvider global. Bahasa dari localStorage, default "id",
  * disinkron ke document.documentElement.lang.
- * Ganti bahasa dari mana saja via i18n.changeLanguage (lihat LocaleToggle).
+ * Ganti bahasa dari mana saja via i18n.changeLanguage (lihat FormSwitch).
  */
 export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   useEffect(() => {

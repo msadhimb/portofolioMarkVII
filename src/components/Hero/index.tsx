@@ -61,7 +61,11 @@ export const Hero = () => {
   })
 
   return (
-    <section id="top" aria-label="Intro" className="relative overflow-hidden">
+    <section
+      id="top"
+      aria-label="Intro"
+      className="relative overflow-hidden pb-14"
+    >
       <Grid />
 
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">

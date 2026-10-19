@@ -1,13 +1,12 @@
 "use client"
 
-import { ArrowLeft, ArrowUpRight, Lock } from "lucide-react"
+import { ArrowUpRight, Lock } from "lucide-react"
 import Link from "next/link"
 import i18next from "i18next"
 import { useTranslation } from "react-i18next"
 import id from "./i18n/id"
 import en from "./i18n/en"
 import { TechList } from "@/components/ProjectCard"
-
 import { useProjectsDetail } from "./store"
 import { useQuery } from "@tanstack/react-query"
 import { Shimmer } from "shimmer-from-structure"
@@ -39,14 +38,6 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
   return (
     <main id="main">
       <article className="mx-auto max-w-4xl px-5 sm:px-8">
-        <Link
-          href="/#projects"
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="size-4" />
-          {t("back")}
-        </Link>
-
         <Shimmer loading={isLoading}>
           <p className="mt-8 font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
             {t("prefix")} · {project.context}
@@ -169,16 +160,6 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
                     </li>
                   ))}
                 </ul>
-                {/* <div className="mt-4 grid gap-4">
-                {project.decisions.map((d: any) => (
-                  <Card key={d.title} className="rounded-2xl p-5">
-                    <h3 className="text-[15px] font-semibold">{d.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      {d.detail}
-                    </p>
-                  </Card>
-                ))}
-              </div> */}
               </section>
             ) : null}
 

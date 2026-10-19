@@ -102,7 +102,7 @@ export const Awards = () => {
     >
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <Reveal>
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <SectionHeading
               index="04"
               eyebrow={t("eyebrow")}

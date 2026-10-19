@@ -28,7 +28,10 @@ export const Footer = () => {
   ]
 
   return (
-    <footer className="border-t border-border" aria-label="Footer">
+    <footer
+      className="border-t border-border pb-14 lg:pb-0"
+      aria-label="Footer"
+    >
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>

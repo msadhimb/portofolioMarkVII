@@ -78,7 +78,7 @@ export const Experience = () => {
                 >
                   <Reveal
                     delay={0.04 * i}
-                    className="grid min-w-0 gap-3 py-8 sm:grid-cols-[180px_1fr] sm:gap-8"
+                    className="grid min-w-0 gap-3 py-8 sm:gap-8 lg:grid-cols-[180px_1fr]"
                   >
                     <div className="flex flex-col gap-3">
                       <p className="tabular font-mono text-xs text-muted-foreground">

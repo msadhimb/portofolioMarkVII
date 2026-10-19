@@ -1,12 +1,20 @@
 "use client"
 
-import { Menu, X } from "lucide-react"
+import {
+  Briefcase,
+  FolderKanban,
+  Home,
+  Mail,
+  Sparkles,
+  Trophy,
+  User,
+  Wrench,
+} from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import i18next from "i18next"
 import { useTranslation } from "react-i18next"
-
-import { LocaleToggle } from "@/components/LocaleToggle"
+import { usePathname } from "next/navigation"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,28 +27,30 @@ import { cn } from "@/lib/utils"
 import id from "./i18n/id"
 import en from "./i18n/en"
 import NavGlass from "./components/NavGlass"
-import FormSwitch from "../Forms/FormSwitch"
+import { LocaleToggle } from "../LocaleToggle"
 
 export const Navbar = () => {
   i18next.addResourceBundle("id", "Navbar", id)
   i18next.addResourceBundle("en", "Navbar", en)
   const { t } = useTranslation("Navbar")
 
+  const pathname = usePathname()
+  const isProjectsPage = pathname.includes("/projects")
+
   const [mounted, setMounted] = useState(false)
-  const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [active, setActive] = useState<string>("")
 
   const links = [
-    { href: "#about", label: t("about") },
-    { href: "#projects", label: t("projects") },
-    { href: "#experience", label: t("experience") },
-    { href: "#awards", label: t("awards") },
-    { href: "#skills", label: t("skills") },
-    { href: "#ai", label: t("ai"), highlight: true },
-    { href: "#contact", label: t("contact") },
+    { href: "#about", label: t("about"), icon: User },
+    { href: "#projects", label: t("projects"), icon: FolderKanban },
+    { href: "#experience", label: t("experience"), icon: Briefcase },
+    { href: "#awards", label: t("awards"), icon: Trophy },
+    { href: "#skills", label: t("skills"), icon: Wrench },
+    { href: "#ai", label: t("ai"), icon: Sparkles, highlight: true },
+    { href: "#contact", label: t("contact"), icon: Mail },
   ]
 
-  // Scroll manual supaya tetap jalan walau hash di URL sudah sama
   const scrollToSection = (
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string
@@ -48,27 +58,15 @@ export const Navbar = () => {
     if (!href.startsWith("#")) return
     e.preventDefault()
 
-    const wasOpen = open
-    setOpen(false)
-
-    const doScroll = () => {
-      const el = href === "#top" ? null : document.querySelector(href)
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" })
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" })
-      }
-      // Update hash tanpa reload / lompat
-      window.history.replaceState(null, "", href)
+    const el = href === "#top" ? null : document.querySelector(href)
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" })
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" })
     }
-
-    // Kalau menu mobile terbuka, body sedang overflow:hidden.
-    // Tunggu sebentar supaya ter-reset dulu sebelum scroll.
-    if (wasOpen) setTimeout(doScroll, 50)
-    else doScroll()
+    window.history.replaceState(null, "", href)
   }
 
-  // Tandai navbar sudah mounted di client
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -80,228 +78,214 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
+  // Tandai section yang sedang terlihat (untuk state aktif di dock)
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : ""
-    return () => {
-      document.body.style.overflow = ""
-    }
-  }, [open])
+    if (isProjectsPage) return
+    const elements = links
+      .map((l) => document.querySelector(l.href))
+      .filter((el): el is Element => !!el)
+    if (!elements.length) return
 
-  // Tutup menu dengan Escape, dan saat layar melebar ke breakpoint desktop
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false)
-    }
-    const mq = window.matchMedia("(min-width: 768px)")
-    const onChange = (e: MediaQueryListEvent) => {
-      if (e.matches) setOpen(false)
-    }
-    window.addEventListener("keydown", onKey)
-    mq.addEventListener("change", onChange)
-    return () => {
-      window.removeEventListener("keydown", onKey)
-      mq.removeEventListener("change", onChange)
-    }
-  }, [open])
-
-  const showBackground = scrolled || open
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(`#${entry.target.id}`)
+        })
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    )
+    elements.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isProjectsPage])
 
   return (
-    <header
-      className={cn(
-        "pointer-events-none fixed inset-x-0 top-0 z-50 px-4 pt-3 sm:px-6",
-        "transition-[opacity,transform,visibility] duration-500 ease-out motion-reduce:transition-none",
-        mounted
-          ? "visible translate-y-0 opacity-100"
-          : "invisible -translate-y-2 opacity-0"
-      )}
-    >
+    <>
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-primary-foreground"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-primary-foreground"
       >
         {t("skipToContent")}
       </a>
 
-      <div className="mx-auto max-w-6xl">
-        <div className="pointer-events-auto relative z-[45] flex items-center justify-between gap-4 rounded-2xl px-4 py-3">
-          <div
-            className={cn(
-              "pointer-events-none absolute inset-0 transition-opacity duration-300",
-              showBackground ? "opacity-100" : "opacity-0 md:opacity-100"
-            )}
-            aria-hidden="true"
-          >
-            <NavGlass borderRadius={16} />
-          </div>
+      {/* ================= DESKTOP NAVBAR (lg+) ================= */}
+      <header
+        className={cn(
+          "pointer-events-none fixed inset-x-0 top-0 z-50 hidden px-6 pt-3 lg:block",
+          "transition-[opacity,transform,visibility] duration-500 ease-out motion-reduce:transition-none",
+          mounted
+            ? "visible translate-y-0 opacity-100"
+            : "invisible -translate-y-2 opacity-0"
+        )}
+      >
+        <div className="mx-auto max-w-6xl">
+          <div className="pointer-events-auto relative flex items-center justify-between gap-4 rounded-2xl px-4 py-3">
+            <div
+              className="pointer-events-none absolute inset-0"
+              aria-hidden="true"
+            >
+              <NavGlass borderRadius={16} />
+            </div>
 
-          <Link
-            href="#top"
-            onClick={(e) => scrollToSection(e, "#top")}
-            className="relative flex items-center gap-2.5 font-mono text-sm"
-            aria-label={t("backToTop")}
-          >
-            <span className="flex size-8 items-center justify-center rounded-md bg-foreground font-semibold text-background">
-              {siteConfig.monogram}
-            </span>
-            <span className="hidden tracking-tight text-foreground sm:inline">
-              salman<span className="text-signal">.</span>adhim
-            </span>
-          </Link>
+            <Link
+              href="#top"
+              onClick={(e) => scrollToSection(e, "#top")}
+              className="relative flex items-center gap-2.5 font-mono text-sm"
+              aria-label={t("backToTop")}
+            >
+              <span className="flex size-8 items-center justify-center rounded-md bg-foreground font-semibold text-background">
+                {siteConfig.monogram}
+              </span>
+              <span className="tracking-tight text-foreground">
+                salman<span className="text-signal">.</span>adhim
+              </span>
+            </Link>
 
-          <nav
-            aria-label="Primary"
-            className="relative hidden items-center gap-1 md:flex"
-          >
-            {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={(e) => scrollToSection(e, l.href)}
-                className={cn(
-                  "rounded-full px-3.5 py-2 text-sm transition-colors",
-                  "highlight" in l && l.highlight
-                    ? "bg-foreground font-medium text-background hover:opacity-90"
-                    : "text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground"
-                )}
-              >
-                {"highlight" in l && l.highlight ? `✦ ${l.label}` : l.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="relative flex items-center gap-1.5">
-            <LocaleToggle />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <ThemeToggle
-                  toLightLabel={t("toggleToLight")}
-                  toDarkLabel={t("toggleToDark")}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="bottom">{t("themeHint")}</TooltipContent>
-            </Tooltip>
-            <Button asChild className="hidden rounded-full md:inline-flex">
-              <Link
-                href="#contact"
-                onClick={(e) => scrollToSection(e, "#contact")}
-              >
-                Hire Me
-              </Link>
-            </Button>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full md:hidden"
-                  aria-expanded={open}
-                  aria-controls="mobile-menu"
-                  aria-label={open ? t("closeMenu") : t("openMenu")}
-                  onClick={() => setOpen((v) => !v)}
-                >
-                  {open ? (
-                    <X className="size-5" />
-                  ) : (
-                    <Menu className="size-5" />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                {open ? t("closeMenu") : t("openMenu")}
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </div>
-
-        {/* Overlay: fade in/out, mengaburkan halaman di belakang menu */}
-        <button
-          type="button"
-          tabIndex={-1}
-          aria-label={t("closeMenu")}
-          onClick={() => setOpen(false)}
-          className={cn(
-            "fixed inset-0 z-40 bg-background/60 md:hidden",
-            "transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none",
-            open
-              ? "pointer-events-auto visible opacity-100"
-              : "pointer-events-none invisible opacity-0"
-          )}
-        />
-
-        <div
-          className={cn(
-            "relative z-50 mt-2 md:hidden",
-            !open && "pointer-events-none"
-          )}
-          id="mobile-menu"
-          role="dialog"
-          aria-label="Menu"
-          aria-hidden={!open}
-        >
-          <div
-            style={{
-              WebkitBackdropFilter: "blur(24px) saturate(160%)",
-              backdropFilter: "blur(24px) saturate(160%)",
-            }}
-            className={cn(
-              "origin-top rounded-[20px] border border-foreground/10 bg-background/40 shadow-lg",
-              "transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              "motion-reduce:transition-none",
-              open
-                ? "visible translate-y-0 scale-100 opacity-100"
-                : "pointer-events-none invisible -translate-y-2 scale-95 opacity-0"
-            )}
-          >
-            <nav aria-label="Mobile" className="flex w-full flex-col gap-1 p-2">
-              {links.map((l, i) => (
+            <nav
+              aria-label="Primary"
+              className="relative flex items-center gap-1"
+            >
+              {isProjectsPage ? (
                 <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={(e) => scrollToSection(e, l.href)}
-                  tabIndex={open ? 0 : -1}
-                  style={{ transitionDelay: open ? `${80 + i * 35}ms` : "0ms" }}
-                  className={cn(
-                    "flex items-center rounded-full px-4 py-3 text-base",
-                    "transition-[opacity,transform,background-color,color] duration-300 ease-out",
-                    "motion-reduce:transition-none",
-                    open
-                      ? "translate-y-0 opacity-100"
-                      : "-translate-y-1 opacity-0",
-                    "highlight" in l && l.highlight
-                      ? "bg-foreground font-medium text-background hover:opacity-90"
-                      : "text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground"
-                  )}
+                  href={"/"}
+                  className="cursor-pointer rounded-full px-3.5 py-2 text-sm font-semibold transition-colors"
                 >
-                  {"highlight" in l && l.highlight ? `✦ ${l.label}` : l.label}
+                  Back To Home
                 </Link>
-              ))}
-              <Button
-                asChild
-                className={cn(
-                  "mt-1 h-11 rounded-full",
-                  "transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none",
-                  open
-                    ? "translate-y-0 opacity-100"
-                    : "-translate-y-1 opacity-0"
-                )}
-                style={{
-                  transitionDelay: open ? `${80 + links.length * 35}ms` : "0ms",
-                }}
-              >
+              ) : (
+                links.map((l) => (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    onClick={(e) => scrollToSection(e, l.href)}
+                    className={cn(
+                      "cursor-pointer rounded-full px-3.5 py-2 text-sm font-semibold transition-colors",
+                      "highlight" in l && l.highlight
+                        ? "bg-foreground font-medium text-background hover:opacity-90"
+                        : "text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground"
+                    )}
+                  >
+                    {"highlight" in l && l.highlight ? `✦ ${l.label}` : l.label}
+                  </Link>
+                ))
+              )}
+            </nav>
+
+            <div className="relative flex items-center gap-1.5">
+              <LocaleToggle />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <ThemeToggle
+                    toLightLabel={t("toggleToLight")}
+                    toDarkLabel={t("toggleToDark")}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="bottom">{t("themeHint")}</TooltipContent>
+              </Tooltip>
+              <Button asChild className="rounded-full">
                 <Link
                   href="#contact"
                   onClick={(e) => scrollToSection(e, "#contact")}
-                  tabIndex={open ? 0 : -1}
                 >
                   Hire Me
                 </Link>
               </Button>
-            </nav>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* ================= MOBILE: toggle melayang (kanan atas) ================= */}
+      <div
+        className={cn(
+          "pointer-events-none fixed top-0 right-0 z-50 px-4 pt-3 lg:hidden",
+          "pt-[max(0.75rem,env(safe-area-inset-top))]",
+          "transition-[opacity,transform,visibility] duration-500 ease-out motion-reduce:transition-none",
+          mounted
+            ? "visible translate-y-0 opacity-100"
+            : "invisible -translate-y-2 opacity-0"
+        )}
+      >
+        <div className="pointer-events-auto relative flex items-center gap-1 rounded-full py-1 pr-3 pl-5">
+          <div
+            className={cn(
+              "pointer-events-none absolute inset-0 transition-opacity duration-300",
+              scrolled ? "opacity-100" : "opacity-0"
+            )}
+            aria-hidden="true"
+          >
+            <NavGlass borderRadius={9999} />
+          </div>
+          <div className="relative flex items-center gap-1">
+            <LocaleToggle />
+            <ThemeToggle
+              toLightLabel={t("toggleToLight")}
+              toDarkLabel={t("toggleToDark")}
+            />
           </div>
         </div>
       </div>
-    </header>
+
+      {/* ================= MOBILE DOCK (di bawah lg) ================= */}
+      <nav
+        aria-label="Dock"
+        className={cn(
+          "pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center px-3 lg:hidden",
+          "pb-[max(0.75rem,env(safe-area-inset-bottom))]",
+          "transition-[opacity,transform,visibility] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+          mounted
+            ? "visible translate-y-0 opacity-100"
+            : "invisible translate-y-6 opacity-0"
+        )}
+      >
+        <div className="pointer-events-auto relative flex items-end gap-1 rounded-[28px] px-2 py-2">
+          <div
+            className="pointer-events-none absolute inset-0"
+            aria-hidden="true"
+          >
+            <NavGlass borderRadius={28} />
+          </div>
+
+          {isProjectsPage ? (
+            <Link
+              href="/"
+              aria-label="Back To Home"
+              className="relative flex h-11 items-center gap-2 rounded-2xl bg-foreground px-4 text-sm font-medium text-background transition-transform active:scale-95"
+            >
+              <Home className="size-5" />
+              Home
+            </Link>
+          ) : (
+            links.map((l) => {
+              const Icon = l.icon
+              const isActive = active === l.href
+              const isHighlight = "highlight" in l && l.highlight
+
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={(e) => scrollToSection(e, l.href)}
+                  aria-label={l.label}
+                  aria-current={isActive ? "true" : undefined}
+                  className={cn(
+                    "relative flex size-11 items-center justify-center rounded-2xl",
+                    "transition-[transform,background-color,color] duration-300 ease-out",
+                    "active:scale-90 motion-reduce:transition-none",
+                    isHighlight
+                      ? "bg-foreground text-background"
+                      : isActive
+                        ? "bg-foreground/10 text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <Icon className="size-5" />
+                </Link>
+              )
+            })
+          )}
+        </div>
+      </nav>
+    </>
   )
 }

@@ -12,7 +12,7 @@ const NavGlass = ({ borderRadius, className }: NavGlassProps) => {
     <>
       <div
         className={cn(
-          "relative hidden h-full w-full overflow-hidden md:block",
+          "relative hidden h-full w-full overflow-hidden lg:block",
           className
         )}
         style={{ borderRadius }}
@@ -46,7 +46,7 @@ const NavGlass = ({ borderRadius, className }: NavGlassProps) => {
             "color-mix(in srgb, var(--background) 75%, transparent)",
         }}
         className={cn(
-          "h-full w-full border border-foreground/10 shadow-lg md:hidden",
+          "h-full w-full border border-foreground/10 shadow-lg lg:hidden",
           className
         )}
       />

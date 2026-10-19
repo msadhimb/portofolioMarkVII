@@ -7,17 +7,23 @@ const Grid = () => {
         aria-hidden="true"
         className="bg-grid bg-grid-fade absolute inset-0"
       />
-      {/* Aurora Desktop: render dengan efek blur & drift di layar ≥ sm */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden sm:block">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden sm:block"
+      >
         <div className="animate-aurora absolute -top-20 left-[8%] size-[26rem] rounded-full bg-signal/15 blur-[110px]" />
-        <div className="animate-aurora-slow absolute top-24 right-[4%] size-[22rem] rounded-full bg-teal-400/20 blur-[110px]" />
+        <div className="animate-aurora-slow absolute top-24 right-[15%] hidden size-[22rem] rounded-full bg-teal-400/20 blur-[110px] lg:block" />
       </div>
 
-      {/* Aurora Mobile: Menggunakan native CSS radial-gradient TANPA filter:blur() yang berat.
-          Animasi pulse-slow halus pada opacity & scale (GPU composited) membuat background hidup tanpa beban GPU. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 sm:hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 sm:hidden"
+      >
         <div className="animate-pulse-slow absolute -top-16 left-[5%] size-80 rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.15)_0%,transparent_70%)]" />
-        <div className="animate-pulse-slow absolute top-32 right-[-10%] size-72 rounded-full bg-[radial-gradient(circle,rgba(45,212,191,0.12)_0%,transparent_70%)]" style={{ animationDelay: "3.5s" }} />
+        <div
+          className="animate-pulse-slow absolute top-32 right-[-10%] size-72 rounded-full bg-[radial-gradient(circle,rgba(45,212,191,0.12)_0%,transparent_70%)]"
+          style={{ animationDelay: "3.5s" }}
+        />
       </div>
       <div
         aria-hidden="true"

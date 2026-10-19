@@ -24,19 +24,15 @@ const FormSwitch = ({
       checked={checked}
       onChange={onChange}
       label={label}
-      trackColor="#27272a"
-      trackOnColor="#f5f5f5"
+      ariaLabel={ariaLabel}
       width={36}
       height={20}
       radius={14}
       speed={50}
-      stretch={26}
+      stretch={200}
       hoverScale={1.035}
       colorDuration={320}
       disabled={disabled}
-      thumbColor="#4e4e51"
-      thumbOnColor="#27272a"
-      ariaLabel={ariaLabel}
       id={id}
     />
   )

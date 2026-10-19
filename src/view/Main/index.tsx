@@ -9,7 +9,7 @@ import { Skills } from "@/components/Skills"
 
 export const MainView = () => {
   return (
-    <main id="main" className="space-y-24 py-32">
+    <main id="main" className="space-y-24 pt-15 pb-32 lg:pt-32">
       <Hero />
       <About />
       <Projects />
