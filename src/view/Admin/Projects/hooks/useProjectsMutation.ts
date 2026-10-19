@@ -1,17 +1,19 @@
 "use client"
 
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useProjects } from "@/components/Projects/store"
+import { useAdminProjects } from "../store"
 
 export const ADMIN_PROJECTS_KEY = ["admin", "projects"]
 
-const invalidateProjectQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
+const invalidateProjectQueries = (
+  queryClient: ReturnType<typeof useQueryClient>
+) => {
   queryClient.invalidateQueries({ queryKey: ADMIN_PROJECTS_KEY })
   queryClient.invalidateQueries({ queryKey: ["projects"] })
 }
 
 export const useCreateProject = () => {
-  const { createProject } = useProjects()
+  const { createProject } = useAdminProjects()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -21,7 +23,7 @@ export const useCreateProject = () => {
 }
 
 export const useUpdateProject = () => {
-  const { updateProject } = useProjects()
+  const { updateProject } = useAdminProjects()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -32,7 +34,7 @@ export const useUpdateProject = () => {
 }
 
 export const useDeleteProject = () => {
-  const { deleteProject } = useProjects()
+  const { deleteProject } = useAdminProjects()
   const queryClient = useQueryClient()
 
   return useMutation({

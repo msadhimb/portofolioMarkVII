@@ -1,17 +1,19 @@
 "use client"
 
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useExperiences } from "@/components/Experience/store"
+import { useAdminExperiences } from "../store"
 
 export const ADMIN_EXPERIENCES_KEY = ["admin", "experiences"]
 
-const invalidateExperienceQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
+const invalidateExperienceQueries = (
+  queryClient: ReturnType<typeof useQueryClient>
+) => {
   queryClient.invalidateQueries({ queryKey: ADMIN_EXPERIENCES_KEY })
   queryClient.invalidateQueries({ queryKey: ["experiences"] })
 }
 
 export const useCreateExperience = () => {
-  const { createExperience } = useExperiences()
+  const { createExperience } = useAdminExperiences()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -21,7 +23,7 @@ export const useCreateExperience = () => {
 }
 
 export const useUpdateExperience = () => {
-  const { updateExperience } = useExperiences()
+  const { updateExperience } = useAdminExperiences()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -32,7 +34,7 @@ export const useUpdateExperience = () => {
 }
 
 export const useDeleteExperience = () => {
-  const { deleteExperience } = useExperiences()
+  const { deleteExperience } = useAdminExperiences()
   const queryClient = useQueryClient()
 
   return useMutation({

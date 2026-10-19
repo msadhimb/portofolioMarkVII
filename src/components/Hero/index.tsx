@@ -162,10 +162,10 @@ export const Hero = () => {
                 size="lg"
                 className="h-11 rounded-full px-5"
               >
-                <Link href="/cv">
+                <a href="/api/v1/cv" download="Salman_Adhim_CV.pdf">
                   <Download className="size-4" />
                   {t("ctaCv")}
-                </Link>
+                </a>
               </Button>
             </Animated>
 

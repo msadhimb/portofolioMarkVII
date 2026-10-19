@@ -4,7 +4,6 @@ import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useProjects } from "@/components/Projects/store"
 import { useActionModal } from "@/components/ActionModal/store"
 import { useConfirmModal } from "@/components/ConfirmModal/store"
 import { DataTable } from "@/view/Admin/components/DataTable"
@@ -17,9 +16,10 @@ import {
   ADMIN_PROJECTS_KEY,
   useDeleteProject,
 } from "./hooks/useProjectsMutation"
+import { useAdminProjects } from "./store"
 
 export const ProjectsAdminView = () => {
-  const { getAdminProjects } = useProjects()
+  const { getAdminProjects } = useAdminProjects()
   const { openModalActions } = useActionModal()
   const { openConfirmModal, closeConfirmModal } = useConfirmModal()
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -90,7 +90,9 @@ export const ProjectsAdminView = () => {
     <div className="flex flex-1 flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Projects</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">
+            Projects
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Kelola daftar projects portofolio dalam dua bahasa.
           </p>

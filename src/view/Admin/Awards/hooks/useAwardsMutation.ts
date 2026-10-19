@@ -1,17 +1,19 @@
 "use client"
 
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useAwards } from "@/components/Awards/store"
+import { useAdminAwards } from "../store"
 
 export const ADMIN_AWARDS_KEY = ["admin", "awards"]
 
-const invalidateAwardQueries = (queryClient: ReturnType<typeof useQueryClient>) => {
+const invalidateAwardQueries = (
+  queryClient: ReturnType<typeof useQueryClient>
+) => {
   queryClient.invalidateQueries({ queryKey: ADMIN_AWARDS_KEY })
   queryClient.invalidateQueries({ queryKey: ["awards"] })
 }
 
 export const useCreateAward = () => {
-  const { createAward } = useAwards()
+  const { createAward } = useAdminAwards()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -21,7 +23,7 @@ export const useCreateAward = () => {
 }
 
 export const useUpdateAward = () => {
-  const { updateAward } = useAwards()
+  const { updateAward } = useAdminAwards()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -32,7 +34,7 @@ export const useUpdateAward = () => {
 }
 
 export const useDeleteAward = () => {
-  const { deleteAward } = useAwards()
+  const { deleteAward } = useAdminAwards()
   const queryClient = useQueryClient()
 
   return useMutation({

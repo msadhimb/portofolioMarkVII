@@ -4,7 +4,6 @@ import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useAwards } from "@/components/Awards/store"
 import { useActionModal } from "@/components/ActionModal/store"
 import { useConfirmModal } from "@/components/ConfirmModal/store"
 import { DataTable } from "@/view/Admin/components/DataTable"
@@ -14,9 +13,10 @@ import { getAwardColumns, type AdminAward } from "./table/columns"
 import { AwardDetailDialog } from "./components/AwardDetailDialog"
 import { AwardDialog } from "./components/AwardDialog"
 import { ADMIN_AWARDS_KEY, useDeleteAward } from "./hooks/useAwardsMutation"
+import { useAdminAwards } from "./store"
 
 export const AwardsAdminView = () => {
-  const { getAdminAwards } = useAwards()
+  const { getAdminAwards } = useAdminAwards()
   const { openModalActions } = useActionModal()
   const { openConfirmModal, closeConfirmModal } = useConfirmModal()
   const [dialogOpen, setDialogOpen] = useState(false)

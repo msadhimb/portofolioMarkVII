@@ -9,8 +9,4 @@ export type SkillGroupApi = {
 
 export type SkillStore = {
   getSkills: (lang: string) => Promise<SkillGroupApi[] | undefined>
-  getAdminSkillGroups: (params?: PageParams) => Promise<any>
-  createSkillGroup: (body: any) => Promise<any>
-  updateSkillGroup: (slug: string, body: any) => Promise<any>
-  deleteSkillGroup: (slug: string) => Promise<any>
 }

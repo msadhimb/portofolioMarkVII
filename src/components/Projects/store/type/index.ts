@@ -7,9 +7,8 @@ export interface ProjectStore {
     lang: string,
     page?: number,
     perPage?: number
-  ) => Promise<{ items: ProjectCard[]; pagination: Paginated<ProjectCard>["pagination"] }>
-  getAdminProjects: (params?: PageParams) => Promise<any>
-  createProject: (body: any) => Promise<any>
-  updateProject: (slug: string, body: any) => Promise<any>
-  deleteProject: (slug: string) => Promise<any>
+  ) => Promise<{
+    items: ProjectCard[]
+    pagination: Paginated<ProjectCard>["pagination"]
+  }>
 }

@@ -28,41 +28,6 @@ export const useProjects = create<ProjectStore>()((set, get) => ({
       },
     })
 
-    console.log(res)
     return res
-  },
-  getAdminProjects: async (params) => {
-    const res = await clientApi({
-      url: `/admin/projects?${toPageQuery({
-        page: params?.page ?? 1,
-        perPage: params?.perPage ?? 100,
-        search: params?.search ?? "",
-      })}`,
-      method: "GET",
-    })
-    return res
-  },
-  createProject: async (body: any) => {
-    const res = await clientApi({
-      url: `/admin/projects`,
-      method: "POST",
-      data: body,
-    })
-    return res.data
-  },
-  updateProject: async (slug: string, body: any) => {
-    const res = await clientApi({
-      url: `/admin/projects/${slug}`,
-      method: "PUT",
-      data: body,
-    })
-    return res.data
-  },
-  deleteProject: async (slug: string) => {
-    const res = await clientApi({
-      url: `/admin/projects/${slug}`,
-      method: "DELETE",
-    })
-    return res.data
   },
 }))

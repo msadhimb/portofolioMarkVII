@@ -8,8 +8,4 @@ export interface ExperienceStore {
     perPage?: number
   ) => Promise<{ data: any[]; pagination: PaginationMeta }>
   getExperienceBySlug: (slug: string, lang: string) => Promise<any>
-  getAdminExperiences: (params?: PageParams) => Promise<any>
-  createExperience: (body: any) => Promise<any>
-  updateExperience: (slug: string, body: any) => Promise<any>
-  deleteExperience: (slug: string) => Promise<any>
 }
