@@ -9,7 +9,7 @@ const locale = {
   paragraphs: [
     "Saya Web Developer / Frontend Engineer yang terbiasa bekerja dari ujung ke ujung: menggambar UI, mengatur state, merancang API dan skema database, mengurus authentication, sampai deployment ke Vercel.",
     "Sebagian waktu saya dihabiskan di lingkungan BUMN dan institusi pemerintahan — tempat di mana “berhasil di laptop saya” tidak cukup. Di sana saya belajar menulis workflow yang bisa diaudit, form yang tidak ambigu antar peran, dan dashboard yang tetap waras saat datanya besar.",
-    "Di sisi lain saya membangun Duitku sebagai latihan disiplin produk: memisahkan data milik user yang wajib dipersist dari data live eksternal yang tidak perlu disimpan. Prinsip kecil, dampak besar untuk maintainability.",
+    "Saya percaya bahwa desain yang baik mengutamakan keseimbangan antara estetika dan fungsionalitas. Saya memilih pendekatan yang elegan dan minimalis, dengan fokus pada kejelasan, konsistensi, dan pengalaman pengguna.",
   ],
   principle:
     "Cara saya bekerja sederhana: pahami masalahnya dulu, sepakati kontrak datanya, baru bangun UI-nya.",

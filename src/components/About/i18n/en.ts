@@ -9,7 +9,7 @@ const locale = {
   paragraphs: [
     "I'm a Web Developer / Frontend Engineer comfortable working end to end: sketching UI, managing state, designing APIs and database schemas, handling authentication, all the way to deploying on Vercel.",
     "Much of my time has been spent around state-owned enterprises and government institutions — places where “works on my machine” isn't enough. There I learned to write auditable workflows, role-proof forms, and dashboards that stay sane at scale.",
-    "On the other side I built Duitku as an exercise in product discipline: separating user-owned data that must be persisted from live external data that should never be stored. A small principle with outsized maintainability payoff.",
+    "I believe good design balances aesthetics and functionality. I favor an elegant, minimal approach that prioritizes clarity, consistency, and user experience.",
   ],
   principle:
     "How I work is simple: understand the problem first, agree on the data contract, then build the UI.",
