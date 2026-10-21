@@ -68,7 +68,9 @@ export const Footer = () => {
             © {new Date().getFullYear()} {siteConfig.siteName}. All rights
             reserved.
           </p>
-          <p className="tabular">Salatiga · v7.0</p>
+          <p className="tabular">
+            {t("privacy")} · Salatiga · v7.0
+          </p>
         </div>
       </div>
     </footer>

@@ -19,6 +19,7 @@ import {
   GalleryVerticalEndIcon,
   LayoutDashboardIcon,
   SparklesIcon,
+  UsersIcon,
 } from "lucide-react"
 
 // This is sample data.
@@ -40,6 +41,11 @@ const data = {
       title: "Overview",
       url: "/admin/dashboard",
       icon: <LayoutDashboardIcon />,
+    },
+    {
+      title: "Visitors",
+      url: "/admin/dashboard/visitors",
+      icon: <UsersIcon />,
     },
     {
       title: "Projects",

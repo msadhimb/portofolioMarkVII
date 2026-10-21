@@ -1,5 +1,6 @@
 import { Footer } from "@/components/Footer"
 import { Navbar } from "@/components/Navbar"
+import VisitorTracker from "@/components/VisitorTracker"
 import React from "react"
 
 const PublicLayout = ({ children }: { children: React.ReactNode }) => {
@@ -8,6 +9,7 @@ const PublicLayout = ({ children }: { children: React.ReactNode }) => {
       <Navbar />
       <main className="lg:pt-20 lg:pb-10">{children}</main>
       <Footer />
+      <VisitorTracker />
     </>
   )
 }
