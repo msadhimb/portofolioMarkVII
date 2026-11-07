@@ -225,7 +225,7 @@ Rules:
 - **Single hub**: `src/data/localized.ts` — `getProjects(locale)`, `getExperiences(locale)`,
   `getSkillGroups(locale)`, `getAwards(locale)`, `getProject(locale, slug)`, `projectSlugs`,
   `siteConfig`.
-- Consumers: `view/Cv`, `components/Hero`, `app/(public)/projects/[slug]` (static params),
+- Consumers: `components/Hero`, `app/(public)/projects/[slug]` (static params),
   `app/api/v1/chat/knowledge.ts`.
 - Static data is also a **fallback layer** when the API returns empty (Awards store,
   Projects placeholder `helper/template.ts`).

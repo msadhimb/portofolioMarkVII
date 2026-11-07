@@ -44,11 +44,11 @@ portofolioMarkVII/
     ├── app/
     │   ├── layout.tsx         # provider stack: Query → Theme → Tooltip → MobileMotion → Language
     │   ├── page.tsx           # home (Navbar + MainView + Footer + VisitorTracker)
-    │   ├── (public)/          # cv/, projects/[slug]
+    │   ├── (public)/          # projects/[slug]
     │   ├── admin/             # login, dashboard/{projects,skills,experiences,awards,visitors}
     │   └── api/v1/            # public reads + chat/cv/settings/visits + admin/*
     ├── components/            # public feature slices (~50 folders)
-    ├── view/                  # Main · Cv · Project · Admin/*
+    ├── view/                  # Main · Project · Admin/*
     ├── data/                  # static typed content (*.en.ts / *.id.ts) + localized.ts
     ├── services/client.ts     # Axios client
     ├── helper/server/         # rateLimit, pagination, parseUserAgent, visitMetadata, wibDate, formatters
@@ -63,14 +63,13 @@ portofolioMarkVII/
 | `src/components/<PascalCase>/` | public site sections | yes, `i18n/en.ts` + `i18n/id.ts` | `Hero`, `Projects`, `Contact`, `Navbar`, `ChatbotSection` |
 | `src/view/Admin/<PascalCase>/` | admin CMS screens | no (hardcoded Indonesian) | `Projects`, `Skills`, `Experiences`, `Awards`, `Visitors` |
 
-Other views: `src/view/Main` (home composition), `src/view/Cv`, `src/view/Project`
+Other views: `src/view/Main` (home composition), `src/view/Project`
 (case study, namespace `CaseStudy`), `src/view/Admin/Login`.
 
 ## 3. Routing map
 
 ### Public pages
 - `/` → `src/app/page.tsx` → `MainView`
-- `/cv` → `src/app/(public)/cv`
 - `/projects/[slug]` → `src/app/(public)/projects/[slug]` (static params from `projectSlugs`)
 
 ### Admin pages

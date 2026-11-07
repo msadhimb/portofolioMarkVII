@@ -1,6 +1,5 @@
 const locale = {
   role: "Web Developer / Frontend Engineer",
-  availability: "Available for projects",
   statement:
     "I build web applications that are well-structured, fast, and mature in user experience.",
   statementExtra:

@@ -1,6 +1,5 @@
 const locale = {
   role: "Web Developer / Frontend Engineer",
-  availability: "Terbuka untuk proyek",
   statement:
     "Saya membangun aplikasi web yang terstruktur, cepat, dan memiliki pengalaman pengguna yang matang.",
   statementExtra:
