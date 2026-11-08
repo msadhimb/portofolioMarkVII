@@ -12,7 +12,7 @@ import {
   DetailSection,
   DetailText,
   LocaleTabs,
-} from "@/view/Admin/components/DetailParts"
+} from "@/components/DetailParts"
 import type { AdminExperience } from "../../table/columns"
 import { format, isValid } from "date-fns"
 import { id as idLocale } from "date-fns/locale"

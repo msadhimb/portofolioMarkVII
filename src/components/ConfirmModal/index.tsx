@@ -67,7 +67,7 @@ export const ConfirmModal = () => {
         showClose={!locked}
         closeLabel={t("cancel")}
         onInteractOutside={(event) => event.preventDefault()}
-        className="card-futuristic max-w-md overflow-hidden rounded-3xl p-0"
+        className="max-w-md overflow-hidden rounded-2xl border border-border p-0"
       >
         <div className="flex flex-col items-center px-6 pt-9 pb-7 text-center sm:px-9">
           <span

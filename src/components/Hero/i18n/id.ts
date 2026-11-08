@@ -1,19 +1,20 @@
 const locale = {
   role: "Web Developer / Frontend Engineer",
+  index: "Portofolio — 2026",
   statement:
-    "Saya membangun aplikasi web yang terstruktur, cepat, dan memiliki pengalaman pengguna yang matang.",
-  statementExtra:
-    "Saya fokus pada arsitektur yang rapi, performa yang terukur, dan detail interaksi yang tidak mengganggu.",
-  ctaProjects: "Lihat proyek",
+    "Saya membangun aplikasi web yang rapi, cepat, dan tenang dipakai.",
+  statementExtra: "Dari kontrak data sampai detail interaksi terakhir.",
+  ctaProjects: "Lihat karya",
   ctaContact: "Hubungi saya",
-  ctaCv: "Download CV",
-  stickerAi: "✦ tanya EVE ↓",
-  viewWork: "view work",
+  ctaCv: "Unduh CV",
+  workIndex: "Indeks karya",
+  workHint: "Geser untuk menjelajah",
   stats: [
-    "Tahun pengalaman JavaScript",
+    "Tahun dengan JavaScript",
     "Proyek unggulan",
-    "Teknologi dikuasai",
+    "Teknologi dipakai",
   ],
+  ariaLabel: "Perkenalan",
 }
 
 export default locale

@@ -10,13 +10,8 @@ import { FormInput } from "@/components/Forms/FormInput"
 import { FormNumber } from "@/components/Forms/FormNumber"
 import { FormTextArea } from "@/components/Forms/FormTextArea"
 import { useActionModal } from "@/components/ActionModal/store"
-import { getErrorMessage } from "@/view/Admin/components/getErrorMessage"
-import {
-  FormSectionCard,
-  FormTabBar,
-  countErrorsByPrefix,
-  type FormTabKey,
-} from "@/view/Admin/components/FormParts"
+import { getErrorMessage } from "@/helper/getErrorMessage"
+
 import {
   skillGroupDefaultValues,
   skillGroupFormToPayload,
@@ -29,6 +24,9 @@ import {
   useUpdateSkillGroup,
 } from "../../hooks/useSkillsMutation"
 import type { AdminSkillGroup } from "../../table/columns"
+import { countErrorsByPrefix } from "@/helper/countErrorsByPrefix"
+import { FormTabBar } from "@/components/Forms/FormTabBar"
+import FormSectionCard from "@/components/Forms/FormSectionCard"
 
 type SkillGroupDialogProps = {
   open: boolean
@@ -49,7 +47,7 @@ export const SkillGroupDialog = ({
   const createMutation = useCreateSkillGroup()
   const updateMutation = useUpdateSkillGroup()
   const isPending = createMutation.isPending || updateMutation.isPending
-  const [tab, setTab] = useState<FormTabKey>("umum")
+  const [tab, setTab] = useState("umum")
 
   const {
     register,
@@ -180,7 +178,11 @@ export const SkillGroupDialog = ({
         noValidate
         className="space-y-4"
       >
-        <FormTabBar active={tab} onChange={setTab} errorCounts={errorCounts} />
+        <FormTabBar
+          active={tab as any}
+          onChange={setTab}
+          errorCounts={errorCounts}
+        />
 
         <FormSectionCard
           hidden={tab !== "umum"}

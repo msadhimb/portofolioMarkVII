@@ -6,8 +6,9 @@ import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useActionModal } from "@/components/ActionModal/store"
 import { useConfirmModal } from "@/components/ConfirmModal/store"
-import { DataTable } from "@/view/Admin/components/DataTable"
-import { getErrorMessage } from "@/view/Admin/components/getErrorMessage"
+import { DataTable } from "@/components/DataTable"
+import { PageHeader } from "@/components/PageHeader/PageHeader"
+import { getErrorMessage } from "@/helper/getErrorMessage"
 import { unwrapList } from "@/lib/pagination"
 import { getExperienceColumns, type AdminExperience } from "./table/columns"
 import { ExperienceDetailDialog } from "./components/ExperienceDetailDialog"
@@ -88,20 +89,16 @@ export const ExperiencesAdminView = () => {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">
-            Experiences
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Kelola riwayat pengalaman dalam dua bahasa.
-          </p>
-        </div>
-        <Button type="button" onClick={handleAdd}>
-          <Plus />
-          Tambah experience
-        </Button>
-      </div>
+      <PageHeader
+        title="Pengalaman"
+        description="Kelola riwayat pengalaman dalam dua bahasa."
+        action={
+          <Button type="button" onClick={handleAdd}>
+            <Plus />
+            Tambah pengalaman
+          </Button>
+        }
+      />
 
       <DataTable
         columns={columns}

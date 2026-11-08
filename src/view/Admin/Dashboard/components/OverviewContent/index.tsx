@@ -6,21 +6,15 @@ import { useAdminSkills } from "@/view/Admin/Skills/store"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { motion } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
 import {
   ArrowRight,
-  ArrowUpRight,
   AwardIcon,
   BadgeCheck,
   BriefcaseBusinessIcon,
-  CalendarDays,
   CircleDot,
-  Database,
   FolderKanbanIcon,
   Globe,
-  Languages,
   LayoutDashboardIcon,
-  PieChart,
   Plus,
   SparklesIcon,
   Star,
@@ -35,8 +29,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Cell, Pie, ResponsiveContainer, Tooltip } from "recharts"
-import { spark } from "../../helper/spark"
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
 import { fadeUp } from "../../helper/fadeUp"
 import { greeting } from "../../helper/greeting"
 import StatCard from "../StateCard"
@@ -122,11 +115,11 @@ const OverviewContent = () => {
 
   const donutData = useMemo(
     () => [
-      { name: "Projects", value: projects.length },
-      { name: "Experiences", value: experiences.length },
-      { name: "Awards", value: awards.length },
-      { name: "Skill groups", value: skillGroups.length },
-      { name: "Skill items", value: stats.totalSkills },
+      { name: "Proyek", value: projects.length },
+      { name: "Pengalaman", value: experiences.length },
+      { name: "Penghargaan", value: awards.length },
+      { name: "Grup skill", value: skillGroups.length },
+      { name: "Item skill", value: stats.totalSkills },
     ],
     [
       projects.length,
@@ -139,54 +132,39 @@ const OverviewContent = () => {
 
   const statCards = [
     {
-      label: "Projects",
+      label: "Proyek",
       value: projects.length,
       hint: `${stats.featured} unggulan · ${stats.bilingual} bilingual`,
-      href: "/admin/dashboard/projects",
+      href: "/dashboard/projects",
       icon: <FolderKanbanIcon className="size-4" />,
-      tile: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
-      sparkData: spark([3, 5, 4, 7, 6, 9, 8]),
-      sparkColor: "#f59e0b",
     },
     {
-      label: "Experiences",
+      label: "Pengalaman",
       value: experiences.length,
       hint: "Riwayat kerja & peran",
-      href: "/admin/dashboard/experiences",
+      href: "/dashboard/experiences",
       icon: <BriefcaseBusinessIcon className="size-4" />,
-      tile: "bg-teal-500/15 text-teal-600 dark:text-teal-300",
-      sparkData: spark([2, 3, 5, 4, 6, 5, 7]),
-      sparkColor: "#2dd4bf",
     },
     {
-      label: "Awards",
+      label: "Penghargaan",
       value: awards.length,
       hint: "Sertifikat, penghargaan & honor",
-      href: "/admin/dashboard/awards",
+      href: "/dashboard/awards",
       icon: <AwardIcon className="size-4" />,
-      tile: "bg-rose-500/15 text-rose-600 dark:text-rose-300",
-      sparkData: spark([1, 3, 2, 4, 3, 5, 4]),
-      sparkColor: "#fb7185",
     },
     {
-      label: "Skill groups",
+      label: "Grup skill",
       value: skillGroups.length,
-      hint: `${stats.totalSkills} skill items`,
-      href: "/admin/dashboard/skills",
+      hint: `${stats.totalSkills} item skill`,
+      href: "/dashboard/skills",
       icon: <SparklesIcon className="size-4" />,
-      tile: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300",
-      sparkData: spark([4, 3, 6, 5, 8, 7, 10]),
-      sparkColor: "#34d399",
     },
     {
-      label: "Featured",
+      label: "Unggulan",
       value: stats.featured,
-      hint: "Ditampilkan di homepage",
-      href: "/admin/dashboard/projects",
+      hint: "Tampil di halaman utama",
+      href: "/dashboard/projects",
       icon: <Star className="size-4" />,
-      tile: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
-      sparkData: spark([1, 2, 2, 3, 4, 3, 5]),
-      sparkColor: "#fbbf24",
     },
   ]
 
@@ -196,21 +174,21 @@ const OverviewContent = () => {
       value: projects.length
         ? Math.round((stats.bilingual / projects.length) * 100)
         : 0,
-      detail: `${stats.bilingual}/${projects.length} projects`,
+      detail: `${stats.bilingual}/${projects.length}`,
     },
     {
       label: "Cover image terisi",
       value: projects.length
         ? Math.round((stats.withImage / projects.length) * 100)
         : 0,
-      detail: `${stats.withImage}/${projects.length} projects`,
+      detail: `${stats.withImage}/${projects.length}`,
     },
     {
       label: "Link demo terisi",
       value: projects.length
         ? Math.round((stats.withDemo / projects.length) * 100)
         : 0,
-      detail: `${stats.withDemo}/${projects.length} projects`,
+      detail: `${stats.withDemo}/${projects.length}`,
     },
   ]
 
@@ -224,97 +202,81 @@ const OverviewContent = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* ── Hero ── */}
       <motion.section
         variants={fadeUp}
         initial="hidden"
         animate="show"
         custom={0}
-        className="hud-corners relative overflow-hidden rounded-2xl border bg-card"
+        className="glass-panel rounded-xl border p-6 md:p-8"
       >
-        <div className="bg-grid bg-grid-fade pointer-events-none absolute inset-0" />
-        <div className="animate-aurora pointer-events-none absolute -top-24 -left-16 size-72 rounded-full bg-cyan-400/25 blur-3xl" />
-        <div className="animate-aurora-slow pointer-events-none absolute -right-20 -bottom-28 size-80 rounded-full bg-teal-500/25 blur-3xl" />
-        <div className="relative grid gap-6 p-6 md:grid-cols-[1fr_280px] md:p-8">
+        <div className="grid gap-8 md:grid-cols-[1fr_220px]">
           <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge className="gap-1.5">
-                <span className="relative flex size-1.5">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary-foreground/70" />
-                  <span className="relative inline-flex size-1.5 rounded-full bg-primary-foreground" />
-                </span>
-                Admin Console · Portfolio v7
-              </Badge>
-              <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
-                <CalendarDays className="size-3.5" />
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.2em] text-signal uppercase">
+                <span className="size-1.5 rounded-full bg-signal" />
+                Admin console
+              </span>
+              <span className="font-mono text-[10px] text-muted-foreground">
                 {formatDateID()}
               </span>
             </div>
-            <h1 className="mt-4 max-w-xl font-display text-3xl leading-tight font-semibold tracking-tight text-balance md:text-4xl">
+            <h1 className="mt-4 max-w-xl text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.05] font-medium tracking-[-0.03em] text-balance text-foreground">
               {greeting()}, Salman.
-              <span className="text-glow text-signal"> Kontenmu siap gas.</span>
             </h1>
-            <p className="mt-2 max-w-lg text-sm leading-relaxed text-muted-foreground">
-              Kelola projects, experiences, awards, dan skills dalam dua bahasa
-              dari satu tempat. Semua perubahan langsung tampil di website
-              publik.
+            <p className="mt-2 max-w-lg text-[13px] leading-relaxed text-muted-foreground">
+              Kelola proyek, pengalaman, penghargaan, dan keahlian dalam dua
+              bahasa. Semua perubahan langsung tampil di situs publik.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-2.5">
               <Button asChild>
-                <Link href="/admin/dashboard/projects">
+                <Link href="/dashboard/projects">
                   <Plus />
-                  Tambah project
+                  Tambah proyek
                 </Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href="/" target="_blank">
                   <Globe />
                   Lihat situs
-                  <ArrowUpRight />
                 </Link>
               </Button>
             </div>
           </div>
 
-          {/* Mini terminal */}
-          <div className="crt relative hidden overflow-hidden rounded-xl border bg-[#141311] p-4 font-mono text-[11px] leading-relaxed text-amber-200 md:block">
-            <div className="crt-scanlines pointer-events-none absolute inset-0" />
-            <div className="flex items-center gap-1.5 border-b border-white/10 pb-2.5">
-              <span className="size-2.5 rounded-full bg-red-400/80" />
-              <span className="size-2.5 rounded-full bg-amber-300/80" />
-              <span className="size-2.5 rounded-full bg-emerald-400/80" />
-              <span className="ml-2 text-white/40">salman@portfolio ~</span>
-            </div>
-            <div className="space-y-1.5 pt-3">
-              <p>
-                <span className="text-emerald-300">$</span> portfolio status
-              </p>
-              <p className="text-white/70">
-                ✓ supabase <span className="text-emerald-300">connected</span>
-              </p>
-              <p className="text-white/70">
-                ✓ i18n <span className="text-cyan-300">id + en</span> aktif
-              </p>
-              <p className="text-white/70">
-                ✓ rls <span className="text-violet-300">enforced</span>
-              </p>
-              <p>
-                <span className="text-emerald-300">$</span>{" "}
-                <span className="animate-typing-dot inline-block h-3.5 w-1.5 translate-y-0.5 bg-cyan-300" />
-              </p>
-            </div>
+          <div className="border-t border-border pt-5 md:border-t-0 md:border-l md:pt-0 md:pl-6">
+            <p className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground uppercase">
+              Status
+            </p>
+            <dl className="mt-3 space-y-2">
+              {[
+                ["supabase", "connected"],
+                ["i18n", "id + en"],
+                ["rls", "enforced"],
+              ].map(([key, value]) => (
+                <div
+                  key={key}
+                  className="flex items-center justify-between gap-3 border-b border-border pb-2 font-mono text-[11px] last:border-b-0"
+                >
+                  <dt className="text-muted-foreground">{key}</dt>
+                  <dd className="text-foreground">{value}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </motion.section>
 
-      {/* ── Stat cards ── */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {statCards.map((s, i) => (
-          <StatCard key={s.label} {...s} loading={loading} custom={i + 1} />
+        {statCards.map((stat, index) => (
+          <StatCard
+            key={stat.label}
+            {...stat}
+            loading={loading}
+            custom={index + 1}
+          />
         ))}
       </div>
 
-      {/* ── Charts + recent ── */}
       <div className="grid gap-4 lg:grid-cols-5">
         <motion.div
           variants={fadeUp}
@@ -325,7 +287,7 @@ const OverviewContent = () => {
         >
           <Card className="h-full">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-[15px]">
+              <CardTitle className="flex items-center gap-2 text-[14px]">
                 <CircleDot className="size-4 text-signal" />
                 Komposisi konten
               </CardTitle>
@@ -348,7 +310,7 @@ const OverviewContent = () => {
                           innerRadius={52}
                           outerRadius={78}
                           paddingAngle={3}
-                          cornerRadius={6}
+                          cornerRadius={4}
                           strokeWidth={0}
                         >
                           {donutData.map((_, idx) => (
@@ -360,7 +322,7 @@ const OverviewContent = () => {
                         </Pie>
                         <Tooltip
                           contentStyle={{
-                            borderRadius: 12,
+                            borderRadius: 10,
                             fontSize: 12,
                             border: "1px solid var(--border)",
                             background: "var(--popover)",
@@ -370,31 +332,31 @@ const OverviewContent = () => {
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="tabular text-2xl font-semibold">
+                      <span className="tabular text-2xl font-medium">
                         {totalItems}
                       </span>
-                      <span className="text-[11px] text-muted-foreground">
+                      <span className="font-mono text-[9px] tracking-[0.14em] text-muted-foreground uppercase">
                         total item
                       </span>
                     </div>
                   </div>
                   <ul className="mt-4 space-y-2">
-                    {donutData.map((d, idx) => (
+                    {donutData.map((entry, idx) => (
                       <li
-                        key={d.name}
-                        className="flex items-center justify-between text-[13px]"
+                        key={entry.name}
+                        className="flex items-center justify-between text-[12px]"
                       >
                         <span className="inline-flex items-center gap-2 text-muted-foreground">
                           <span
-                            className="size-2.5 rounded-full"
+                            className="size-2 rounded-full"
                             style={{
                               background:
                                 DONUT_COLORS[idx % DONUT_COLORS.length],
                             }}
                           />
-                          {d.name}
+                          {entry.name}
                         </span>
-                        <span className="tabular font-semibold">{d.value}</span>
+                        <span className="tabular font-mono">{entry.value}</span>
                       </li>
                     ))}
                   </ul>
@@ -414,41 +376,41 @@ const OverviewContent = () => {
           <Card className="h-full">
             <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0">
               <div>
-                <CardTitle className="flex items-center gap-2 text-[15px]">
+                <CardTitle className="flex items-center gap-2 text-[14px]">
                   <FolderKanbanIcon className="size-4 text-signal" />
-                  Project terbaru
+                  Proyek terbaru
                 </CardTitle>
                 <CardDescription>Urutan terbaru di atas.</CardDescription>
               </div>
               <Button variant="ghost" size="sm" asChild>
-                <Link href="/admin/dashboard/projects">
+                <Link href="/dashboard/projects">
                   Semua <ArrowRight />
                 </Link>
               </Button>
             </CardHeader>
-            <CardContent className="space-y-2.5">
+            <CardContent>
               {loading ? (
-                <>
-                  <Skeleton className="h-16 w-full rounded-xl" />
-                  <Skeleton className="h-16 w-full rounded-xl" />
-                  <Skeleton className="h-16 w-full rounded-xl" />
-                </>
+                <div className="space-y-2.5">
+                  <Skeleton className="h-14 w-full rounded-lg" />
+                  <Skeleton className="h-14 w-full rounded-lg" />
+                  <Skeleton className="h-14 w-full rounded-lg" />
+                </div>
               ) : recentProjects.length === 0 ? (
-                <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed py-10 text-center">
+                <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-border py-10 text-center">
                   <LayoutDashboardIcon className="size-6 text-muted-foreground" />
-                  <p className="text-sm font-medium">Belum ada project</p>
+                  <p className="text-sm font-medium">Belum ada proyek</p>
                   <p className="text-xs text-muted-foreground">
-                    Tambahkan project pertamamu sekarang.
+                    Tambahkan proyek pertamamu sekarang.
                   </p>
                   <Button size="sm" asChild className="mt-1">
-                    <Link href="/admin/dashboard/projects">
-                      <Plus /> Tambah project
+                    <Link href="/dashboard/projects">
+                      <Plus /> Tambah proyek
                     </Link>
                   </Button>
                 </div>
               ) : (
-                recentProjects.map((p) => (
-                  <RecentProjectItem key={p.slug} p={p} />
+                recentProjects.map((project) => (
+                  <RecentProjectItem key={project.slug} p={project} />
                 ))
               )}
             </CardContent>
@@ -456,7 +418,6 @@ const OverviewContent = () => {
         </motion.div>
       </div>
 
-      {/* ── Completeness + quick actions ── */}
       <div className="grid gap-4 lg:grid-cols-5">
         <motion.div
           variants={fadeUp}
@@ -467,7 +428,7 @@ const OverviewContent = () => {
         >
           <Card className="h-full">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-[15px]">
+              <CardTitle className="flex items-center gap-2 text-[14px]">
                 <BadgeCheck className="size-4 text-signal" />
                 Kelengkapan konten
               </CardTitle>
@@ -479,20 +440,19 @@ const OverviewContent = () => {
               {loading ? (
                 <Skeleton className="h-24 w-full rounded-xl" />
               ) : (
-                completeness.map((c) => (
-                  <CompletenessBar key={c.label} {...c} />
+                completeness.map((item) => (
+                  <CompletenessBar key={item.label} {...item} />
                 ))
               )}
               <div className="flex flex-wrap gap-2 pt-1">
-                <Badge variant="secondary" className="gap-1.5">
-                  <Languages className="size-3" /> ID + EN
-                </Badge>
-                <Badge variant="secondary" className="gap-1.5">
-                  <Database className="size-3" /> Supabase RLS
-                </Badge>
-                <Badge variant="secondary" className="gap-1.5">
-                  <Globe className="size-3" /> Auto-publish
-                </Badge>
+                {["ID + EN", "Supabase RLS", "Auto-publish"].map((chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-full border border-border px-2.5 py-1 font-mono text-[10px] text-muted-foreground"
+                  >
+                    {chip}
+                  </span>
+                ))}
               </div>
             </CardContent>
           </Card>
@@ -505,22 +465,24 @@ const OverviewContent = () => {
           custom={8}
           className="lg:col-span-2"
         >
-          <Card className="h-full overflow-hidden">
+          <Card className="h-full">
             <CardHeader>
-              <CardTitle className="text-[15px]">Aksi cepat</CardTitle>
+              <CardTitle className="text-[14px]">Aksi cepat</CardTitle>
               <CardDescription>Lompat ke tugas paling sering.</CardDescription>
             </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-              {QUICK_ACTIONS.map((a) => (
+            <CardContent className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {QUICK_ACTIONS.map((action) => (
                 <Button
-                  key={a.label}
+                  key={action.label}
                   variant="outline"
                   asChild
-                  className="h-auto flex-col gap-1.5 py-4 hover:border-signal/60 hover:bg-signal/5"
+                  className="h-auto flex-col gap-1.5 py-4 hover:border-signal/60 hover:text-signal"
                 >
-                  <Link href={a.href}>
-                    {a.icon}
-                    <span className="text-xs">{a.label}</span>
+                  <Link href={action.href}>
+                    {action.icon}
+                    <span className="font-mono text-[10px]">
+                      {action.label}
+                    </span>
                   </Link>
                 </Button>
               ))}
@@ -529,7 +491,6 @@ const OverviewContent = () => {
         </motion.div>
       </div>
 
-      {/* ── CV Manager ── */}
       <CvCard />
     </div>
   )

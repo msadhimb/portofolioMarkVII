@@ -11,7 +11,7 @@ import {
   DetailSection,
   DetailText,
   LocaleTabs,
-} from "@/view/Admin/components/DetailParts"
+} from "@/components/DetailParts"
 import {
   AWARD_CATEGORY_LABELS,
   type AdminAward,

@@ -3,34 +3,45 @@ const locale = {
   titleA: "An engineer who thinks like",
   titleAccent: "a product owner.",
   description:
-    "About 4 years building with JavaScript — from fast landing pages to enterprise systems used daily.",
-  greeting: "Hi, I'm Salman Adhim.",
+    "Four years building with JavaScript — from fast landing pages to systems used every day.",
+  greeting: "Hi, I'm Salman.",
   highlight: "state-owned enterprises and government institutions",
   paragraphs: [
-    "I'm a Web Developer / Frontend Engineer comfortable working end to end: sketching UI, managing state, designing APIs and database schemas, handling authentication, all the way to deploying on Vercel.",
-    "Much of my time has been spent around state-owned enterprises and government institutions — places where “works on my machine” isn't enough. There I learned to write auditable workflows, role-proof forms, and dashboards that stay sane at scale.",
-    "I believe good design balances aesthetics and functionality. I favor an elegant, minimal approach that prioritizes clarity, consistency, and user experience.",
+    "I work end to end: shape the UI, manage state, define the API and data model, handle authentication, then ship it.",
+    "Most of that time has been around state-owned enterprises and government institutions. There, “works on my machine” is never enough: flows must be auditable, forms must be clear across roles, and dashboards must stay sane as data grows.",
+    "Good design, to me, is not the loudest. It is the clearest. Calm type, enough space, and interactions that stay out of the way.",
   ],
   principle:
-    "How I work is simple: understand the problem first, agree on the data contract, then build the UI.",
+    "Understand the problem. Agree on the data contract. Then build the UI.",
+  manifestoLabel: "How I work",
+  valuesLabel: "Working principles",
   values: [
     {
       title: "Maintainable architecture",
-      body: "Small modules, explicit types, one-way data flow. I write code as if the next reader is me six months from now — tired and on a deadline.",
+      body: "Small modules, explicit types, one-way data flow. I write for myself six months from now — tired and on a deadline.",
     },
     {
-      title: "Security & data correctness",
-      body: "At home with auth, Supabase RLS, double validation, and audit trails for enterprise systems. Financial and government data leaves no room for 'almost right'.",
+      title: "Security and data correctness",
+      body: "Auth, Supabase RLS, double validation, audit trails. For financial and government data, 'almost right' is not an option.",
     },
     {
       title: "Performance as a feature",
-      body: "Pagination, server-side aggregation, lazy sections, and JavaScript budgets. Speed isn't about scores — it's about trust when the app is used every day.",
+      body: "Pagination, server-side aggregation, lazy sections, and a JavaScript budget. Speed is not a score; it is trust when the app is used daily.",
     },
     {
-      title: "Mature UX, not noisy",
-      body: "Whitespace, type hierarchy, and calm micro-motion. I'd rather ship one precise 200ms transition than ten shouting animations.",
+      title: "Quiet UX",
+      body: "Hierarchy, whitespace, and just enough micro-motion. One precise 200ms transition beats ten shouting animations.",
     },
   ],
+  factLocation: "Location",
+  factLocationValue: "Salatiga, Central Java",
+  factFocus: "Focus",
+  factFocusValue: "Frontend & full-stack",
+  factStack: "Stack",
+  factStackValue: "Next.js · TypeScript · Supabase",
+  factStatus: "Status",
+  factStatusValue: "Open for projects",
+  ariaLabel: "About",
 }
 
 export default locale

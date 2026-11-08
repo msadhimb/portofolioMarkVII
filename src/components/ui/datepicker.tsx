@@ -190,7 +190,7 @@ export function DatePicker({
           disabled={disabled}
           className={cn(
             "h-11 w-full justify-start rounded-xl px-4 text-[15px] font-normal shadow-xs",
-            "bg-background dark:bg-background",
+            "bg-card/40 backdrop-blur-sm dark:bg-card/40",
             "focus-visible:border-signal/60 focus-visible:ring-2 focus-visible:ring-signal/25",
             value ? "text-foreground" : "text-muted-foreground/60",
             hasError &&

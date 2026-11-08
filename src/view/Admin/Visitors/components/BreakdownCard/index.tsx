@@ -69,7 +69,7 @@ const BreakdownCard = ({
                   </div>
                   <div className="h-1.5 overflow-hidden rounded-full bg-muted">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-amber-500 to-teal-400"
+                      className="h-full rounded-full bg-signal"
                       style={{
                         width: `${Math.max(
                           (item.pageviews / max) * 100,

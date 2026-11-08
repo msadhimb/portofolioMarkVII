@@ -37,7 +37,7 @@ const SelectTrigger = ({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "flex h-11 w-full items-center justify-between gap-2 rounded-xl border border-border bg-background px-4 text-[15px] text-foreground shadow-xs transition-all outline-none selection:bg-signal/30 placeholder:text-muted-foreground/60",
+        "flex h-11 w-full items-center justify-between gap-2 rounded-xl border border-border bg-card/40 px-4 text-[15px] text-foreground shadow-xs backdrop-blur-sm transition-all outline-none selection:bg-signal/30 placeholder:text-muted-foreground/60",
         "focus-visible:border-signal/60 focus-visible:ring-2 focus-visible:ring-signal/25",
         "aria-invalid:border-destructive/60 aria-invalid:ring-2 aria-invalid:ring-destructive/20",
         "disabled:cursor-not-allowed disabled:opacity-50",
@@ -67,7 +67,7 @@ const SelectContent = ({
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          "relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-xl border border-border bg-popover text-popover-foreground shadow-md",
+          "glass-panel relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-xl border text-popover-foreground",
           "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
           "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
           "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",

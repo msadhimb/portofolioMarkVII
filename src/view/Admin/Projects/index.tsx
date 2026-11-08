@@ -6,8 +6,9 @@ import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useActionModal } from "@/components/ActionModal/store"
 import { useConfirmModal } from "@/components/ConfirmModal/store"
-import { DataTable } from "@/view/Admin/components/DataTable"
-import { getErrorMessage } from "@/view/Admin/components/getErrorMessage"
+import { DataTable } from "@/components/DataTable"
+import { PageHeader } from "@/components/PageHeader/PageHeader"
+import { getErrorMessage } from "@/helper/getErrorMessage"
 import { unwrapList } from "@/lib/pagination"
 import { getProjectColumns, type AdminProject } from "./table/columns"
 import { ProjectDetailDialog } from "./components/ProjectDetailDialog"
@@ -88,20 +89,16 @@ export const ProjectsAdminView = () => {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">
-            Projects
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Kelola daftar projects portofolio dalam dua bahasa.
-          </p>
-        </div>
-        <Button type="button" onClick={handleAdd}>
-          <Plus />
-          Tambah project
-        </Button>
-      </div>
+      <PageHeader
+        title="Proyek"
+        description="Kelola daftar proyek portofolio dalam dua bahasa."
+        action={
+          <Button type="button" onClick={handleAdd}>
+            <Plus />
+            Tambah proyek
+          </Button>
+        }
+      />
 
       <DataTable
         columns={columns}

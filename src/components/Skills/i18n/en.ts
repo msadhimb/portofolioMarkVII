@@ -1,12 +1,14 @@
 const locale = {
-    eyebrow: "Skills & Approach",
-    titleA: "Deep stack,",
-    titleAccent: "clear opinions.",
-    description:
-      "Technology is just a tool. What sets work apart is deciding when to use what — and what to deliberately leave out.",
-    rangeTitle: "Engineering range",
-    rangeNote: "One person, the whole flow.",
-    rangeItems: ["UI → state → API", "DB → auth → RLS", "PDF → i18n → deploy"],
-  };
+  eyebrow: "Capabilities",
+  titleA: "Technical depth,",
+  titleAccent: "not a logo wall.",
+  description:
+    "I pick tools based on the edges of the problem, not the trend cycle. These are the areas I most often own end to end.",
+  rangeTitle: "Working range",
+  rangeNote: "One person, from interface to deploy.",
+  rangeItems: ["UI → state → API", "DB → auth → RLS", "PDF → i18n → deploy"],
+  principlesLabel: "Working principles",
+  ariaLabel: "Skills and approach",
+}
 
-export default locale;
+export default locale

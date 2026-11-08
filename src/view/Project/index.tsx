@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowUpRight, Lock } from "lucide-react"
+import { ArrowLeft, ArrowUpRight, Lock } from "lucide-react"
 import Link from "next/link"
 import i18next from "i18next"
 import { useTranslation } from "react-i18next"
@@ -35,42 +35,61 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
   }
 
   const project: any = projectData ?? projectTemplate
+  const hasImage =
+    Boolean(project?.image) && !String(project.image).startsWith("/images/")
+  const period = project.end_date
+    ? `${moment(project.start_date).format("MMM YYYY")} — ${moment(project.end_date).format("MMM YYYY")}`
+    : moment(project.start_date).format("MMM YYYY")
 
   return (
     <main id="main">
-      <article className="mx-auto max-w-4xl px-5 sm:px-8">
+      <article className="mx-auto max-w-6xl px-5 pt-10 pb-24 sm:px-8">
         <Shimmer loading={isLoading}>
-          <p className="mt-8 font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
-            {t("prefix")} · {project.context}
-          </p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-            {project.title}
-          </h1>
-          <p className="mt-2 font-display text-xl text-muted-foreground italic">
-            {project.tagline}
-          </p>
+          <Link
+            href="/#projects"
+            className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase transition-colors hover:text-signal"
+          >
+            <ArrowLeft className="size-3.5" />
+            {t("back")}
+          </Link>
 
-          <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-border py-5 sm:grid-cols-4">
+          <header className="mt-8 border-t border-border pt-6">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
+              <span className="text-signal">{t("prefix")}</span>
+              <span aria-hidden="true">/</span>
+              <span>{project.context}</span>
+              <span aria-hidden="true">/</span>
+              <span>{period}</span>
+            </div>
+
+            <h1 className="mt-5 max-w-4xl text-[clamp(2.5rem,6vw,5rem)] font-medium leading-[0.95] tracking-[-0.04em] text-balance text-foreground">
+              {project.title}
+            </h1>
+            <p className="mt-4 max-w-2xl font-display text-[clamp(1.2rem,2.2vw,1.75rem)] leading-snug text-muted-foreground italic">
+              {project.tagline}
+            </p>
+          </header>
+
+          <dl className="glass-panel mt-10 grid grid-cols-2 gap-x-6 gap-y-6 rounded-2xl border px-6 py-6 sm:grid-cols-4">
             <div>
-              <dt className="font-mono text-[11px] text-muted-foreground uppercase">
+              <dt className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground uppercase">
                 {t("role")}
               </dt>
-              <dd className="mt-1 text-sm font-medium">{project.role}</dd>
+              <dd className="mt-1.5 text-sm text-foreground">{project.role}</dd>
             </div>
             <div>
-              <dt className="font-mono text-[11px] text-muted-foreground uppercase">
+              <dt className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground uppercase">
                 {t("period")}
               </dt>
-              <dd className="mt-1 text-sm font-medium">
-                {moment(project.start_date).format("MMM YYYY")} -{" "}
-                {moment(project.end_date).format("MMM YYYY")}
+              <dd className="tabular mt-1.5 text-sm text-foreground">
+                {period}
               </dd>
             </div>
             <div>
-              <dt className="font-mono text-[11px] text-muted-foreground uppercase">
+              <dt className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground uppercase">
                 {t("demo")}
               </dt>
-              <dd className="mt-1 text-sm font-medium">
+              <dd className="mt-1.5 text-sm">
                 {project.demoUrl ? (
                   <a
                     href={project.demoUrl}
@@ -88,117 +107,158 @@ export const ProjectView = ({ slug }: ProjectViewProps) => {
               </dd>
             </div>
             <div>
-              <dt className="font-mono text-[11px] text-muted-foreground uppercase">
+              <dt className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground uppercase">
                 {t("stack")}
               </dt>
-              <dd className="mt-1 text-sm font-medium">
-                {project.technologies.slice(0, 3).join(" · ")}
+              <dd className="mt-1.5 text-sm text-foreground">
+                {(project.technologies ?? []).slice(0, 3).join(" · ")}
               </dd>
             </div>
           </dl>
 
-          <div className="mt-8 overflow-hidden rounded-3xl border border-border bg-muted/60">
-            <Image
-              src={project?.image}
-              alt={project?.title}
-              width={1000}
-              height={1000}
-              className="h-100 w-full object-cover"
-            />
-          </div>
+          {hasImage ? (
+            <div className="relative mt-10 aspect-[16/9] overflow-hidden rounded-[24px] border border-border bg-card/40">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                priority
+                sizes="(min-width: 1024px) 80rem, 100vw"
+                className="object-cover"
+              />
+            </div>
+          ) : null}
 
-          <div className="prose-portfolio mt-10 space-y-10">
-            <section>
-              <h2 className="flex items-center gap-3 font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
-                <span className="text-signal">01</span> {t("problem")}
-              </h2>
-              <p className="mt-3 text-justify text-[16px] leading-relaxed text-foreground/90">
-                {project.problem}
-              </p>
-            </section>
+          <div className="mt-14 grid gap-12 lg:grid-cols-[220px_1fr] lg:gap-16">
+            <aside className="hidden lg:block">
+              <div className="glass-panel sticky top-28 rounded-2xl border p-5">
+                <p className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground uppercase">
+                  {t("technologies")}
+                </p>
+                <div className="mt-3">
+                  <TechList items={project.technologies} />
+                </div>
+              </div>
+            </aside>
 
-            <section>
-              <h2 className="flex items-center gap-3 font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
-                <span className="text-signal">02</span> {t("built")}
-              </h2>
-              <p className="mt-3 text-justify text-[16px] leading-relaxed text-foreground/90">
-                {project.description}
-              </p>
-              <ul className="mt-5 space-y-2.5">
-                {project.highlights.map((h: any) => (
-                  <li
-                    key={h}
-                    className="flex gap-3 text-justify text-[15px] leading-relaxed text-muted-foreground"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="mt-[9px] size-1.5 shrink-0 rounded-full bg-signal"
-                    />
-                    {h}
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            {project.decisions ? (
+            <div className="max-w-3xl space-y-12">
               <section>
-                <h2 className="flex items-center gap-3 font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
-                  <span className="text-signal">03</span> {t("decisions")}
-                </h2>
-                <ul className="mt-5 space-y-2.5">
-                  {project.decisions.map((h: any) => (
+                <div className="flex items-baseline gap-3 border-t border-border pt-4">
+                  <span className="font-mono text-[9px] text-signal">01</span>
+                  <h2 className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
+                    {t("problem")}
+                  </h2>
+                </div>
+                <p className="mt-4 text-[15px] leading-relaxed text-foreground/90">
+                  {project.problem}
+                </p>
+              </section>
+
+              <section>
+                <div className="flex items-baseline gap-3 border-t border-border pt-4">
+                  <span className="font-mono text-[9px] text-signal">02</span>
+                  <h2 className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
+                    {t("built")}
+                  </h2>
+                </div>
+                <p className="mt-4 text-[15px] leading-relaxed text-foreground/90">
+                  {project.description}
+                </p>
+                <ul className="mt-5 space-y-3">
+                  {(project.highlights ?? []).map((highlight: string) => (
                     <li
-                      key={h}
-                      className="flex gap-3 text-[15px] leading-relaxed text-muted-foreground"
+                      key={highlight}
+                      className="flex gap-3 text-[14px] leading-relaxed text-muted-foreground"
                     >
                       <span
                         aria-hidden="true"
-                        className="mt-[9px] size-1.5 shrink-0 rounded-full bg-signal"
+                        className="mt-[0.6em] h-px w-4 shrink-0 bg-signal"
                       />
-                      <div className="flex flex-col gap-1">
-                        <p className="text-md text-justify font-medium text-foreground">
-                          {h.title}
-                        </p>
-                        <p className="text-justify text-sm">{h.detail}</p>
-                      </div>
+                      <span className="min-w-0">{highlight}</span>
                     </li>
                   ))}
                 </ul>
               </section>
-            ) : null}
 
-            <section>
-              <h2 className="flex items-center gap-3 font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
-                <span className="text-signal">04</span> {t("technologies")}
-              </h2>
-              <div className="mt-4">
-                <TechList items={project.technologies} />
-              </div>
-            </section>
+              {project.decisions ? (
+                <section>
+                  <div className="flex items-baseline gap-3 border-t border-border pt-4">
+                    <span className="font-mono text-[9px] text-signal">03</span>
+                    <h2 className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
+                      {t("decisions")}
+                    </h2>
+                  </div>
+                  <ol className="mt-5 space-y-5">
+                    {project.decisions.map(
+                      (
+                        decision: { title: string; detail: string },
+                        index: number
+                      ) => (
+                        <li
+                          key={`${decision.title}-${index}`}
+                          className="grid grid-cols-[28px_1fr] gap-3"
+                        >
+                          <span className="tabular font-mono text-[10px] text-signal">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <div>
+                            <p className="text-sm font-medium text-foreground">
+                              {decision.title}
+                            </p>
+                            <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+                              {decision.detail}
+                            </p>
+                          </div>
+                        </li>
+                      )
+                    )}
+                  </ol>
+                </section>
+              ) : null}
+
+              <section className="lg:hidden">
+                <div className="flex items-baseline gap-3 border-t border-border pt-4">
+                  <span className="font-mono text-[9px] text-signal">04</span>
+                  <h2 className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
+                    {t("technologies")}
+                  </h2>
+                </div>
+                <div className="mt-4">
+                  <TechList items={project.technologies} />
+                </div>
+              </section>
+            </div>
           </div>
 
-          {project.related && project.related.length > 0 && (
+          {project.related && project.related.length > 0 ? (
             <nav
               aria-label={t("moreProjects")}
-              className="mt-14 grid gap-4 border-t border-border pt-8 sm:grid-cols-2"
+              className="glass-panel mt-16 rounded-2xl border px-5 py-5"
             >
-              {project.related?.map((p: any) => (
-                <Link
-                  key={p.slug}
-                  href={`/projects/${p.slug}`}
-                  className="group rounded-2xl border border-border bg-card p-5 transition-all hover:border-signal/50 hover:shadow-[0_0_40px_-12px_rgba(245,158,11,0.3)]"
-                >
-                  <p className="font-mono text-[11px] text-muted-foreground uppercase">
-                    {t("nextCase")}
-                  </p>
-                  <p className="mt-1 flex items-center justify-between text-lg font-semibold">
-                    {p.title}
-                    <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-px group-hover:-translate-y-px" />
-                  </p>
-                </Link>
-              ))}
+              <p className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground uppercase">
+                {t("moreProjects")}
+              </p>
+              <div className="mt-4">
+                {project.related.map((related: any) => (
+                  <Link
+                    key={related.slug}
+                    href={`/projects/${related.slug}`}
+                    className="group flex items-center justify-between gap-4 border-b border-border py-4 transition-colors last:border-b-0 hover:text-signal"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-mono text-[9px] tracking-[0.18em] text-muted-foreground uppercase">
+                        {t("nextCase")}
+                      </p>
+                      <p className="mt-1 truncate text-lg font-medium tracking-tight text-foreground transition-colors group-hover:text-signal">
+                        {related.title}
+                      </p>
+                    </div>
+                    <ArrowUpRight className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-signal" />
+                  </Link>
+                ))}
+              </div>
             </nav>
-          )}
+          ) : null}
         </Shimmer>
       </article>
     </main>

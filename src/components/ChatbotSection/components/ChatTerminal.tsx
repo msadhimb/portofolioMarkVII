@@ -1,11 +1,11 @@
-import { Sparkles } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 import type { ChatInputErrorKey, ChatMsg } from "../store/type"
 import { ChatInput } from "./ChatInput"
 import { MessageList } from "./MessageList"
+import { SpotlightCard } from "@/components/SpotlightCard"
 
 type ChatTerminalProps = {
   model: string
+  terminalTitle: string
   messages: ChatMsg[]
   loading: boolean
   error: string | null
@@ -29,6 +29,7 @@ type ChatTerminalProps = {
 
 export const ChatTerminal = ({
   model,
+  terminalTitle,
   messages,
   loading,
   error,
@@ -50,25 +51,17 @@ export const ChatTerminal = ({
   onClear,
 }: ChatTerminalProps) => {
   return (
-    <div className="crt relative overflow-hidden rounded-2xl border border-teal-400/20 bg-[#141311] shadow-[0_0_90px_-18px_rgba(245,158,11,0.3),0_40px_90px_-30px_rgba(0,0,0,0.6)]">
-      {/* Title bar */}
-      <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-5 py-3.5">
-        <span className="size-3 rounded-full bg-[#ff5f57]" />
-        <span className="size-3 rounded-full bg-[#febc2e]" />
-        <span className="size-3 rounded-full bg-[#28c840]" />
-        <span className="ml-3 font-mono text-xs text-[#a8a294]">
-          adhim-ai — ollama console
+    <SpotlightCard className="relative overflow-hidden rounded-[24px] border border-white/12 bg-[#111411]/95 p-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_40px_80px_-55px_rgba(0,0,0,0.85)] backdrop-blur-xl">
+      <div className="flex items-center gap-2.5 border-b border-white/10 px-4 py-3">
+        <span className="size-1.5 rounded-full bg-signal" />
+        <span className="truncate font-mono text-[10px] tracking-[0.16em] text-[#a8a294] uppercase">
+          {terminalTitle}
         </span>
-        <Badge
-          variant="secondary"
-          className="ml-auto border-white/10 bg-white/[0.06] font-mono text-[10px] text-[#f59e0b]"
-        >
-          <Sparkles className="mr-1 size-3" />
+        <span className="ml-auto shrink-0 font-mono text-[10px] text-[#a8a294]">
           {model}
-        </Badge>
+        </span>
       </div>
 
-      {/* Pesan */}
       <MessageList
         messages={messages}
         loading={loading}
@@ -78,7 +71,6 @@ export const ChatTerminal = ({
         error={error}
       />
 
-      {/* Input */}
       <ChatInput
         input={input}
         inputErrorKey={inputErrorKey}
@@ -95,12 +87,6 @@ export const ChatTerminal = ({
         onStop={onStop}
         onClear={onClear}
       />
-
-      {/* Scanlines CRT */}
-      <div
-        aria-hidden="true"
-        className="crt-scanlines pointer-events-none absolute inset-0"
-      />
-    </div>
+    </SpotlightCard>
   )
 }

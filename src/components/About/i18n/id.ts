@@ -3,34 +3,45 @@ const locale = {
   titleA: "Engineer yang berpikir seperti",
   titleAccent: "pemilik produk.",
   description:
-    "Sekitar 4 tahun membangun dengan JavaScript — dari landing page cepat sampai sistem enterprise yang dipakai harian.",
-  greeting: "Halo, saya Salman Adhim.",
+    "Empat tahun membangun dengan JavaScript — dari landing page cepat sampai sistem yang dipakai setiap hari.",
+  greeting: "Halo, saya Salman.",
   highlight: "BUMN dan institusi pemerintahan",
   paragraphs: [
-    "Saya Web Developer / Frontend Engineer yang terbiasa bekerja dari ujung ke ujung: menggambar UI, mengatur state, merancang API dan skema database, mengurus authentication, sampai deployment ke Vercel.",
-    "Sebagian waktu saya dihabiskan di lingkungan BUMN dan institusi pemerintahan — tempat di mana “berhasil di laptop saya” tidak cukup. Di sana saya belajar menulis workflow yang bisa diaudit, form yang tidak ambigu antar peran, dan dashboard yang tetap waras saat datanya besar.",
-    "Saya percaya bahwa desain yang baik mengutamakan keseimbangan antara estetika dan fungsionalitas. Saya memilih pendekatan yang elegan dan minimalis, dengan fokus pada kejelasan, konsistensi, dan pengalaman pengguna.",
+    "Saya bekerja dari ujung ke ujung: merancang UI, mengatur state, membentuk API dan skema data, mengurus autentikasi, lalu mengantar ke produksi.",
+    "Sebagian besar waktu itu habis di lingkungan BUMN dan institusi pemerintahan. Di sana “berhasil di laptop saya” tidak pernah cukup: alur harus bisa diaudit, form harus jelas antar peran, dan dashboard harus tetap waras saat datanya besar.",
+    "Desain yang baik menurut saya bukan yang paling ramai, tapi yang paling jelas. Saya memilih tipografi yang tenang, ruang yang cukup, dan interaksi yang tidak mencuri perhatian.",
   ],
   principle:
-    "Cara saya bekerja sederhana: pahami masalahnya dulu, sepakati kontrak datanya, baru bangun UI-nya.",
+    "Pahami masalahnya dulu. Sepakati kontrak datanya. Baru bangun UI-nya.",
+  manifestoLabel: "Cara saya bekerja",
+  valuesLabel: "Prinsip kerja",
   values: [
     {
       title: "Arsitektur yang bisa dirawat",
-      body: "Modul kecil, tipe eksplisit, dan aliran data satu arah. Saya menulis kode seolah orang berikutnya yang membacanya adalah saya sendiri enam bulan dari sekarang — lelah dan dikejar deadline.",
+      body: "Modul kecil, tipe eksplisit, aliran data satu arah. Saya menulis untuk diri saya sendiri enam bulan dari sekarang — lelah dan dikejar deadline.",
     },
     {
-      title: "Keamanan & kebenaran data",
-      body: "Terbiasa dengan auth, RLS Supabase, validasi ganda, dan jejak audit untuk sistem enterprise. Data finansial dan pemerintahan tidak memberi ruang untuk 'hampir benar'.",
+      title: "Keamanan dan kebenaran data",
+      body: "Auth, RLS Supabase, validasi ganda, jejak audit. Untuk data finansial dan pemerintahan, “hampir benar” bukan pilihan.",
     },
     {
       title: "Performa sebagai fitur",
-      body: "Pagination, agregasi server-side, lazy section, dan budget JavaScript. Cepat bukan soal skor — soal rasa percaya saat aplikasi dipakai setiap hari.",
+      body: "Pagination, agregasi di server, lazy section, dan anggaran JavaScript. Cepat bukan soal skor, tapi rasa percaya saat dipakai harian.",
     },
     {
-      title: "UX yang matang, bukan ramai",
-      body: "Whitespace, hierarki tipografi, dan micro-motion yang tenang. Saya lebih suka satu transisi 200ms yang tepat daripada sepuluh animasi yang berteriak.",
+      title: "UX yang tenang",
+      body: "Hierarki, whitespace, dan micro-motion secukupnya. Satu transisi 200ms yang tepat lebih baik daripada sepuluh animasi yang berteriak.",
     },
   ],
+  factLocation: "Lokasi",
+  factLocationValue: "Salatiga, Jawa Tengah",
+  factFocus: "Fokus",
+  factFocusValue: "Frontend & full-stack",
+  factStack: "Stack",
+  factStackValue: "Next.js · TypeScript · Supabase",
+  factStatus: "Status",
+  factStatusValue: "Terbuka untuk proyek",
+  ariaLabel: "Tentang",
 }
 
 export default locale

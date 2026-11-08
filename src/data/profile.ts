@@ -1,6 +1,7 @@
 export const siteConfig = {
   siteName: "Muhamad Salman Adhim Baqy",
   shortName: "Salman",
+  wordmark: "salman.adhim",
   monogram: "sa",
   location: "Salatiga, Jawa Tengah",
   email: "adhimbaqy72@gmail.com",

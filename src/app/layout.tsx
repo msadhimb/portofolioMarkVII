@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/components/LanguageProvider"
 import { QueryProvider } from "@/components/QueryProvider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { MobileMotionProvider } from "@/components/MobileMotionProvider"
+import AmbientBackdrop from "@/components/AmbientBackdrop"
 import { cn } from "@/lib/utils"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
@@ -21,11 +22,11 @@ const display = Instrument_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL("https://salmanbaqy.dev"),
   title: {
-    default: "Muhamad Salman Adhim Baqy — Web Developer / Frontend Engineer",
-    template: "%s · Muhamad Salman Adhim Baqy",
+    default: "Muhamad Salman Adhim Baqy — Web Developer",
+    template: "%s · salman.adhim",
   },
   description:
-    "Portofolio Muhamad Salman Adhim Baqy, Web Developer dengan ±4 tahun pengalaman JavaScript. Membangun aplikasi Next.js yang terstruktur dan cepat untuk BUMN, institusi, dan produk independen — dari UI, API, database, auth, hingga deployment.",
+    "Portofolio Muhamad Salman Adhim Baqy — web developer dengan empat tahun pengalaman membangun produk Next.js: antarmuka, API, database, auth, hingga deploy.",
   keywords: [
     "Web Developer",
     "Frontend Engineer",
@@ -42,15 +43,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
     siteName: "salman.adhim",
-    title: "Muhamad Salman Adhim Baqy — Web Developer / Frontend Engineer",
+    title: "Muhamad Salman Adhim Baqy — Web Developer",
     description:
-      "Saya membangun aplikasi web yang terstruktur, cepat, dan memiliki pengalaman pengguna yang matang.",
+      "Antarmuka yang tenang, sistem yang rapi. Proyek, pengalaman, dan cara kerja.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Muhamad Salman Adhim Baqy — Web Developer / Frontend Engineer",
-    description:
-      "Next.js · TypeScript · Supabase · Enterprise & produk independen.",
+    title: "Muhamad Salman Adhim Baqy — Web Developer",
+    description: "Next.js · TypeScript · Supabase · Enterprise & produk independen.",
   },
   robots: { index: true, follow: true },
 }
@@ -72,15 +72,18 @@ const RootLayout = ({ children }: RootLayoutProps) => {
       )}
     >
       <body className="font-sans">
-        <QueryProvider>
-          <ThemeProvider>
-            <TooltipProvider>
-              <MobileMotionProvider>
-                <LanguageProvider>{children}</LanguageProvider>
-              </MobileMotionProvider>
-            </TooltipProvider>
-          </ThemeProvider>
-        </QueryProvider>
+        <AmbientBackdrop />
+        <div className="relative z-10">
+          <QueryProvider>
+            <ThemeProvider>
+              <TooltipProvider>
+                <MobileMotionProvider>
+                  <LanguageProvider>{children}</LanguageProvider>
+                </MobileMotionProvider>
+              </TooltipProvider>
+            </ThemeProvider>
+          </QueryProvider>
+        </div>
       </body>
     </html>
   )

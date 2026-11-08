@@ -37,7 +37,7 @@ export const principlesId = [
   {
     id: {
       title: "Motion melayani narasi",
-      note: "RLS, validasi ganda (client + server), dan prinsip least-privilege — terutama untuk data finansial dan enterprise.",
+      note: "Animasi hanya ada jika membantu orientasi atau emosi. Hormati prefers-reduced-motion.",
     },
     en: {
       title: "Motion serves narrative",

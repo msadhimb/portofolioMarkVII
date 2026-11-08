@@ -14,7 +14,6 @@ import { validateChatInput } from "./validation"
 import { ChatTerminal } from "./components/ChatTerminal"
 import { ModelCard } from "./components/ModelCard"
 import { PromptChips } from "./components/PromptChips"
-import Grid from "../Background/Grid"
 
 export const ChatbotSection = () => {
   i18next.addResourceBundle("id", "Chatbot", id)
@@ -70,16 +69,14 @@ export const ChatbotSection = () => {
   return (
     <section
       id="ai"
-      aria-label="EVE chatbot"
-      className="relative scroll-mt-24 overflow-hidden border-y border-border py-20 sm:py-28"
+      aria-label={t("eyebrow")}
+      className="relative scroll-mt-24 border-y border-border bg-muted/20 py-20 sm:py-28"
     >
-      <Grid />
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
-          {/* Kolom kiri: heading + prompt keyboard + kartu model */}
           <Reveal>
             <SectionHeading
-              index="AI"
+              index={t("index")}
               eyebrow={t("eyebrow")}
               title={
                 <>
@@ -101,43 +98,40 @@ export const ChatbotSection = () => {
 
             <ModelCard
               model={model}
-              terminalTitle={t("terminalTitle")}
               onlineLabel={t("online")}
               modelLabel={t("modelLabel")}
               apiPath={t("apiPath")}
             />
 
-            <p className="mt-4 font-mono text-[11px] leading-relaxed text-muted-foreground">
+            <p className="mt-5 max-w-sm font-mono text-[10px] leading-relaxed text-muted-foreground">
               {t("disclaimer")}
             </p>
           </Reveal>
 
-          {/* Kolom kanan: jendela terminal HUD futuristik */}
-          <Reveal delay={0.1} className="w-full">
-            <div className="hud-corners p-3">
-              <ChatTerminal
-                model={model}
-                messages={messages}
-                loading={loading}
-                error={error}
-                input={input}
-                inputErrorKey={inputErrorKey}
-                thinkingLabel={t("thinking")}
-                emptyStateLabel={t("emptyState")}
-                copyLabel={t("copyAnswer")}
-                placeholder={t("placeholder")}
-                sendLabel={t("send")}
-                stopLabel={t("stop")}
-                clearLabel={t("clear")}
-                hintLabel={t("inputHint")}
-                validationEmptyLabel={t("validationEmpty")}
-                validationTooLongLabel={t("validationTooLong")}
-                onInputChange={setInput}
-                onSubmitText={handleSubmitText}
-                onStop={stop}
-                onClear={handleClear}
-              />
-            </div>
+          <Reveal delay={0.08} className="w-full">
+            <ChatTerminal
+              model={model}
+              terminalTitle={t("terminalTitle")}
+              messages={messages}
+              loading={loading}
+              error={error}
+              input={input}
+              inputErrorKey={inputErrorKey}
+              thinkingLabel={t("thinking")}
+              emptyStateLabel={t("emptyState")}
+              copyLabel={t("copyAnswer")}
+              placeholder={t("placeholder")}
+              sendLabel={t("send")}
+              stopLabel={t("stop")}
+              clearLabel={t("clear")}
+              hintLabel={t("inputHint")}
+              validationEmptyLabel={t("validationEmpty")}
+              validationTooLongLabel={t("validationTooLong")}
+              onInputChange={setInput}
+              onSubmitText={handleSubmitText}
+              onStop={stop}
+              onClear={handleClear}
+            />
           </Reveal>
         </div>
       </div>

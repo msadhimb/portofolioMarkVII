@@ -21,7 +21,7 @@ import {
   DetailText,
   LocaleTabs,
   MetricGrid,
-} from "@/view/Admin/components/DetailParts"
+} from "@/components/DetailParts"
 import type { AdminProject } from "../../table/columns"
 import { formatPeriodRange } from "../../form"
 

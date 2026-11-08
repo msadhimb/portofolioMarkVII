@@ -1,18 +1,17 @@
-"use client";
+"use client"
 
-import { Bot } from "lucide-react";
-import { useEffect, useRef } from "react";
-import type { ChatMsg } from "../store/type";
-import { ChatMessageItem } from "./ChatMessageItem";
+import { useEffect, useRef } from "react"
+import type { ChatMsg } from "../store/type"
+import { ChatMessageItem } from "./ChatMessageItem"
 
 type MessageListProps = {
-  messages: ChatMsg[];
-  loading: boolean;
-  thinkingLabel: string;
-  emptyStateLabel: string;
-  copyLabel: string;
-  error: string | null;
-};
+  messages: ChatMsg[]
+  loading: boolean
+  thinkingLabel: string
+  emptyStateLabel: string
+  copyLabel: string
+  error: string | null
+}
 
 export const MessageList = ({
   messages,
@@ -22,58 +21,66 @@ export const MessageList = ({
   copyLabel,
   error,
 }: MessageListProps) => {
-  const listRef = useRef<HTMLDivElement | null>(null);
+  const listRef = useRef<HTMLDivElement | null>(null)
 
-  const lastMessage = messages[messages.length - 1];
+  const lastMessage = messages[messages.length - 1]
 
-  // Auto-scroll ke pesan terbaru.
   useEffect(() => {
-    const el = listRef.current;
-    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-  }, [messages, loading]);
+    const el = listRef.current
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" })
+  }, [messages, loading])
 
-  const showTyping = loading && (!lastMessage || lastMessage.content === "");
+  const showTyping = loading && (!lastMessage || lastMessage.content === "")
 
   return (
     <div
       ref={listRef}
       role="log"
       aria-live="polite"
-      className="h-[380px] space-y-4 overflow-y-auto px-5 py-5 touch-pan-y overscroll-contain [scrollbar-width:thin] sm:h-[420px]"
+      className="h-[380px] touch-pan-y space-y-5 overflow-y-auto overscroll-contain px-5 py-6 [scrollbar-width:thin] sm:h-[420px]"
     >
       {messages.length === 0 && !loading ? (
-         <p className="font-mono text-xs leading-relaxed text-[#a8a294]">{emptyStateLabel}</p>
+        <p className="max-w-xs font-mono text-[11px] leading-relaxed text-[#a8a294]">
+          {emptyStateLabel}
+        </p>
       ) : null}
 
       {messages.map((message) => (
-        <ChatMessageItem key={message.id} message={message} copyLabel={copyLabel} />
+        <ChatMessageItem
+          key={message.id}
+          message={message}
+          copyLabel={copyLabel}
+        />
       ))}
 
       {showTyping ? (
-        <div className="flex items-center gap-2.5">
-          <span className="flex size-7 items-center justify-center rounded-lg bg-cyan-400/15 text-cyan-300">
-            <Bot className="size-4" />
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[9px] tracking-[0.2em] text-signal uppercase">
+            EVE
           </span>
-          <div className="inline-flex items-center gap-2 rounded-2xl rounded-bl-md border border-white/10 bg-white/[0.05] px-4 py-3">
-            <span className="flex gap-1">
-              {[0, 1, 2].map((i) => (
-                <span
-                  key={i}
-                  className="animate-typing-dot size-1.5 rounded-full bg-[#f59e0b]"
-                  style={{ animationDelay: `${i * 0.18}s` }}
-                />
-              ))}
-            </span>
-             <span className="font-mono text-[11px] text-[#a8a294]">{thinkingLabel}…</span>
-          </div>
+          <span className="flex gap-1">
+            {[0, 1, 2].map((i) => (
+              <span
+                key={i}
+                className="animate-typing-dot size-1 rounded-full bg-[#a8a294]"
+                style={{ animationDelay: `${i * 0.18}s` }}
+              />
+            ))}
+          </span>
+          <span className="font-mono text-[10px] text-[#a8a294]">
+            {thinkingLabel}…
+          </span>
         </div>
       ) : null}
 
       {error && !loading ? (
-        <p role="alert" className="font-mono text-[11px] leading-relaxed text-red-300">
+        <p
+          role="alert"
+          className="font-mono text-[10px] leading-relaxed text-red-300/90"
+        >
           {error}
         </p>
       ) : null}
     </div>
-  );
-};
+  )
+}

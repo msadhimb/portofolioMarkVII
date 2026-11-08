@@ -9,19 +9,21 @@ import {
   type UseFormRegister,
 } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { BriefcaseBusiness, Languages, Loader2, Plus, Save, Settings2 } from "lucide-react"
+import {
+  BriefcaseBusiness,
+  Languages,
+  Loader2,
+  Plus,
+  Save,
+  Settings2,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DialogModal } from "@/components/DialogModal"
 import { FormInput } from "@/components/Forms/FormInput"
 import { FormTextArea } from "@/components/Forms/FormTextArea"
 import { useActionModal } from "@/components/ActionModal/store"
-import { getErrorMessage } from "@/view/Admin/components/getErrorMessage"
-import {
-  FormSectionCard,
-  FormTabBar,
-  countErrorsByPrefix,
-  type FormTabKey,
-} from "@/view/Admin/components/FormParts"
+import { getErrorMessage } from "@/helper/getErrorMessage"
+
 import {
   experienceDefaultValues,
   experienceFormToPayload,
@@ -34,6 +36,9 @@ import {
   useUpdateExperience,
 } from "../../hooks/useExperiencesMutation"
 import type { AdminExperience } from "../../table/columns"
+import { countErrorsByPrefix } from "@/helper/countErrorsByPrefix"
+import { FormTabBar } from "@/components/Forms/FormTabBar"
+import FormSectionCard from "@/components/Forms/FormSectionCard"
 
 type ExperienceDialogProps = {
   open: boolean
@@ -54,7 +59,7 @@ export const ExperienceDialog = ({
   const createMutation = useCreateExperience()
   const updateMutation = useUpdateExperience()
   const isPending = createMutation.isPending || updateMutation.isPending
-  const [tab, setTab] = useState<FormTabKey>("umum")
+  const [tab, setTab] = useState("umum")
 
   const {
     register,
@@ -185,7 +190,11 @@ export const ExperienceDialog = ({
         noValidate
         className="space-y-4"
       >
-        <FormTabBar active={tab} onChange={setTab} errorCounts={errorCounts} />
+        <FormTabBar
+          active={tab as any}
+          onChange={setTab}
+          errorCounts={errorCounts}
+        />
 
         <FormSectionCard
           hidden={tab !== "umum"}

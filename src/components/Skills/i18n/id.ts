@@ -1,12 +1,14 @@
 const locale = {
-    eyebrow: "Keahlian & Pendekatan",
-    titleA: "Stack yang dalam,",
-    titleAccent: "opini yang jelas.",
-    description:
-      "Teknologi hanyalah alat. Yang membedakan adalah keputusan kapan memakai apa — dan apa yang sengaja tidak dipakai.",
-    rangeTitle: "Engineering range",
-    rangeNote: "Satu orang, seluruh alur.",
-    rangeItems: ["UI → state → API", "DB → auth → RLS", "PDF → i18n → deploy"],
-  };
+  eyebrow: "Kemampuan",
+  titleA: "Kedalaman teknis,",
+  titleAccent: "bukan daftar logo.",
+  description:
+    "Saya memilih alat berdasarkan batas masalah, bukan tren. Berikut area yang paling sering saya pegang dari ujung ke ujung.",
+  rangeTitle: "Cakupan kerja",
+  rangeNote: "Satu orang, dari antarmuka sampai deploy.",
+  rangeItems: ["UI → state → API", "DB → auth → RLS", "PDF → i18n → deploy"],
+  principlesLabel: "Prinsip kerja",
+  ariaLabel: "Kemampuan dan pendekatan",
+}
 
-export default locale;
+export default locale

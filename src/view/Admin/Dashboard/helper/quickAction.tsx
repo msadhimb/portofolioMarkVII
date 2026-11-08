@@ -8,28 +8,28 @@ import {
 
 export const QUICK_ACTIONS = [
   {
-    label: "Project",
-    href: "/admin/dashboard/projects",
+    label: "Proyek",
+    href: "/dashboard/projects",
     icon: <FolderKanbanIcon className="size-4" />,
   },
   {
-    label: "Experience",
-    href: "/admin/dashboard/experiences",
+    label: "Pengalaman",
+    href: "/dashboard/experiences",
     icon: <BriefcaseBusinessIcon className="size-4" />,
   },
   {
-    label: "Awards",
-    href: "/admin/dashboard/awards",
+    label: "Penghargaan",
+    href: "/dashboard/awards",
     icon: <AwardIcon className="size-4" />,
   },
   {
-    label: "Skills",
-    href: "/admin/dashboard/skills",
+    label: "Keahlian",
+    href: "/dashboard/skills",
     icon: <SparklesIcon className="size-4" />,
   },
   {
-    label: "Overview",
-    href: "/admin/dashboard",
+    label: "Ringkasan",
+    href: "/dashboard",
     icon: <LayoutDashboardIcon className="size-4" />,
   },
 ]

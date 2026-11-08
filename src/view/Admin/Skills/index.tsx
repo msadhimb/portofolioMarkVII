@@ -6,8 +6,9 @@ import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useActionModal } from "@/components/ActionModal/store"
 import { useConfirmModal } from "@/components/ConfirmModal/store"
-import { DataTable } from "@/view/Admin/components/DataTable"
-import { getErrorMessage } from "@/view/Admin/components/getErrorMessage"
+import { DataTable } from "@/components/DataTable"
+import { PageHeader } from "@/components/PageHeader/PageHeader"
+import { getErrorMessage } from "@/helper/getErrorMessage"
 import { unwrapList } from "@/lib/pagination"
 import { getSkillGroupColumns, type AdminSkillGroup } from "./table/columns"
 import { SkillGroupDetailDialog } from "./components/SkillGroupDetailDialog"
@@ -88,20 +89,16 @@ export const SkillsAdminView = () => {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">
-            Skills
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Kelola grup skill dalam dua bahasa.
-          </p>
-        </div>
-        <Button type="button" onClick={handleAdd}>
-          <Plus />
-          Tambah skill group
-        </Button>
-      </div>
+      <PageHeader
+        title="Keahlian"
+        description="Kelola grup skill dalam dua bahasa."
+        action={
+          <Button type="button" onClick={handleAdd}>
+            <Plus />
+            Tambah grup skill
+          </Button>
+        }
+      />
 
       <DataTable
         columns={columns}

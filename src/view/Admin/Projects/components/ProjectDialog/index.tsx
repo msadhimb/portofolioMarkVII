@@ -28,13 +28,8 @@ import { FormImageUpload } from "@/components/Forms/FormImageUpload"
 import { FormSelect } from "@/components/Forms/FormSelect"
 import { FormTextArea } from "@/components/Forms/FormTextArea"
 import { useActionModal } from "@/components/ActionModal/store"
-import { getErrorMessage } from "@/view/Admin/components/getErrorMessage"
-import {
-  FormSectionCard,
-  FormTabBar,
-  countErrorsByPrefix,
-  type FormTabKey,
-} from "@/view/Admin/components/FormParts"
+import { getErrorMessage } from "@/helper/getErrorMessage"
+
 import {
   projectDefaultValues,
   projectFormToPayload,
@@ -47,6 +42,9 @@ import {
   useUpdateProject,
 } from "../../hooks/useProjectsMutation"
 import type { AdminProject } from "../../table/columns"
+import { countErrorsByPrefix } from "@/helper/countErrorsByPrefix"
+import { FormTabBar } from "@/components/Forms/FormTabBar"
+import FormSectionCard from "@/components/Forms/FormSectionCard"
 
 type ProjectDialogProps = {
   open: boolean
@@ -72,7 +70,7 @@ export const ProjectDialog = ({
   const createMutation = useCreateProject()
   const updateMutation = useUpdateProject()
   const isPending = createMutation.isPending || updateMutation.isPending
-  const [tab, setTab] = useState<FormTabKey>("umum")
+  const [tab, setTab] = useState("umum")
 
   const {
     register,
@@ -201,7 +199,11 @@ export const ProjectDialog = ({
         noValidate
         className="space-y-4"
       >
-        <FormTabBar active={tab} onChange={setTab} errorCounts={errorCounts} />
+        <FormTabBar
+          active={tab as any}
+          onChange={setTab}
+          errorCounts={errorCounts}
+        />
 
         <FormSectionCard
           hidden={tab !== "umum"}
@@ -486,7 +488,8 @@ const LocaleFields = ({
 
         {metricFields.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border/70 p-4 text-center text-xs text-muted-foreground">
-            Belum ada metrik. Klik &ldquo;Tambah metrik&rdquo; jika ingin menambahkan.
+            Belum ada metrik. Klik &ldquo;Tambah metrik&rdquo; jika ingin
+            menambahkan.
           </div>
         ) : (
           <div className="space-y-3">
@@ -524,7 +527,7 @@ const LocaleFields = ({
                     size="icon"
                     disabled={disabled}
                     onClick={() => removeMetric(index)}
-                    className="mt-7 text-muted-foreground hover:text-destructive shrink-0"
+                    className="mt-7 shrink-0 text-muted-foreground hover:text-destructive"
                     title="Hapus metrik"
                   >
                     <Trash2 className="size-4" />
@@ -540,7 +543,9 @@ const LocaleFields = ({
       <div className="space-y-3 pt-2">
         <div className="flex items-center justify-between">
           <div>
-            <Label className="text-sm font-medium">Keputusan Teknis / Desain</Label>
+            <Label className="text-sm font-medium">
+              Keputusan Teknis / Desain
+            </Label>
             <p className="text-xs text-muted-foreground">
               Keputusan arsitektur atau rekayasa (judul & detail).
             </p>
@@ -559,13 +564,16 @@ const LocaleFields = ({
 
         {decisionFields.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border/70 p-4 text-center text-xs text-muted-foreground">
-            Belum ada keputusan. Klik &ldquo;Tambah keputusan&rdquo; jika ingin menambahkan.
+            Belum ada keputusan. Klik &ldquo;Tambah keputusan&rdquo; jika ingin
+            menambahkan.
           </div>
         ) : (
           <div className="space-y-3">
             {decisionFields.map((fieldItem, index) => {
               const currentErrors =
-                errors[`${prefix}Decisions` as "idDecisions" | "enDecisions"]?.[index]
+                errors[`${prefix}Decisions` as "idDecisions" | "enDecisions"]?.[
+                  index
+                ]
               return (
                 <div
                   key={fieldItem.id}
@@ -598,7 +606,7 @@ const LocaleFields = ({
                     size="icon"
                     disabled={disabled}
                     onClick={() => removeDecision(index)}
-                    className="mt-7 text-muted-foreground hover:text-destructive shrink-0"
+                    className="mt-7 shrink-0 text-muted-foreground hover:text-destructive"
                     title="Hapus keputusan"
                   >
                     <Trash2 className="size-4" />

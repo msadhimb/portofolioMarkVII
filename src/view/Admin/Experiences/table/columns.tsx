@@ -4,7 +4,7 @@ import {
   RowActions,
   SortableHeader,
   type DataTableFeatures,
-} from "@/view/Admin/components/DataTable"
+} from "@/components/DataTable"
 import { format, isValid } from "date-fns"
 import { id as idLocale } from "date-fns/locale"
 

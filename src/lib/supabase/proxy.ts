@@ -39,20 +39,34 @@ export const updateSession = async (request: NextRequest) => {
 
   const pathname = request.nextUrl.pathname
   const isDashboardRoute =
+    pathname === "/dashboard" || pathname.startsWith("/dashboard/")
+
+  const isLoginRoute = pathname === "/login"
+
+  if (pathname === "/admin/login") {
+    const url = request.nextUrl.clone()
+    url.pathname = "/login"
+    return NextResponse.redirect(url)
+  }
+
+  if (
     pathname === "/admin/dashboard" ||
     pathname.startsWith("/admin/dashboard/")
-
-  const isLoginRoute = pathname === "/admin/login"
+  ) {
+    const url = request.nextUrl.clone()
+    url.pathname = pathname.replace(/^\/admin\/dashboard/, "/dashboard")
+    return NextResponse.redirect(url)
+  }
 
   if (!user && isDashboardRoute) {
     const url = request.nextUrl.clone()
-    url.pathname = "/admin/login"
+    url.pathname = "/login"
     return NextResponse.redirect(url)
   }
 
   if (user && isLoginRoute) {
     const url = request.nextUrl.clone()
-    url.pathname = "/admin/dashboard"
+    url.pathname = "/dashboard"
     return NextResponse.redirect(url)
   }
 

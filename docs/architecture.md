@@ -1,4 +1,4 @@
-﻿# Architecture
+# Architecture
 
 Overview of the technical architecture of portofolioMarkVII. Read together with
 [AGENTS.md](../AGENTS.md) (hard rules + skills) and
@@ -45,7 +45,7 @@ portofolioMarkVII/
     │   ├── layout.tsx         # provider stack: Query → Theme → Tooltip → MobileMotion → Language
     │   ├── page.tsx           # home (Navbar + MainView + Footer + VisitorTracker)
     │   ├── (public)/          # projects/[slug]
-    │   ├── admin/             # login, dashboard/{projects,skills,experiences,awards,visitors}
+    │   ├── (admin)/           # login, dashboard/{projects,skills,experiences,awards,visitors}
     │   └── api/v1/            # public reads + chat/cv/settings/visits + admin/*
     ├── components/            # public feature slices (~50 folders)
     ├── view/                  # Main · Project · Admin/*
@@ -73,8 +73,8 @@ Other views: `src/view/Main` (home composition), `src/view/Project`
 - `/projects/[slug]` → `src/app/(public)/projects/[slug]` (static params from `projectSlugs`)
 
 ### Admin pages
-- `/admin/login`
-- `/admin/dashboard` + `/admin/dashboard/{projects,skills,experiences,awards,visitors}`
+- `/login`
+- `/dashboard` + `/dashboard/{projects,skills,experiences,awards,visitors}`
 
 ### API
 Versioned under `/api/v1` — see [api-reference.md](api-reference.md).
@@ -83,8 +83,8 @@ Versioned under `/api/v1` — see [api-reference.md](api-reference.md).
 
 1. **`src/proxy.ts`** (Next 16 middleware replacement) runs for almost all paths:
    - builds a cookie-bound Supabase server client, refreshes session via `getClaims()`
-   - redirects unauthenticated users away from `/admin/dashboard*` → `/admin/login`
-   - redirects authenticated users off `/admin/login` → `/admin/dashboard`
+   - redirects unauthenticated users away from `/dashboard*` → `/login`
+   - redirects authenticated users off `/login` → `/dashboard`
 2. **Server Components / API routes** create their own client per request with
    `createClient()` from `@/lib/supabase/server`.
 3. **Admin API handlers** enforce a second, JSON-level guard:
@@ -104,7 +104,7 @@ This mirrors the DB (RLS: `for all to authenticated` on admin-writable tables).
    Business logic moves to `hooks/`, `helper/`, `form/` etc.
 4. **Split files at ~600 lines** by responsibility; `index.tsx` keeps orchestration only.
 5. **Shared code rule**: code used by ≥2 features with a stable API moves to
-   `src/components/Forms/`, `src/view/Admin/components/`, `src/helper/`, or `src/lib/`.
+   `src/components/Forms/`, `src/components/`, `src/helper/`, or `src/lib/`.
    Single-feature code stays inside the feature.
 6. **shadcn primitives live only in `src/components/ui/`** — never put business
    components there. Add shadcn components one by one (`npx shadcn@latest add <x>`),
@@ -124,7 +124,7 @@ Projects placeholder cards).
   (rate-limited, 60/min/IP-hash, returns 204 when throttled, writes deferred via `after()`).
 - Cookies: `portfolio_visitor` (1y), `portfolio_visit_session` (30m).
 - Writes bypass RLS with `createAdminClient()` → RPC `record_site_visit`.
-- Admin dashboard: `/admin/dashboard/visitors` → `GET /api/v1/admin/visits`
+- Admin dashboard: `/dashboard/visitors` → `GET /api/v1/admin/visits`
   (range `7d|30d|90d`, device filter, summary + daily series + top pages/countries/devices).
 - SQL: `supabase/analytics_schema.sql`.
 

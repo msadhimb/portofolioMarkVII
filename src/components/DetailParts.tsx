@@ -16,11 +16,11 @@ export const DetailSection = ({
   return (
     <section
       aria-label={title}
-      className="card-futuristic overflow-hidden rounded-xl border bg-card shadow-[0_16px_40px_-28px_rgba(245,158,11,0.4)]"
+      className="glass-panel overflow-hidden rounded-xl border"
     >
-      <header className="flex items-center gap-2.5 border-b border-border/70 bg-muted/50 px-4 py-2.5">
+      <header className="flex items-center gap-2.5 border-b border-border/70 bg-muted/40 px-4 py-2.5">
         {icon ? (
-           <span className="flex size-7 items-center justify-center rounded-lg border border-signal/25 bg-gradient-to-br from-amber-500/20 to-teal-500/20 text-signal [&_svg]:size-3.5">
+          <span className="flex size-7 items-center justify-center rounded-md border border-border bg-muted text-signal [&_svg]:size-3.5">
             {icon}
           </span>
         ) : null}
@@ -89,7 +89,7 @@ export const DetailList = ({
           >
             <span
               aria-hidden="true"
-               className="tabular flex size-5 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-amber-500/25 to-teal-500/25 font-mono text-[10px] font-bold text-signal"
+              className="tabular flex size-5 shrink-0 items-center justify-center rounded-sm border border-border bg-muted font-mono text-[10px] font-semibold text-signal"
             >
               {index + 1}
             </span>
@@ -124,7 +124,7 @@ export const DetailChips = ({
             <Badge
               key={item}
               variant="secondary"
-               className="gap-1.5 border-signal/20 bg-gradient-to-br from-amber-500/10 to-teal-500/10 py-1 font-normal hover:border-signal/50"
+              className="gap-1.5 border-border bg-muted py-1 font-normal hover:border-signal/50"
             >
               <span
                 aria-hidden="true"
@@ -145,7 +145,6 @@ export const DetailHero = ({
   subtitle,
   badges,
   actions,
-  tone = "cyan",
 }: {
   letter: string
   title: string
@@ -154,37 +153,10 @@ export const DetailHero = ({
   actions?: ReactNode
   tone?: "cyan" | "violet" | "emerald"
 }) => {
-  const wash =
-    tone === "violet"
-      ? "from-amber-500/[0.18] via-transparent to-transparent"
-      : tone === "emerald"
-        ? "from-emerald-500/[0.16] via-transparent to-transparent"
-        : "from-teal-500/[0.16] via-transparent to-transparent"
-  const blob =
-    tone === "violet"
-      ? "bg-amber-500/30"
-      : tone === "emerald"
-        ? "bg-emerald-400/30"
-        : "bg-teal-400/30"
   return (
-    <div className="relative overflow-hidden rounded-xl border bg-card">
-      <div
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute inset-0 bg-gradient-to-br",
-          wash
-        )}
-      />
-      <div className="bg-grid pointer-events-none absolute inset-0 opacity-70 [mask-image:radial-gradient(ellipse_90%_100%_at_0%_0%,black,transparent)]" />
-      <div
-        aria-hidden="true"
-        className={cn(
-          "animate-aurora pointer-events-none absolute -top-16 -right-8 size-48 rounded-full blur-2xl opacity-75",
-          blob
-        )}
-      />
-      <div className="relative flex items-start gap-4 p-4 sm:p-5">
-         <span className="font-display flex size-14 shrink-0 items-center justify-center rounded-2xl border border-signal/25 bg-gradient-to-br from-amber-500/25 to-teal-500/25 text-2xl font-bold text-signal shadow-lg">
+    <div className="glass-panel overflow-hidden rounded-xl border">
+      <div className="flex items-start gap-4 p-4 sm:p-5">
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-md border border-border bg-muted font-mono text-lg font-medium text-signal">
           {letter}
         </span>
         <div className="min-w-0 flex-1">
@@ -205,7 +177,7 @@ export const DetailHero = ({
         ) : null}
       </div>
       {actions ? (
-        <div className="relative flex gap-2 border-t border-border/60 bg-muted/40 px-4 py-2.5 sm:hidden">
+        <div className="relative flex gap-2 border-t border-border/60 bg-muted/30 px-4 py-2.5 sm:hidden">
           {actions}
         </div>
       ) : null}
@@ -244,17 +216,17 @@ export const LocaleTabs = ({
             type="button"
             onClick={() => onChange(tab.key)}
             className={cn(
-              "flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-[13px] font-medium transition-all",
+              "flex items-center justify-center gap-2 rounded-md px-3 py-2 text-[13px] font-medium transition-colors",
               selected
-                ? "border border-signal/30 bg-card text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
+                ? "border border-border bg-muted text-foreground"
+                : "border border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
             <span
               className={cn(
-                "flex size-5 items-center justify-center rounded-md font-mono text-[9px] font-bold",
+                "flex size-5 items-center justify-center rounded-sm font-mono text-[9px] font-semibold",
                 selected
-                   ? "bg-gradient-to-br from-amber-500/30 to-teal-500/30 text-signal"
+                  ? "bg-signal/15 text-signal"
                   : "bg-muted text-muted-foreground"
               )}
             >
@@ -291,9 +263,9 @@ export const MetricGrid = ({
         {items.map((metric, index) => (
           <div
             key={`${metric.label}-${index}`}
-             className="relative overflow-hidden rounded-lg border border-border/60 bg-gradient-to-b from-amber-500/[0.08] to-teal-500/[0.08] p-3 text-center transition-colors hover:border-signal/40"
+            className="rounded-md border border-border bg-muted/40 p-3 text-center transition-colors hover:border-signal/40"
           >
-            <p className="tabular font-display text-lg leading-tight font-bold text-signal">
+            <p className="tabular font-display text-lg leading-tight text-signal">
               {metric.value}
             </p>
             <p className="mt-1 truncate text-[11px] text-muted-foreground">

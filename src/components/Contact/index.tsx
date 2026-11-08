@@ -1,7 +1,6 @@
 "use client"
 
-import { ArrowUpRight, Copy, Mail } from "lucide-react"
-import { ClickSpark } from "@/components/ClickSpark"
+import { ArrowUpRight, Mail } from "lucide-react"
 import { CopyEmailButton } from "@/components/CopyEmailButton"
 import i18next from "i18next"
 import { useTranslation } from "react-i18next"
@@ -9,7 +8,7 @@ import id from "./i18n/id"
 import en from "./i18n/en"
 import { Reveal } from "@/components/Reveal"
 import { SectionHeading } from "@/components/SectionHeading"
-import { Card } from "@/components/ui/card"
+import { SpotlightCard } from "@/components/SpotlightCard"
 import { siteConfig } from "@/data/profile"
 import { useSiteSettings } from "@/hooks/useSiteSettings"
 
@@ -28,12 +27,12 @@ export const Contact = () => {
   }[]
 
   return (
-    <section id="contact" aria-label="Contact" className="scroll-mt-24">
+    <section id="contact" aria-label={t("eyebrow")} className="scroll-mt-24">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="grid items-start gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-20">
           <Reveal>
             <SectionHeading
-              index="05"
+              index="07"
               eyebrow={t("eyebrow")}
               title={
                 <>
@@ -46,85 +45,85 @@ export const Contact = () => {
             >
               {t("description")}
             </SectionHeading>
-            <div className="space-y-4">
-              <ClickSpark
-                sparkColor={["#F59E0B", "#2DD4BF"]}
-                sparkCount={10}
-                sparkRadius={48}
-                className="h-auto!"
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="inline-flex h-12 items-center gap-2 rounded-full border border-white/10 bg-foreground px-6 text-sm font-medium text-background shadow-[0_18px_40px_-30px_rgba(0,0,0,0.7)] transition-transform duration-200 hover:-translate-y-px"
               >
-                <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
-                  <a
-                    href={`mailto:${siteConfig.email}`}
-                    className="inline-flex h-12 items-center gap-2 rounded-full bg-foreground px-6 text-[15px] font-medium text-background transition-transform hover:-translate-y-px"
-                  >
-                    <Mail className="size-4" />
-                    {siteConfig.email}
-                  </a>
-                  <CopyEmailButton
-                    email={siteConfig.email}
-                    copyLabel={t("copyEmail")}
-                    copiedLabel={t("copied")}
-                  />
-                </div>
-              </ClickSpark>
-              <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 md:justify-start">
-                {[
-                  { label: "GitHub", href: siteConfig.github },
-                  { label: "LinkedIn", href: siteConfig.linkedin },
-                ].map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {s.label}
-                    <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-px group-hover:-translate-y-px" />
-                  </a>
-                ))}
-              </div>
+                <Mail className="size-4" />
+                {siteConfig.email}
+              </a>
+              <CopyEmailButton
+                email={siteConfig.email}
+                copyLabel={t("copyEmail")}
+                copiedLabel={t("copied")}
+              />
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3">
+              {[
+                { label: "GitHub", href: siteConfig.github },
+                { label: "LinkedIn", href: siteConfig.linkedin },
+              ].map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase transition-colors hover:text-signal"
+                >
+                  {social.label}
+                  <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </a>
+              ))}
             </div>
           </Reveal>
 
           <Reveal delay={0.08}>
-            <Card className="rounded-3xl p-7">
-              <h3 className="font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
-                {t("expectations")}
-              </h3>
-              <ol className="mt-5 space-y-5">
-                {steps.map((step, i) => (
-                  <li key={step.title} className="flex gap-4">
-                    <span className="tabular font-mono text-xs font-semibold text-signal">
-                      0{i + 1}
-                    </span>
-                    <div>
-                      <p className="text-[15px] font-semibold text-foreground">
-                        {step.title}
-                      </p>
-                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                        {step.detail}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-              <div className="mt-6 rounded-2xl bg-muted/70 p-4">
-                <p className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Copy className="size-4 text-signal" />
-                  {t("availabilityNow")}:{" "}
-                  {settings.is_available
-                    ? availabilityLabel.toLowerCase()
-                    : i18n.language === "en"
-                      ? "currently unavailable"
-                      : "sedang tidak tersedia"}
+            <SpotlightCard className="glass-panel rounded-2xl border px-5 pb-5 shadow-none">
+              <div className="py-5">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+                  {t("availabilityNow")}
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {t("capacity")}
+                <p className="mt-2 flex items-center gap-2 text-sm text-foreground">
+                  <span className="size-1.5 shrink-0 rounded-full bg-signal" />
+                  {settings.is_available
+                    ? availabilityLabel
+                    : t("unavailable")}
                 </p>
               </div>
-            </Card>
+
+              <p className="border-t border-border py-5 text-[13px] leading-relaxed text-muted-foreground">
+                {t("capacity")}
+              </p>
+
+              <div className="border-t border-border pt-7">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+                  {t("expectations")}
+                </p>
+                <ol className="mt-5 space-y-5">
+                  {steps.map((step, index) => (
+                    <li
+                      key={step.title}
+                      className="grid grid-cols-[28px_1fr] gap-3"
+                    >
+                      <span className="tabular font-mono text-[10px] text-signal">
+                        0{index + 1}
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">
+                          {step.title}
+                        </p>
+                        <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+                          {step.detail}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </SpotlightCard>
           </Reveal>
         </div>
       </div>

@@ -1,19 +1,20 @@
 const locale = {
   role: "Web Developer / Frontend Engineer",
+  index: "Portfolio — 2026",
   statement:
-    "I build web applications that are well-structured, fast, and mature in user experience.",
-  statementExtra:
-    "I focus on tidy architecture, measurable performance, and interaction details that stay out of the way.",
-  ctaProjects: "View projects",
+    "I build web applications that are structured, fast, and calm to use.",
+  statementExtra: "From the data contract down to the last interaction detail.",
+  ctaProjects: "See the work",
   ctaContact: "Contact me",
   ctaCv: "Download CV",
-  stickerAi: "✦ ask EVE ↓",
-  viewWork: "view work",
+  workIndex: "Work index",
+  workHint: "Drag to browse",
   stats: [
-    "Years of JavaScript experience",
+    "Years with JavaScript",
     "Featured projects",
-    "Technologies mastered",
+    "Technologies in use",
   ],
+  ariaLabel: "Introduction",
 }
 
 export default locale

@@ -38,8 +38,9 @@ src/view/Admin/Projects/
 No `i18n/` in admin — UI strings are hardcoded Indonesian.
 Study order when cloning: **Skills → Awards → Experiences → Projects** (simplest → richest).
 
-Shared admin pieces live in `src/view/Admin/components/`:
-`DataTable`, `FormParts`, `DetailParts`, `getErrorMessage`.
+Shared admin pieces live in `src/components/`:
+`DataTable`, `FormParts`, `DetailParts`, `PageHeader`
+(`getErrorMessage` lives in `src/helper/getErrorMessage.ts`).
 
 ## 2. How to write a component file
 

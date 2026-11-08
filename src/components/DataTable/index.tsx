@@ -112,7 +112,7 @@ export const DataTable = <TData extends RowData>({
     return (
       <div
         role="alert"
-        className="flex flex-col items-center gap-3 rounded-xl border border-destructive/30 bg-card p-10 text-center"
+        className="glass-panel flex flex-col items-center gap-3 rounded-xl border border-destructive/30 p-10 text-center"
       >
         <p className="text-sm font-medium text-destructive">
           Gagal memuat data.
@@ -151,7 +151,7 @@ export const DataTable = <TData extends RowData>({
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="glass-panel overflow-hidden rounded-xl border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -207,7 +207,7 @@ export const DataTable = <TData extends RowData>({
         </Table>
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-xl border border-border bg-card px-4 py-3">
+      <div className="glass-chip flex flex-wrap items-center gap-x-4 gap-y-3 rounded-xl border px-4 py-3">
         <p className="text-sm text-muted-foreground tabular-nums">
           Menampilkan{" "}
           <span className="font-semibold text-foreground">
@@ -222,7 +222,7 @@ export const DataTable = <TData extends RowData>({
             aria-label="Baris per halaman"
             value={currentPageSize}
             onChange={(event) => table.setPageSize(Number(event.target.value))}
-            className="h-8 rounded-lg border border-border bg-background px-2 text-sm text-foreground outline-none transition-colors hover:border-signal/50 focus-visible:border-signal"
+            className="h-8 rounded-lg border border-border bg-card/40 px-2 text-sm text-foreground outline-none transition-colors hover:border-signal/50 focus-visible:border-signal"
           >
             {PAGE_SIZE_OPTIONS.map((size) => (
               <option key={size} value={size}>
@@ -274,8 +274,8 @@ export const DataTable = <TData extends RowData>({
                 className={cn(
                   "tabular h-8 min-w-8 rounded-lg border px-2 font-mono text-[13px] transition-all",
                   item === pageIndex
-                    ? "border-signal/60 bg-gradient-to-br from-amber-500/25 to-teal-500/25 font-bold text-signal shadow-[0_0_18px_-6px_rgba(245,158,11,0.5)]"
-                    : "border-transparent text-muted-foreground hover:border-border hover:bg-muted hover:text-foreground"
+                    ? "border-signal bg-signal/10 font-semibold text-signal"
+                    : "border-transparent text-muted-foreground hover:border-border hover:bg-card/40 hover:text-foreground"
                 )}
               >
                 {item + 1}

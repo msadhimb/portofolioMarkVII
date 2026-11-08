@@ -29,11 +29,11 @@ export const Reveal = ({ children, delay = 0, className }: RevealProps) => {
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: isMobile ? 12 : 18 }}
+      initial={{ opacity: 0, y: isMobile ? 12 : 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: isMobile ? "-30px" : "-80px" }}
       transition={{
-        duration: isMobile ? 0.42 : 0.55,
+        duration: isMobile ? 0.42 : 0.7,
         delay: isMobile ? Math.min(delay, 0.15) : delay,
         ease: [0.22, 1, 0.36, 1],
       }}

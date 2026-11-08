@@ -28,6 +28,7 @@ import id from "./i18n/id"
 import en from "./i18n/en"
 import NavGlass from "./components/NavGlass"
 import { LocaleToggle } from "../LocaleToggle"
+import { GlassSurface } from "@/components/GlassSurface"
 
 export const Navbar = () => {
   i18next.addResourceBundle("id", "Navbar", id)
@@ -72,13 +73,12 @@ export const Navbar = () => {
   }, [])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12)
+    const onScroll = () => setScrolled(window.scrollY > 24)
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  // Tandai section yang sedang terlihat (untuk state aktif di dock)
   useEffect(() => {
     if (isProjectsPage) return
     const elements = links
@@ -96,15 +96,20 @@ export const Navbar = () => {
     )
     elements.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isProjectsPage])
 
   return (
     <>
-      {/* ================= DESKTOP NAVBAR (lg+) ================= */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[70] focus:rounded-full focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:text-background"
+      >
+        {t("skipToContent")}
+      </a>
+
       <header
         className={cn(
-          "pointer-events-none fixed inset-x-0 top-0 z-50 hidden px-6 pt-3 lg:block",
+          "pointer-events-none fixed inset-x-0 top-0 z-50 hidden px-6 pt-4 lg:block",
           "transition-[opacity,transform,visibility] duration-500 ease-out motion-reduce:transition-none",
           mounted
             ? "visible translate-y-0 opacity-100"
@@ -112,75 +117,125 @@ export const Navbar = () => {
         )}
       >
         <div className="mx-auto max-w-6xl">
-          <div className="pointer-events-auto relative flex items-center justify-between gap-4 rounded-2xl px-4 py-3">
+          <div className="pointer-events-auto relative flex items-center justify-between gap-4 rounded-full px-5 py-2.5">
             <div
               className="pointer-events-none absolute inset-0"
               aria-hidden="true"
             >
-              <NavGlass borderRadius={16} />
+              <NavGlass borderRadius={9999} />
             </div>
 
             <Link
               href="#top"
               onClick={(e) => scrollToSection(e, "#top")}
-              className="relative flex items-center gap-2.5 font-mono text-sm"
+              className="relative flex items-center gap-2.5 font-mono text-[13px]"
               aria-label={t("backToTop")}
             >
-              <span className="flex size-8 items-center justify-center rounded-md bg-foreground font-semibold text-background">
+              <span className="flex size-8 items-center justify-center rounded-full bg-foreground text-[11px] font-semibold text-background">
                 {siteConfig.monogram}
               </span>
               <span className="tracking-tight text-foreground">
-                salman<span className="text-signal">.</span>adhim
+                {siteConfig.wordmark}
               </span>
             </Link>
 
             <nav
-              aria-label="Primary"
+              aria-label={t("primaryNav")}
               className="relative flex items-center gap-1"
             >
               {isProjectsPage ? (
                 <Link
-                  href={"/"}
-                  className="cursor-pointer rounded-full px-3.5 py-2 text-sm font-semibold transition-colors"
+                  href="/"
+                  className="flex cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  Back To Home
+                  <Home className="size-3.5" />
+                  {t("backHome")}
                 </Link>
               ) : (
-                links.map((l) => (
-                  <Link
-                    key={l.href}
-                    href={l.href}
-                    onClick={(e) => scrollToSection(e, l.href)}
-                    className={cn(
-                      "cursor-pointer rounded-full px-3.5 py-2 text-sm font-semibold transition-colors",
-                      "highlight" in l && l.highlight
-                        ? "bg-foreground font-medium text-background hover:opacity-90"
-                        : "text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground"
-                    )}
-                  >
-                    {"highlight" in l && l.highlight ? `✦ ${l.label}` : l.label}
-                  </Link>
-                ))
+                links.map((l) => {
+                  const isActive = active === l.href
+                  const isHighlight = "highlight" in l && l.highlight
+
+                  return (
+                    <Link
+                      key={l.href}
+                      href={l.href}
+                      onClick={(e) => scrollToSection(e, l.href)}
+                      className={cn(
+                        "relative cursor-pointer rounded-full px-3 py-2 text-[13px] font-medium transition-colors",
+                        isActive
+                          ? "bg-card/40 text-foreground"
+                          : "text-muted-foreground hover:bg-card/30 hover:text-foreground"
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1.5",
+                          isHighlight && "text-signal"
+                        )}
+                      >
+                        {isHighlight ? (
+                          <span
+                            aria-hidden="true"
+                            className="size-1 rounded-full bg-signal"
+                          />
+                        ) : null}
+                        {l.label}
+                      </span>
+                      {isActive ? (
+                        <span
+                          aria-hidden="true"
+                          className="absolute inset-x-3 -bottom-0.5 h-px bg-signal"
+                        />
+                      ) : null}
+                    </Link>
+                  )
+                })
               )}
             </nav>
 
-            <div className="relative flex items-center gap-1.5">
-              <LocaleToggle />
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <ThemeToggle
-                    toLightLabel={t("toggleToLight")}
-                    toDarkLabel={t("toggleToDark")}
+            <div className="relative flex items-center gap-2">
+              <div className="relative flex items-center gap-1 rounded-full px-2 py-1">
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  aria-hidden="true"
+                >
+                  <GlassSurface
+                    borderRadius={9999}
+                    width="100%"
+                    height="100%"
+                    redOffset={5}
+                    greenOffset={15}
+                    blueOffset={25}
+                    backgroundOpacity={0.3}
+                    saturation={1.2}
+                    blur={8}
+                    shadow={false}
+                    border={true}
+                    className="h-full w-full"
                   />
-                </TooltipTrigger>
-                <TooltipContent side="bottom">{t("themeHint")}</TooltipContent>
-              </Tooltip>
-              <Button asChild className="rounded-full">
+                </div>
+                <div className="relative flex items-center gap-1">
+                  <LocaleToggle />
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <ThemeToggle
+                        toLightLabel={t("toggleToLight")}
+                        toDarkLabel={t("toggleToDark")}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      {t("themeHint")}
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
+              <Button asChild size="sm" className="h-9 rounded-full px-4">
                 <Link
                   href="#contact"
                   onClick={(e) => scrollToSection(e, "#contact")}
                 >
-                  Hire Me
+                  {t("hireMe")}
                 </Link>
               </Button>
             </div>
@@ -188,7 +243,6 @@ export const Navbar = () => {
         </div>
       </header>
 
-      {/* ================= MOBILE: toggle melayang (kanan atas) ================= */}
       <div
         className={cn(
           "pointer-events-none fixed top-0 right-0 z-50 px-4 pt-3 lg:hidden",
@@ -199,11 +253,11 @@ export const Navbar = () => {
             : "invisible -translate-y-2 opacity-0"
         )}
       >
-        <div className="pointer-events-auto relative flex items-center gap-1 rounded-full py-1 pr-3 pl-5">
+        <div className="pointer-events-auto relative flex items-center gap-1 rounded-full py-1 pr-2 pl-2">
           <div
             className={cn(
               "pointer-events-none absolute inset-0 transition-opacity duration-300",
-              scrolled ? "opacity-100" : "opacity-0"
+              scrolled ? "opacity-100" : "opacity-90"
             )}
             aria-hidden="true"
           >
@@ -219,9 +273,8 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* ================= MOBILE DOCK (di bawah lg) ================= */}
       <nav
-        aria-label="Dock"
+        aria-label={t("dockNav")}
         className={cn(
           "pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center px-3 lg:hidden",
           "pb-[max(0.75rem,env(safe-area-inset-bottom))]",
@@ -231,7 +284,7 @@ export const Navbar = () => {
             : "invisible translate-y-6 opacity-0"
         )}
       >
-        <div className="pointer-events-auto relative flex items-end gap-1 rounded-[28px] px-2 py-2">
+        <div className="pointer-events-auto relative flex max-w-[calc(100vw-1.5rem)] [scrollbar-width:none] items-end gap-0.5 overflow-x-auto rounded-[28px] px-2 py-2 [&::-webkit-scrollbar]:hidden">
           <div
             className="pointer-events-none absolute inset-0"
             aria-hidden="true"
@@ -242,11 +295,11 @@ export const Navbar = () => {
           {isProjectsPage ? (
             <Link
               href="/"
-              aria-label="Back To Home"
-              className="relative flex h-11 items-center gap-2 rounded-2xl bg-foreground px-4 text-sm font-medium text-background transition-transform active:scale-95"
+              aria-label={t("backHome")}
+              className="relative flex h-11 items-center gap-2 rounded-2xl bg-foreground px-4 text-[13px] font-medium text-background transition-transform active:scale-95"
             >
               <Home className="size-5" />
-              Home
+              {t("home")}
             </Link>
           ) : (
             links.map((l) => {
@@ -262,17 +315,23 @@ export const Navbar = () => {
                   aria-label={l.label}
                   aria-current={isActive ? "true" : undefined}
                   className={cn(
-                    "relative flex size-11 items-center justify-center rounded-2xl",
+                    "relative flex size-11 shrink-0 items-center justify-center rounded-2xl",
                     "transition-[transform,background-color,color] duration-300 ease-out",
                     "active:scale-90 motion-reduce:transition-none",
                     isHighlight
-                      ? "bg-foreground text-background"
+                      ? "text-signal"
                       : isActive
-                        ? "bg-foreground/10 text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
+                        ? "bg-card/40 text-foreground"
+                        : "text-muted-foreground hover:bg-card/25 hover:text-foreground"
                   )}
                 >
                   <Icon className="size-5" />
+                  {isActive ? (
+                    <span
+                      aria-hidden="true"
+                      className="absolute bottom-1.5 size-1 rounded-full bg-signal"
+                    />
+                  ) : null}
                 </Link>
               )
             })

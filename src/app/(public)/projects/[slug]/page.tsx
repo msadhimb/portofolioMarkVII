@@ -9,7 +9,7 @@ type CaseStudyPageProps = {
 export const generateStaticParams = () => projectSlugs.map((slug) => ({ slug }))
 
 export const metadata: Metadata = {
-  title: "Case Study",
+  title: "Studi kasus",
 }
 
 const CaseStudyPage = async ({ params }: CaseStudyPageProps) => {

@@ -5,7 +5,7 @@ import {
   RowActions,
   SortableHeader,
   type DataTableFeatures,
-} from "@/view/Admin/components/DataTable"
+} from "@/components/DataTable"
 
 export type AdminProjectTranslation = {
   description?: string

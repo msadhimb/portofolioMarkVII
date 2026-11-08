@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils"
 import { GlassSurface } from "@/components/GlassSurface"
-import { useEffect, useState } from "react"
 
 type NavGlassProps = {
   borderRadius: number
@@ -24,8 +23,9 @@ const NavGlass = ({ borderRadius, className }: NavGlassProps) => {
           redOffset={0}
           greenOffset={10}
           blueOffset={20}
-          backgroundOpacity={0.5}
-          saturation={1.4}
+          backgroundOpacity={0.8}
+          saturation={1.5}
+          distortionScale={-50}
           shadow={false}
           className="h-full w-full"
         />
@@ -35,20 +35,20 @@ const NavGlass = ({ borderRadius, className }: NavGlassProps) => {
           className="pointer-events-none absolute inset-0 bg-background/15"
           style={{ borderRadius }}
         />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            borderRadius,
+            boxShadow:
+              "inset 0 1px 0 rgba(255,255,255,0.38), inset 0 -1px 0 rgba(17,20,17,0.08)",
+          }}
+        />
       </div>
 
       <div
-        style={{
-          borderRadius,
-          WebkitBackdropFilter: "blur(24px) saturate(160%)",
-          backdropFilter: "blur(24px) saturate(160%)",
-          backgroundColor:
-            "color-mix(in srgb, var(--background) 75%, transparent)",
-        }}
-        className={cn(
-          "h-full w-full border border-foreground/10 shadow-lg lg:hidden",
-          className
-        )}
+        className={cn("glass-nav h-full w-full border lg:hidden", className)}
+        style={{ borderRadius }}
       />
     </>
   )

@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { EMPTY_PAGINATION } from "@/lib/pagination"
+import { PageHeader } from "@/components/PageHeader/PageHeader"
 import { cn } from "@/lib/utils"
 import BreakdownCard from "./components/BreakdownCard"
 import SummaryCards from "./components/SummaryCards"
@@ -104,30 +105,25 @@ export const VisitorsAdminView = () => {
   return (
     <div className="flex flex-1 flex-col gap-4">
       <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="text-xl font-semibold tracking-tight text-foreground">
-              Visitors
-            </h1>
-            <p className="mt-1 max-w-xl text-sm text-muted-foreground">
-              Pengunjung unik berdasarkan browser. Lokasi dari header Vercel, IP
-              di-hash, dan kunjungan berulang tidak membuat baris baru.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {RANGE_OPTIONS.map((option) => (
-              <Button
-                key={option.value}
-                type="button"
-                size="sm"
-                variant={range === option.value ? "default" : "outline"}
-                onClick={() => handleRangeChange(option.value)}
-              >
-                {option.label}
-              </Button>
-            ))}
-          </div>
-        </div>
+        <PageHeader
+          title="Pengunjung"
+          description="Pengunjung unik berdasarkan browser. Lokasi dari header Vercel, IP di-hash, dan kunjungan berulang tidak membuat baris baru."
+          action={
+            <div className="flex flex-wrap items-center gap-2">
+              {RANGE_OPTIONS.map((option) => (
+                <Button
+                  key={option.value}
+                  type="button"
+                  size="sm"
+                  variant={range === option.value ? "default" : "outline"}
+                  onClick={() => handleRangeChange(option.value)}
+                >
+                  {option.label}
+                </Button>
+              ))}
+            </div>
+          }
+        />
 
         <div className="flex flex-wrap items-center gap-2">
           <span className="mr-1 font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">

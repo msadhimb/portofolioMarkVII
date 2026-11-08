@@ -1,10 +1,13 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { useTheme } from 'next-themes';
+import { cn } from '@/lib/utils';
 
 export type SpotlightShape = 'circle' | 'beam';
 
-export type SpotlightCardProps = React.HTMLAttributes<HTMLDivElement> & {
+export type SpotlightCardProps = React.HTMLAttributes<HTMLElement> & {
+  as?: React.ElementType;
   spotlightColor?: string;
   intensity?: number;
   spotlightSize?: number;
@@ -37,7 +40,7 @@ type Settings = {
 
 const THEMES: Record<'dark' | 'light', Palette> = {
   dark: {
-    surface: '#141311',
+    surface: 'rgba(20, 19, 17, 0.62)',
     border: 'rgba(245, 158, 11, 0.18)',
     shadow: '0 24px 50px -24px rgba(245, 158, 11, 0.35), 0 24px 48px -24px rgba(0, 0, 0, 0.6)',
     light: '#ffffff',
@@ -45,11 +48,11 @@ const THEMES: Record<'dark' | 'light', Palette> = {
     edge: 1
   },
   light: {
-    surface: '#fafcff',
-    border: 'rgba(109, 40, 217, 0.16)',
-    shadow: '0 1px 2px rgba(10, 15, 36, 0.05), 0 20px 45px -22px rgba(109, 40, 217, 0.3)',
+    surface: 'rgba(251, 249, 244, 0.72)',
+    border: 'rgba(180, 83, 9, 0.16)',
+    shadow: '0 1px 2px rgba(10, 15, 36, 0.05), 0 20px 45px -22px rgba(180, 83, 9, 0.2)',
     light: '#18181b',
-    fill: 0.28,
+    fill: 0.35,
     edge: 0.7
   }
 };
@@ -81,12 +84,13 @@ const CARD =
   'relative isolate overflow-hidden rounded-3xl p-8 [background-color:var(--spotlight-card-surface)] [box-shadow:var(--spotlight-card-shadow)]';
 
 const SpotlightCard = ({
+  as: Component = 'div',
   children,
   className = '',
   style,
   spotlightColor,
-  intensity = 0.15,
-  spotlightSize = 240,
+  intensity = 0.35,
+  spotlightSize = 260,
   softness = 0.7,
   shape = 'circle',
   borderGlow = 0.6,
@@ -95,16 +99,18 @@ const SpotlightCard = ({
   ambient = false,
   flare = true,
   grain = 0,
-  theme = 'dark',
+  theme,
   ...rest
 }: SpotlightCardProps) => {
-  const rootRef = useRef<HTMLDivElement>(null);
+  const { resolvedTheme } = useTheme();
+  const rootRef = useRef<HTMLElement>(null);
   const lightRef = useRef<HTMLSpanElement>(null);
   const grainRef = useRef<HTMLSpanElement>(null);
   const edgeRef = useRef<HTMLSpanElement>(null);
   const wakeRef = useRef<(() => void) | null>(null);
-  const palette = THEMES[theme] ?? THEMES.dark;
-  const color = spotlightColor ?? palette.light;
+  const activeTheme = theme ?? (resolvedTheme === 'light' ? 'light' : 'dark');
+  const palette = THEMES[activeTheme] ?? THEMES.dark;
+  const color = spotlightColor ?? 'var(--signal)';
   const form = SHAPES.includes(shape) ? shape : 'circle';
   const settings: Settings = {
     shape: form,
@@ -302,9 +308,9 @@ const SpotlightCard = ({
   }, []);
 
   return (
-    <div
+    <Component
       ref={rootRef}
-      className={`${CARD}${className ? ` ${className}` : ''}`}
+      className={cn(CARD, className)}
       style={
         {
           '--spotlight-card-surface': palette.surface,
@@ -336,7 +342,7 @@ const SpotlightCard = ({
         className="pointer-events-none absolute inset-0 z-[1] rounded-[inherit] p-px opacity-0 [-webkit-mask:linear-gradient(#000_0_0)_content-box,linear-gradient(#000_0_0)] [-webkit-mask-composite:xor] [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)]"
         aria-hidden="true"
       />
-    </div>
+    </Component>
   );
 };
 

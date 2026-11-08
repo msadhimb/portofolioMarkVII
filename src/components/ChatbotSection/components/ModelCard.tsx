@@ -1,9 +1,7 @@
-import { Terminal } from "lucide-react"
-import { Card } from "@/components/ui/card"
+import { SpotlightCard } from "@/components/SpotlightCard"
 
 type ModelCardProps = {
   model: string
-  terminalTitle: string
   onlineLabel: string
   modelLabel: string
   apiPath: string
@@ -11,7 +9,6 @@ type ModelCardProps = {
 
 export const ModelCard = ({
   model,
-  terminalTitle,
   onlineLabel,
   modelLabel,
   apiPath,
@@ -19,33 +16,24 @@ export const ModelCard = ({
   const rows: Array<[string, string]> = [
     [modelLabel, model],
     ["api", apiPath],
-    ["stream", "token-by-token"],
-    ["key", "OLLAMA_API_KEY"],
+    ["stream", "token"],
+    ["runtime", "ollama"],
   ]
 
   return (
-    <Card className="mt-6 gap-0 overflow-hidden rounded-2xl p-0">
-      <div className="flex items-center gap-2 border-b border-border bg-muted/60 px-4 py-2.5 font-mono text-[11px] text-muted-foreground">
-        <Terminal className="size-3.5 text-signal" />
-        {terminalTitle}
-        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-emerald-500/12 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">
-          <span className="relative flex size-1.5">
-            <span className="absolute h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-            <span className="relative size-1.5 rounded-full bg-emerald-500" />
-          </span>
-          {onlineLabel}
-        </span>
+    <SpotlightCard className="glass-panel mt-6 overflow-hidden rounded-[20px] border p-0 shadow-none">
+      <div className="flex items-center gap-2 border-b border-border px-4 py-2.5 font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
+        <span className="size-1.5 rounded-full bg-signal" />
+        {onlineLabel}
       </div>
       <dl className="grid grid-cols-2 gap-px bg-border font-mono text-[11px]">
         {rows.map(([label, value]) => (
-          <div key={label} className="bg-card px-4 py-2.5">
+          <div key={label} className="bg-card/60 px-4 py-3">
             <dt className="text-muted-foreground">{label}</dt>
-            <dd className="mt-0.5 truncate font-semibold text-foreground">
-              {value}
-            </dd>
+            <dd className="mt-0.5 truncate text-foreground">{value}</dd>
           </div>
         ))}
       </dl>
-    </Card>
+    </SpotlightCard>
   )
 }

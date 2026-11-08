@@ -195,7 +195,7 @@ export const FormImageUpload = ({
       />
 
       {value ? (
-        <div className="relative overflow-hidden rounded-xl border border-border/70 bg-card p-3 shadow-xs">
+        <div className="glass-chip relative overflow-hidden rounded-xl border border-border/70 p-3">
           <div className="flex items-center gap-3">
             <div className="relative size-16 shrink-0 overflow-hidden rounded-lg border border-border/60 bg-muted/40">
               {/* eslint-disable-next-line @next/next/no-img-element */}

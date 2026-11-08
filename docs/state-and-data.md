@@ -194,7 +194,7 @@ Rules:
 - Return shape is inconsistent by design: list endpoints return the envelope
   (`res`), single-item endpoints return `res.data`. Normalize with `unwrapList<T>()`.
 - Errors are re-thrown as `{ message, status, code, data }` — UI reads them via
-  `getErrorMessage` from `src/view/Admin/components/`.
+  `getErrorMessage` from `src/helper/getErrorMessage.ts`.
 - `next-auth/react` imports in the interceptor are vestigial; real auth is Supabase.
 
 ## 4. Pagination helpers

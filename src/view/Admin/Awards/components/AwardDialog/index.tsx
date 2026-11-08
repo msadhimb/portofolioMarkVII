@@ -16,13 +16,13 @@ import { FormInput } from "@/components/Forms/FormInput"
 import { FormSelect } from "@/components/Forms/FormSelect"
 import { FormTextArea } from "@/components/Forms/FormTextArea"
 import { useActionModal } from "@/components/ActionModal/store"
-import { getErrorMessage } from "@/view/Admin/components/getErrorMessage"
+import { getErrorMessage } from "@/helper/getErrorMessage"
 import {
   FormSectionCard,
   FormTabBar,
   countErrorsByPrefix,
   type FormTabKey,
-} from "@/view/Admin/components/FormParts"
+} from "@/components/FormParts"
 import {
   awardDefaultValues,
   awardFormToPayload,

@@ -9,14 +9,12 @@ import { Skills } from "@/components/Skills"
 
 export const MainView = () => {
   return (
-    <main id="main" className="space-y-24 pt-15 pb-32 lg:pt-32">
+    <main id="main" className="space-y-24 pt-20 pb-32 md:space-y-32 lg:pt-28">
       <Hero />
       <About />
       <Projects />
-      <div className="space-y-24 bg-card/40 py-14">
-        <Experience />
-        <Awards />
-      </div>
+      <Experience />
+      <Awards />
       <Skills />
       <ChatbotSection />
       <Contact />

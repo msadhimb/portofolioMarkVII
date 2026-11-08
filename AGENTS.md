@@ -1,4 +1,4 @@
-﻿# AGENTS.md — AI Agent Guide for portofolioMarkVII
+# AGENTS.md — AI Agent Guide for portofolioMarkVII
 
 > Read this file first. It is the single entry point for AI coding agents working in this
 > repository. Detailed documentation lives in [`docs/`](docs/) — read only the file you need.
@@ -82,7 +82,7 @@ referenced exemplar file first and mirror it.
 3. `store/index.ts` → Zustand API wrapper calling `clientApi({ url, method, data })`.
 4. `hooks/useXMutation.ts` → export `ADMIN_X_KEY = ["admin","x"]`, `useCreateX/useUpdateX/useDeleteX`; each `onSuccess` invalidates `ADMIN_X_KEY` **and** the public key (`["x"]`).
 5. Dialog in `components/XDialog/index.tsx`: `useForm` + `resolver: yupResolver(schemaX) as unknown as Resolver<XFormData>`, `mode: "onTouched"`, field primitives from `src/components/Forms/*`, tabs `umum | id | en` via `FormTabBar`/`FormSectionCard`, `countErrorsByPrefix` for per-tab error badges.
-6. Table columns in `table/columns.tsx` using shared `DataTable` from `src/view/Admin/components/`.
+6. Table columns in `table/columns.tsx` using shared `DataTable` from `src/components/DataTable/`.
 - Exemplar: `src/view/Admin/Skills/` (clone this shape).
 
 ### skill: add-translation
@@ -102,7 +102,7 @@ Mirror an existing domain end to end (preferred order of study: **Skills → Awa
 3. Store: `src/view/Admin/<X>/store/index.ts` + `store/type/index.ts`.
 4. Mutations: `hooks/use<X>Mutation.ts` with key constants and invalidation.
 5. Form/validation/dialog/table as in *add-form*.
-6. View orchestrator: `src/view/Admin/<X>/index.tsx` — `useQuery` + `unwrapList<T>(data)` + dialogs; register the route page under `src/app/admin/dashboard/<x>/page.tsx`.
+6. View orchestrator: `src/view/Admin/<X>/index.tsx` — `useQuery` + `unwrapList<T>(data)` + dialogs; register the route page under `src/app/(admin)/dashboard/<x>/page.tsx`.
 7. Public read API + `src/components/<X>/` feed if the content is public.
 
 ## 4. Documentation map

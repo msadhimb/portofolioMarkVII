@@ -16,55 +16,45 @@ import {
   AwardIcon,
   BriefcaseBusinessIcon,
   FolderKanbanIcon,
-  GalleryVerticalEndIcon,
   LayoutDashboardIcon,
   SparklesIcon,
   UsersIcon,
 } from "lucide-react"
 
-// This is sample data.
 const data = {
   user: {
-    name: "Admin",
+    name: "Administrator",
     email: "admin@salmanbaqy.dev",
-    avatar: "/avatars/admin.jpg",
   },
-  teams: [
-    {
-      name: "Portfolio Admin",
-      logo: <GalleryVerticalEndIcon />,
-      plan: "Admin",
-    },
-  ],
   navMain: [
     {
-      title: "Overview",
-      url: "/admin/dashboard",
+      title: "Ringkasan",
+      url: "/dashboard",
       icon: <LayoutDashboardIcon />,
     },
     {
-      title: "Visitors",
-      url: "/admin/dashboard/visitors",
+      title: "Pengunjung",
+      url: "/dashboard/visitors",
       icon: <UsersIcon />,
     },
     {
-      title: "Projects",
-      url: "/admin/dashboard/projects",
+      title: "Proyek",
+      url: "/dashboard/projects",
       icon: <FolderKanbanIcon />,
     },
     {
-      title: "Experiences",
-      url: "/admin/dashboard/experiences",
+      title: "Pengalaman",
+      url: "/dashboard/experiences",
       icon: <BriefcaseBusinessIcon />,
     },
     {
-      title: "Awards",
-      url: "/admin/dashboard/awards",
+      title: "Penghargaan",
+      url: "/dashboard/awards",
       icon: <AwardIcon />,
     },
     {
-      title: "Skills",
-      url: "/admin/dashboard/skills",
+      title: "Keahlian",
+      url: "/dashboard/skills",
       icon: <SparklesIcon />,
     },
   ],
@@ -74,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

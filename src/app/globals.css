@@ -40,48 +40,53 @@
 :root {
   color-scheme: light;
   --radius: 0.625rem;
-  /* Light — "lab": putih kebiruan + tinta navy, aksen violet elektrik + cyan neon */
-  --background: #edf1f9;
-  --foreground: #0a0f24;
-  --card: #fafcff;
-  --card-foreground: #0a0f24;
-  --popover: #fafcff;
-  --popover-foreground: #0a0f24;
-  --primary: #6d28d9;
-  --primary-foreground: #f5f1ff;
-  --secondary: #dde5f5;
-  --secondary-foreground: #0a0f24;
-  --muted: #dde5f5;
-  --muted-foreground: #55618a;
-  --accent: #dde5f5;
-  --accent-foreground: #0a0f24;
-  --destructive: #dc2626;
-  --border: #c9d4ee;
-  --input: #c9d4ee;
-  --ring: #06b6d4;
-  /* Aksen: cyan neon */
-  --signal: #0891b2;
-  --signal-foreground: #eefcff;
-  /* Highlight cyan pucat */
-  --hl: #a5f3fc;
-  --hl-foreground: #0a0f24;
-  --surface: #fafcff;
-  --ink-soft: #3d4a75;
-  --grid-line: rgba(40, 80, 200, 0.1);
-  --code-bg: #e2e9fa;
+  --background: #f4f1ea;
+  --foreground: #111411;
+  --card: #fbf9f4;
+  --card-foreground: #111411;
+  --popover: #fbf9f4;
+  --popover-foreground: #111411;
+  --primary: #14120e;
+  --primary-foreground: #f4f1ea;
+  --secondary: #e8e3d8;
+  --secondary-foreground: #111411;
+  --muted: #e8e3d8;
+  --muted-foreground: #6f6a5f;
+  --accent: #e8e3d8;
+  --accent-foreground: #111411;
+  --destructive: #b91c1c;
+  --border: #d9d3c5;
+  --input: #d9d3c5;
+  --ring: #b45309;
+  --signal: #b45309;
+  --signal-foreground: #fff7ed;
+  --hl: #f3d9b1;
+  --hl-foreground: #14120e;
+  --surface: #fbf9f4;
+  --ink-soft: #4a463d;
+  --code-bg: #ece7db;
+  --grid-line: rgba(17, 20, 17, 0.055);
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --glass-rim: rgba(255, 255, 255, 0.55);
+  --glass-rim-bottom: rgba(17, 20, 17, 0.05);
+  --glass-shadow: rgba(17, 20, 17, 0.16);
+  --glass-sheen: rgba(255, 255, 255, 0.26);
+  --glass-panel-bg: rgba(251, 249, 244, 0.72);
+  --glass-chip-bg: rgba(251, 249, 244, 0.62);
+  --glass-nav-bg: rgba(244, 241, 234, 0.68);
+  --glass-chip-rim: rgba(255, 255, 255, 0.42);
 }
 
 .dark {
   color-scheme: dark;
-  /* Dark — "warm terminal": charcoal hangat + aksen amber & teal */
-  --background: #0b0b0d;
+  --background: #0c0c0c;
   --foreground: #ece7dd;
   --card: #141311;
   --card-foreground: #ece7dd;
   --popover: #141311;
   --popover-foreground: #ece7dd;
-  --primary: #f59e0b;
-  --primary-foreground: #1a1206;
+  --primary: #ece7dd;
+  --primary-foreground: #14120e;
   --secondary: #1c1a15;
   --secondary-foreground: #ece7dd;
   --muted: #1c1a15;
@@ -92,15 +97,23 @@
   --border: rgba(231, 214, 186, 0.14);
   --input: rgba(231, 214, 186, 0.2);
   --ring: #f59e0b;
-  /* Aksen: teal agar kontras dengan primary amber */
-  --signal: #2dd4bf;
-  --signal-foreground: #03211d;
+  --signal: #f59e0b;
+  --signal-foreground: #1a1206;
   --hl: #f59e0b;
   --hl-foreground: #1a1206;
   --surface: #141311;
   --ink-soft: #b8b2a4;
-  --grid-line: rgba(231, 214, 186, 0.07);
   --code-bg: #141311;
+  --grid-line: rgba(231, 214, 186, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-rim: rgba(255, 255, 255, 0.18);
+  --glass-rim-bottom: rgba(0, 0, 0, 0.18);
+  --glass-shadow: rgba(0, 0, 0, 0.55);
+  --glass-sheen: rgba(255, 255, 255, 0.1);
+  --glass-panel-bg: rgba(20, 19, 17, 0.62);
+  --glass-chip-bg: rgba(20, 19, 17, 0.7);
+  --glass-nav-bg: rgba(12, 12, 12, 0.6);
+  --glass-chip-rim: rgba(255, 255, 255, 0.14);
 }
 
 @layer base {
@@ -116,6 +129,10 @@
     text-rendering: optimizeLegibility;
     font-feature-settings: "ss01", "cv11";
   }
+  html,
+  body {
+    overflow-x: clip;
+  }
   ::selection {
     background: var(--hl);
     color: var(--hl-foreground);
@@ -129,149 +146,66 @@
   .text-balance {
     text-wrap: balance;
   }
-  .bg-grid {
-    background-image:
-      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-    background-size: 44px 44px;
-  }
-  .bg-grid-fade {
-    mask-image: radial-gradient(
-      ellipse 90% 70% at 50% 0%,
-      black 35%,
-      transparent 78%
-    );
-  }
   .tabular {
     font-variant-numeric: tabular-nums;
   }
-
-  /* --- Unik: marquee, aurora, CRT chatbot, sticker --- */
   .animate-marquee {
-    animation: marquee 28s linear infinite;
+    animation: marquee 40s linear infinite;
     will-change: transform;
   }
   .animate-marquee:hover {
     animation-play-state: paused;
   }
-  .animate-aurora {
-    animation: aurora-drift 11s ease-in-out infinite alternate;
-    will-change: transform;
-  }
-  .animate-aurora-slow {
-    animation: aurora-drift 17s ease-in-out infinite alternate-reverse;
-    will-change: transform;
-  }
   .animate-typing-dot {
     animation: typing-dot 1.1s ease-in-out infinite;
     will-change: opacity, transform;
   }
-  .animate-spin-slow {
-    animation: spin 14s linear infinite;
-    will-change: transform;
+  .bg-hairline {
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
-  .animate-pulse-slow {
-    animation: pulse-slow 7s ease-in-out infinite alternate;
-    will-change: opacity, transform;
-  }
-  .crt-scanlines {
-    background: repeating-linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 2px,
-      rgba(255, 255, 255, 0.025) 3px,
-      rgba(0, 0, 0, 0.12) 4px
-    );
-    mix-blend-mode: overlay;
-  }
-  .crt::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(
-      ellipse 120% 90% at 50% 10%,
-      transparent 55%,
-      rgba(0, 0, 0, 0.35) 100%
-    );
-  }
-  .sticker {
+  .glass-panel,
+  .glass-chip,
+  .glass-nav {
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(150%);
+    border-color: var(--glass-border);
     box-shadow:
-      0 1px 0 rgba(0, 0, 0, 0.15),
-      0 12px 28px -12px rgba(0, 0, 0, 0.35);
+      inset 0 1px 0 var(--glass-rim),
+      inset 0 -1px 0 var(--glass-rim-bottom),
+      0 24px 60px -44px var(--glass-shadow);
   }
-  /* Bingkai HUD futuristik: siku bercahaya di 4 sudut.
-     Pakai background-image (bukan shorthand) agar menyatu dengan warna bg lain. */
-  .hud-corners {
-    --hud: var(--signal);
-    background-image:
-      linear-gradient(var(--hud), var(--hud)),
-      linear-gradient(var(--hud), var(--hud)),
-      linear-gradient(var(--hud), var(--hud)),
-      linear-gradient(var(--hud), var(--hud)),
-      linear-gradient(var(--hud), var(--hud)),
-      linear-gradient(var(--hud), var(--hud)),
-      linear-gradient(var(--hud), var(--hud)),
-      linear-gradient(var(--hud), var(--hud));
-    background-size:
-      26px 2px,
-      2px 26px,
-      26px 2px,
-      2px 26px,
-      26px 2px,
-      2px 26px,
-      26px 2px,
-      2px 26px;
-    background-position:
-      left top,
-      left top,
-      right top,
-      right top,
-      left bottom,
-      left bottom,
-      right bottom,
-      right bottom;
-    background-repeat: no-repeat;
+  .glass-panel {
+    background:
+      linear-gradient(140deg, var(--glass-sheen), transparent 46%),
+      var(--glass-panel-bg);
   }
-  /* Varian ramping untuk card: siku kecil semi-transparan di tiap sudut */
-  .card-futuristic {
-    background-image:
-      linear-gradient(var(--corner), var(--corner)),
-      linear-gradient(var(--corner), var(--corner)),
-      linear-gradient(var(--corner), var(--corner)),
-      linear-gradient(var(--corner), var(--corner)),
-      linear-gradient(var(--corner), var(--corner)),
-      linear-gradient(var(--corner), var(--corner)),
-      linear-gradient(var(--corner), var(--corner)),
-      linear-gradient(var(--corner), var(--corner));
-    background-size:
-      18px 2px,
-      2px 18px,
-      18px 2px,
-      2px 18px,
-      18px 2px,
-      2px 18px,
-      18px 2px,
-      2px 18px;
-    background-position:
-      left top,
-      left top,
-      right top,
-      right top,
-      left bottom,
-      left bottom,
-      right bottom,
-      right bottom;
-    background-repeat: no-repeat;
-    /* GPU compositing: isolasi paint area agar hover tidak repaint seluruh halaman */
-    contain: layout style;
-    transform: translateZ(0);
+  .glass-chip {
+    background: var(--glass-chip-bg);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    backdrop-filter: blur(10px) saturate(140%);
+    box-shadow: inset 0 1px 0 var(--glass-chip-rim);
   }
-  /* Teks neon: glow halus mengikuti --signal */
-  .text-glow {
-    text-shadow:
-      0 0 22px color-mix(in srgb, var(--signal) 60%, transparent),
-      0 0 2px var(--signal);
+  .glass-nav {
+    background:
+      linear-gradient(140deg, var(--glass-sheen), transparent 50%),
+      var(--glass-nav-bg);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(24px) saturate(160%);
+  }
+}
+
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .glass-panel,
+  .glass-chip {
+    background: var(--card);
+  }
+  .glass-nav {
+    background: var(--background);
   }
 }
 
@@ -281,15 +215,6 @@
   }
   to {
     transform: translateX(-50%);
-  }
-}
-
-@keyframes aurora-drift {
-  from {
-    transform: translate3d(-6%, -4%, 0);
-  }
-  to {
-    transform: translate3d(7%, 6%, 0);
   }
 }
 
@@ -305,18 +230,6 @@
   }
 }
 
-@keyframes pulse-slow {
-  0% {
-    opacity: 0.55;
-    transform: scale(0.98);
-  }
-  100% {
-    opacity: 0.95;
-    transform: scale(1.02);
-  }
-}
-
-/* Focus visibility for a11y */
 :focus-visible {
   outline: 2px solid var(--signal);
   outline-offset: 3px;
@@ -333,78 +246,38 @@
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+  .animate-marquee {
+    animation: none !important;
+  }
 }
 
-/**
- * Mobile performance — iOS 27+ Safari.
- * Tujuan: hanya nonaktifkan animasi BERAT (aurora, marquee, spin) yang
- * menguras GPU; animasi UI ringan (menu, hover, transition) tetap berjalan
- * karena sudah di-GPU-composite via transform: translateZ(0).
- */
 @media (max-width: 768px) {
   html {
-    /* instant jump tetap lebih baik di mobile: smooth scroll memakai main thread */
     scroll-behavior: auto;
   }
-
-  /* Matikan hanya animasi dekoratif berat */
-  .animate-marquee,
-  .animate-aurora,
-  .animate-aurora-slow,
-  .animate-spin-slow {
+  .animate-marquee {
     animation: none !important;
     will-change: auto;
   }
-
-  /* Typing dot & animasi UI ringan: tetap jalan, kurangi durasi sedikit */
   .animate-typing-dot {
     animation-duration: 0.9s;
   }
-
-  /*
-   * backdrop-filter: kurangi intensitas di mobile, JANGAN hapus total.
-   * Safari iOS 26+ mendukung backdrop-filter dengan baik, tapi layer yang
-   * di-blur perlu dipromote ke GPU layer sendiri supaya tidak repaint.
-   */
   [style*="backdrop-filter"],
   [style*="-webkit-backdrop-filter"] {
-    /* Promote ke GPU layer agar blur tidak menyebabkan main-thread jank */
     transform: translateZ(0);
     isolation: isolate;
   }
-
-  /*
-   * Animasi transisi Navbar & overlay: percepat sedikit di mobile
-   * agar terasa snappier tanpa menghilangkan animasinya.
-   */
   #mobile-menu [class*="transition"] {
     transition-duration: 200ms !important;
   }
 }
 
-/*
- * iOS Safari-specific: gunakan @supports untuk menarget fitur rendering
- * yang hanya tersedia di engine WebKit/Safari.
- * `(hanging-punctuation: first)` adalah quirk CSS yang hanya diparse Safari.
- */
 @supports (hanging-punctuation: first) {
-  /*
-   * Elemen dengan backdrop-filter perlu forced GPU layer di WebKit.
-   * Tanpa ini, backdrop-filter di iOS bisa menyebabkan off-screen rendering
-   * yang lambat saat elemen muncul/hilang.
-   */
   [style*="backdrop-filter"],
   [style*="-webkit-backdrop-filter"] {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
-
-  /*
-   * iOS 26/27 "Liquid Glass" engine: animasi opacity + transform berjalan
-   * lebih mulus saat elemen punya explicit stacking context.
-   * `isolation: isolate` membuat stacking context tanpa z-index.
-   */
-  .card-futuristic,
   #mobile-menu > div {
     isolation: isolate;
   }

@@ -1,21 +1,23 @@
-  const locale = {
-    eyebrow: "Proyek Pilihan",
-    titleA: "Kerja nyata,",
-    titleAccent: "bukan daftar logo.",
-    description:
-      "Proyek-proyek yang paling menjelaskan cara saya berpikir: produk finansial, sistem enterprise, dan pengalaman kreatif.",
-    note: "Setiap proyek mencantumkan problem, peran, keputusan teknis, dan studi kasusnya.",
-    featured: "Unggulan",
-    problem: "Problem",
-    viewCaseStudy: "Lihat Studi Kasus",
-    liveDemo: "Demo langsung",
-    internalDemo: "Internal — demo on request",
-    loadMore: "Muat project lainnya",
-    loadingMore: "Memuat project…",
-    showing: "Menampilkan {{shown}} dari {{total}} project",
-    allShown: "Semua project sudah tampil",
-    autoHint: "Otomatis dimuat saat kamu scroll",
-    retry: "Coba lagi",
-  };
+const locale = {
+  eyebrow: "Karya pilihan",
+  titleA: "Kerja nyata,",
+  titleAccent: "bukan daftar logo.",
+  description:
+    "Tiga proyek yang paling menjelaskan cara saya bekerja: produk finansial, sistem enterprise, dan pengalaman kreatif.",
+  note: "Setiap proyek memuat konteks, peran, keputusan teknis, dan studi kasusnya.",
+  featured: "Unggulan",
+  restLabel: "Proyek lain",
+  viewCaseStudy: "Buka studi kasus",
+  liveDemo: "Demo langsung",
+  internalDemo: "Internal — demo sesuai permintaan",
+  loadMore: "Muat proyek lain",
+  loadingMore: "Memuat proyek…",
+  showing: "{{shown}} dari {{total}} proyek",
+  allShown: "Semua proyek sudah tampil",
+  autoHint: "Dimuat saat kamu menggulir",
+  retry: "Coba lagi",
+  empty: "Belum ada proyek yang bisa ditampilkan.",
+  ariaLabel: "Karya pilihan",
+}
 
-export default locale;
+export default locale
